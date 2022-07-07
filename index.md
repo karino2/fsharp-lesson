@@ -37,16 +37,20 @@ c-lessonと同様、あくまで作るのは学習目的で実用性は無いも
 KVSはちょっと低レベルすぎる気もするので、最初は[ztittle/Qdbm.Net: .NET port of the QDBM Embedded Database](https://github.com/ztittle/Qdbm.Net)この辺を使ってインデクサを作り、
 そこまでの分量を見て物足りなかったら自作して置き換えるでもいいかもしれない。
 
-# 事前準備
+## 事前準備
 
 - 簡単なgitの使い方
-    - [https://git-scm.com/book/ja/v2/](https://git-scm.com/book/ja/v2/)の3章くらいまでやっておく
+  - [https://git-scm.com/book/ja/v2/](https://git-scm.com/book/ja/v2/)の3章くらいまでやっておく
+- F#の入門（概要くらいは）
+  - [F# syntax in 60 seconds - F# for fun and profit](https://fsharpforfunandprofit.com/posts/fsharp-in-60-seconds/)
+  - [F# のツアー - Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/fsharp/tour)
 
-なんか書く
+F# for fun and profitはそのほかの記事もいろいろ読む事をおすすめするが、
+あまり前提にはしないつもり。
 
-# 第一回 まずはライブラリをつついてみよう
+## 第一回 まずはライブラリをつついてみよう
 
-初回は進め方とかのチュートリアル的に、簡単な事をやってもらう。DoodleとArguを触ってもらう感じ。
+初回は進め方とかのチュートリアル的に、簡単な事をやってもらう。DoodleとArguを触ってもらう感じ。環境設定とかそういう話。
 
 [第一回 まずはライブラリをつついてみよう](intro_library.md)
 
