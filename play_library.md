@@ -23,11 +23,12 @@ F# での基本的な作業の進め方に慣れつつ、あとで使う事に�
 
 NYI: dotnet coreでVSCodeでIonideのセットアップをしよう、的な事を誰かが書いてくれる。
 
-## Doodleをつついてみよう
+## Deedleをつついてみよう
 
-次の第二回で使う予定のDoodleをつついてみよう。
+Deedleをつついてみよう。
 
 
+[Get Started with F# in Visual Studio Code - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/fsharp/get-started/get-started-vscode)
 
 ## Arguをつついてみよう
 
