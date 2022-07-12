@@ -34,7 +34,7 @@ plugins:
   - jekyll-sitemap
 
 header_pages:
-  - intro_library.md
+  - play_library.md
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

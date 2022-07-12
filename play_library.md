@@ -25,6 +25,9 @@ NYI: dotnet coreでVSCodeでIonideのセットアップをしよう、的な事�
 
 ## Doodleをつついてみよう
 
+次の第二回で使う予定のDoodleをつついてみよう。
+
+
 
 ## Arguをつついてみよう
 
