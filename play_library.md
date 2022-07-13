@@ -377,6 +377,29 @@ rowを引数にboolを返す関数を引数にとってフィルタしたFrame�
 
 ## Arguをつついてみよう
 
+次にfsproj周辺の話をしつつArguをつつく。
+ブランチ名は `play_library/2_playargu` で。
+
+### プロジェクトを作って実行しよう
+
+前回同様コマンドラインから `dotnet new` でPlayArguというプロジェクトを作ってください。
+
+NYI: 以下dotnet runとかbuildの説明
+
+### 課題6: オプションhelloを出力
+
+とりあえずArguは使わずに、引数が `-hello` だったら"Hello World"とコンソールに出力し、
+それ以外なら "I don't know"と出力するようにProgram.fsを変更して動作を確認。
+
+### Argu入門
+
+NYI: プロジェクトにArguを追加して実行したり`-hello`をArgu化したり
+
+### PlayDeedleのprojectとfilterをArguでコマンドライン化
+
+NYI: `-project "場所" "学年"` みたいなオプションと、 `-filter "専門" "数学"` みたいなオプションを実装する。
+
+
 ## FParsecをつついてみよう
 
-
+FParsec入門してprojectとfilterを`project(場所, 学年)`みたいなのと、`filter(専門 = "数学")` みたいなのをパースして実行する。
