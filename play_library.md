@@ -367,6 +367,6 @@ df.RowsDense
 
 ## Arguをつついてみよう
 
-## FParseをつついてみよう
+## FParsecをつついてみよう
 
 
