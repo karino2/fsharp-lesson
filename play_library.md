@@ -402,4 +402,4 @@ NYI: `-project "場所" "学年"` みたいなオプションと、 `-filter "�
 
 ## FParsecをつついてみよう
 
-FParsec入門してprojectとfilterを`project(場所, 学年)`みたいなのと、`filter(専門 = "数学")` みたいなのをパースして実行する。
+FParsec入門してprojectとfilterを`project([場所], [学年])`みたいなのと、`filter([専門] = "数学")` みたいなのをパースして実行する。
