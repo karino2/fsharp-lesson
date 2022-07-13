@@ -364,6 +364,16 @@ df.RowsDense
 
 これもcommitしてpushして私に見せてください。
 
+### 課題4: 場所と学年だけのFrameを作ろう
+
+これも[Deedle in 10 minutes using F#](https://fslab.org/Deedle/tutorial.html)のProjection and filteringを参考に（joinedOpensを作っているあたり）
+
+
+### 課題5: フィルタとプロジェクションを関数にしよう
+
+rowを引数にboolを返す関数を引数にとってフィルタしたFrameを返すfilterと、
+カラムの名前のリストを引数にとってそのカラムだけを含んだFrameを返すproject関数を作ろう。
+
 
 ## Arguをつついてみよう
 
