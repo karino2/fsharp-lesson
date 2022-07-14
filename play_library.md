@@ -479,6 +479,16 @@ publishについては以下に詳しく書いてありますが、
 
 とりあえずArguは使わずに、引数が `-hello` だったら"Hello World"とコンソールに出力し、
 それ以外なら "I don't know"と出力するようにProgram.fsを変更して動作を確認しましょう。
+
+以下のようになるようにします。
+
+```
+$ dotnet run -hello
+Hello World
+$ dotnet run
+I don't know
+```
+
 これを２つの方法でやってみます。
 
 1. `Environment.GetCommandLineArgs()`を使う方法
