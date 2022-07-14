@@ -377,19 +377,124 @@ rowを引数にboolを返す関数を引数にとってフィルタしたFrame�
 
 ## Arguをつついてみよう
 
-次にfsproj周辺の話をしつつArguをつつく。
-ブランチ名は `play_library/2_playargu` で。
+fsxでDeedleをつつくのはだいたいわかったと思うので、次は.fsの方を見ていきます。ついでにArguというライブラリをつついてみます。
+ブランチ名は `play_library/2_playargu` で行きましょう。
 
 ### プロジェクトを作って実行しよう
 
 前回同様コマンドラインから `dotnet new` でPlayArguというプロジェクトを作ってください。
+そして出来たPlayArguをVSCodeで開く所までは前回と同様です。
 
-NYI: 以下dotnet runとかbuildの説明
+ただ今回はプロジェクトを生成した時に一緒に作られるProgram.fsを見てみましょう。
+以下のようになっていると思います。
+
+```
+// For more information see https://aka.ms/fsharp-console-apps
+printfn "Hello from F#"
+```
+
+このurlを開いてみるのも有益ですが、まずは実行してみましょう。
+このプロジェクトまでターミナルからcdして、以下のように実行します。
+
+```
+$ dotnet run
+```
+
+すると少しまったあとに、以下のように出力される事でしょう。
+
+```
+Hello from F#
+```
+
+これがProgram.fsに書かれている内容なのはまぁいいでしょう。
+試しに出力される文を`Hello World`になるように変更して実行してみてください。
+
+### dotnet buildとfsproj
+
+次に `dotnet run` を実行した時に生成されるファイルを見ます。
+
+binというディレクトリが作られているはずです。
+このbinの下の、`bin/Debug/net6.0/` という所を見ると、なんだか一杯ファイルがあると思います。
+
+ここにある `PlayArgu` というファイルを実行すると、同じ結果になるはずです。
+
+```
+$ bin/Debug/net6.0/PlayArgu
+Hello from F#
+```
+
+`dotnet run` というコマンドは
+
+1. PlayArguという実行ファイル（及び関連するdllや設定ファイルなど）を作る
+2. PlayArguを実行する
+
+という２つの事をやってくれるコマンドです。
+
+1だけを実行する別のコマンドもあって、それは`dotnet build`です。
+
+```
+$ rm -r bin
+$ dotnet build
+$ bin/Debug/net6.0/PlayArgu
+Hello from F#
+```
+
+dotnet buildというのは、現在のディレクトリにあるfsprojファイル（この場合はPlayArgu.fsprojという名前）に書かれている.fsのファイルを全部まとめて実行ファイルに変換する、という事をしてくれます。
+
+こちらがF# の正規（？）の開発方法と思う。
+
+### dotnet publishの話を少しだけ
+
+なお、dotnet buildで作ったPlayArguバイナリは、同じフォルダにあるPlayArgu.dllやそのほかいろいろな物に依存しているので、PlayArguという実行ファイルをコピーして違う所に持っていくだけでは動きません。
+
+```
+$ cp bin/Debug/net6.0/PlayArgu ./
+$ ./PlayArgu
+The application to execute does not exist: 'XXXX/fsharp-lesson/sources/play_library/PlayArgu/PlayArgu.dll'.
+```
+
+これらのファイルがそれぞれ何なのかはdotnetの方の話になりますが、コンソールアプリで使っている分にはあまり知る必要も無いでしょう。
+
+よその場所に持っていって実行する場合はpublishというのを実行する必要があります。
+Macの場合は以下のように実行します。
+
+```
+$ dotnet publish -r osx-x64 /p:PublishSingleFile=true
+$ cp bin/Debug/net6.0/osx-x64/publish/PlayArgu ./
+$ ./PlayArgu
+Hello from F#
+```
+
+self-containedもつけろとかワーニングは出ますが動くはずです。
+なお、この時も実行するマシンにはdotnet runtimeが入っている必要があります。ランタイムもくっつけて一つにする方法などもありますが、
+このシリーズでは使わないのでこのくらいにしておきます。
+
+publishについては以下に詳しく書いてありますが、
+
+[dotnet publish command - .NET CLI - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish)
+
+結構長いので必要になるまでは読まなくて良いでしょう。
 
 ### 課題6: オプションhelloを出力
 
 とりあえずArguは使わずに、引数が `-hello` だったら"Hello World"とコンソールに出力し、
-それ以外なら "I don't know"と出力するようにProgram.fsを変更して動作を確認。
+それ以外なら "I don't know"と出力するようにProgram.fsを変更して動作を確認しましょう。
+これを２つの方法でやってみます。
+
+1. `Environment.GetCommandLineArgs()`を使う方法
+2. `[<EntryPoint>]`を使う方法
+
+この時に、Program.fsに書かれているリンク先を見るとヒントになります。
+
+[コンソール アプリケーションと明示的なエントリ ポイント - F# - Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/fsharp/language-reference/functions/entry-point)
+
+まず1で実現してcommitし、次に2に変更してcommitしてgithubの履歴のリンクをgitterに貼って下さい。
+
+### VSCodeからの実行
+
+次にVSCodeからの実行方法を見てみます。
+
+NYI: tasks.json, launch.jsonとブレークポイントの話をする。
 
 ### Argu入門
 
