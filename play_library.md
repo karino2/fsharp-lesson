@@ -475,7 +475,7 @@ publishについては以下に詳しく書いてありますが、
 
 結構長いので必要になるまでは読まなくて良いでしょう。
 
-### 課題6: オプションhelloを出力
+### 課題6: オプションhelloを処理
 
 とりあえずArguは使わずに、引数が `-hello` だったら"Hello World"とコンソールに出力し、
 それ以外なら "I don't know"と出力するようにProgram.fsを変更して動作を確認しましょう。
@@ -504,7 +504,44 @@ I don't know
 
 次にVSCodeからの実行方法を見てみます。
 
-NYI: tasks.json, launch.jsonとブレークポイントの話をする。
+- とりあえずF5押す
+- LLDBを選ぶ（とりあえずlaunch.jsonが作られるもの）
+- launch.jsonを以下のように書き換える
+
+```
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Build: PlayArgu.fsproj",
+      "program": "${workspaceFolder}/bin/Debug/net6.0/PlayArgu.dll",
+      "args": ["-hello"],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    }
+  ]
+}
+```
+
+- F5をもう一度押すと"Build: PlayArgu.fsprojが見つけられませんでした”と言われてダイアログが出るので、そこからタスクの構成を選ぶ
+- Build: PlayArgu.fsprojを選ぶ
+- task.jsonが生成されるので保存する
+- F5
+
+これでデバッグ実行が出来ます。Program.fsの適当な行の上でF9を押すとブレークポイントがはれるので、そのあとF5するとそこで止まると思います。
+F10で次の行に進む、F11でステップイン（後述）、F5で次のブレークポイントまで進みます。
+デバッガの使い方などは進めていく過程で学んでいくのがいいと思います。
+
+上記のlaunch.jsonのポイントとしては、以下の点に注目しておきましょう。
+
+- preLaunchTaskにビルドの名前を書く（fsprojの名前はプロジェクトごとに変える）
+- programの行も生成されるdllのパスに変える
+- argsは必要に応じて足す（ここに足したものがコマンドライン引数として渡される。上記の例では"-hello"を渡している）
+
 
 ### Argu入門
 
