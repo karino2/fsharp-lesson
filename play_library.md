@@ -544,13 +544,109 @@ F10で次の行に進む、F11でステップイン（後述）、F5で次のブ
 - argsは必要に応じて足す（ここに足したものがコマンドライン引数として渡される。上記の例では"-hello"を渡している）
 
 
-### Argu入門
+### Arguをつついてみよう
 
-NYI: プロジェクトにArguを追加して実行したり`-hello`をArgu化したり
+では次に、fsprojにArguというライブラリを追加して使ってみましょう。
+Arguはコマンドラインの引数のパーサーです。
 
-### PlayDeedleのprojectとfilterをArguでコマンドライン化
+[Argu: Introduction](https://fsprojects.github.io/Argu/)
 
-NYI: `-project "場所" "学年"` みたいなオプションと、 `-filter "専門" "数学"` みたいなオプションを実装する。
+このIntroductionやそこからリンクされている[Tutorial](https://fsprojects.github.io/Argu/tutorial.html)を見ればだいたい全てがわかるのですが、
+割と簡単なものなのでとりあえず触ってみてどういうものか先に理解する方が手早いでしょう。
+
+とりあえずいつものようにScratch.fsxというファイルを作ってつついてみます。
+まずはNuGetのサイトで探します。
+
+[NuGet Gallery - Argu](https://www.nuget.org/packages/Argu)
+
+```
+#r "nuget: Argu"
+```
+
+を実行すれば良さそう。
+
+そして一番簡単な例として、以下のようなコードを実行してみてください。
+
+```
+open Argu
+
+type Arguments =
+    | Hoge
+    | Foo of path:string
+
+    interface IArgParserTemplate with
+      member s.Usage =
+        match s with
+        | Hoge -> "print Hello World"
+        | Foo _ -> "print Bar with arg"
+
+let parser = ArgumentParser.Create<Arguments>(programName="hogehoge")
+
+parser.PrintUsage()
+```
+
+IArgParserTemplateというインターフェースの定義が5行もあるのでぎょっとしますが、これはヘルプに関する記述をしているだけなので大した事はありません。
+ヘルプの内容と、ArgumentsのUnion定義を見比べると、だいたいどういうものかわかるでしょう。
+
+次に以下を実行してみます。
+
+```
+parser.Parse[| "--hoge" |]
+parser.Parse[| "--foo" |]
+parser.Parse[| "--foo"; "fugafuga" |]
+```
+
+なお、`[|`と`|]`でくくって中身をセミコロンで区切るのは、F#では配列の記法です。
+普通リストしか使わないので見かけないかもしれませんが、引数のパーサーなのでmainに渡ってくる文字列の配列がそのまま渡せるようになっている為、
+こうして実験でつつく時は配列を渡す必要があります。
+
+上記の例だと、二番目はパースエラーに、1番目と3番目はなにかパースが成功したっぽく見えます。
+
+### Arguのパース結果をつつく
+
+では結果を変数に入れて少しつついてみましょう。
+
+```
+let res = parser.Parse[| "--foo"; "ikaika" |]
+
+res.Contains Hoge
+res.Contains Foo
+```
+
+ContainsのあとにはUnionで定義した値がそのまま使えるようです。
+これでif文で何が渡されたかを判断出来そう。
+
+さらにfooの時の引数を取得する為には、以下のようにGetResultを実行します。
+
+```
+res.GetResult(Foo)
+```
+
+引数は複数同時に指定出来るので、どのオプションの引数かを指定する必要があります。
+
+```
+let res = parser.Parse[| "--hoge"; "--foo"; "ikaika" |]
+```
+
+などに対してもやってみてください。
+
+
+### 課題7: -hello をArgu化しよう
+
+課題6でやった `-hello` の処理をArguで実装しなおしましょう。PlayArguプロジェクトで作業を続けます。
+
+- fsporjへの追加は `dotnet add package Argu`
+- ArguのパーサーへはEntryPointの引数をそのまま渡せば良い
+- `--hello` を `-hello` にするのは `[<CliPrefix(CliPrefix.Dash)>]` をtypeにつける
+
+あたりをヒントにやってみてください。
+
+### 課題8: PlayDeedleのprojectとfilterをArguでコマンドライン化
+
+`--project "場所" "学年"` みたいなオプションと、 `--filter "専門" "数学"` みたいなオプションを実装しましょう。
+csvのパスは決め打ちで開いてしまっていいです。
+
+PlayArguのプロジェクトに `dotnet add` でDeedleも追加して、課題3や課題5のコードを持ってきて修正してください。
 
 
 ## FParsecをつついてみよう
