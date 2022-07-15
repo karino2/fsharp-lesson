@@ -505,7 +505,8 @@ I don't know
 次にVSCodeからの実行方法を見てみます。
 
 - とりあえずF5押す
-- LLDBを選ぶ（とりあえずlaunch.jsonが作られるもの）
+  - この２つのステップが上手く行かない時は画面左端の三角と虫のアイコンをクリックして、「launch.jsonファイルを作成します」を選ぶ
+- Blazor WebAssembly Debugを選ぶ（とりあえずlaunch.jsonが作られるものならなんでも良い）
 - launch.jsonを以下のように書き換える
 
 ```
