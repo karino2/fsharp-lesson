@@ -346,7 +346,7 @@ row.GetAs<string>("専門")
 
 ```
 df.RowsDense
-|> Series.filterValues fun row -> ???)
+|> Series.filterValues(fun row -> ???)
 ```
 
 これはScratch.fsxに書いてcommitしてpushし、gitterで私にgithub上のリンクを送って下さい。
