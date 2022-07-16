@@ -21,7 +21,7 @@ F# での基本的な作業の進め方に慣れつつ、あとで使う事に�
 
 ## セットアップ
 
-NYI: dotnet coreでVSCodeでIonideのセットアップをしよう、的な事を誰かが書いてくれる。
+[Install F# with Visual Studio Code](https://docs.microsoft.com/en-us/dotnet/fsharp/get-started/install-fsharp#install-f-with-visual-studio-code)に従って.NET、VSCode、Ionideのインストールを行ってください。
 
 ## Deedleをつついてみよう
 
@@ -37,7 +37,7 @@ Deedleをつついてみましょう。
 第一回だったら、`sources/play_library/` というディレクトリがあると思うので、この下にそれぞれディレクトリをほって作業します。
 
 また、少し通常のブランチの使い方と違いますが、添削の都合で各作業はブランチを切る事にします。
-第一回のブランチ名は全て `play_library/` を前につけて、あとは数女の通し番号とどこかを表す名前を適当につけます。
+第一回のブランチ名は全て `play_library/` を前につけて、あとは数字の通し番号とどこかを表す名前を適当につけます。
 
 例えばDeedleをいじってみるというこのブランチは`play_library/1_playdeedle` としましょう。
 次のArguは`play_library/2_helloargu` とします。（2のラベル名はあとで変えるかも）
