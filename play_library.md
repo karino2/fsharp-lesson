@@ -21,7 +21,7 @@ F# での基本的な作業の進め方に慣れつつ、あとで使う事に�
 
 ## セットアップ
 
-NYI: dotnet coreでVSCodeでIonideのセットアップをしよう、的な事を誰かが書いてくれる。
+[Install F# with Visual Studio Code](https://docs.microsoft.com/en-us/dotnet/fsharp/get-started/install-fsharp#install-f-with-visual-studio-code)に従って.NET、VSCode、Ionideのインストールを行ってください。
 
 ## Deedleをつついてみよう
 
