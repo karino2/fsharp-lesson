@@ -456,10 +456,10 @@ The application to execute does not exist: 'XXXX/fsharp-lesson/sources/play_libr
 これらのファイルがそれぞれ何なのかはdotnetの方の話になりますが、コンソールアプリで使っている分にはあまり知る必要も無いでしょう。
 
 よその場所に持っていって実行する場合はpublishというのを実行する必要があります。
-Macの場合は以下のように実行します。
+Macの場合は以下のように実行します。(他のOSについては、`-r <RID>`で指定する[Runtime Identifier (RID)](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog)を変えて下さい。)
 
 ```
-$ dotnet publish -r osx-x64 /p:PublishSingleFile=true
+$ dotnet publish -r osx-x64 -p:PublishSingleFile=true
 $ cp bin/Debug/net6.0/osx-x64/publish/PlayArgu ./
 $ ./PlayArgu
 Hello from F#
