@@ -659,6 +659,7 @@ PlayArguのプロジェクトに `dotnet add` でDeedleも追加して、課題3
 
 FParsecはいわゆるパーサーコンビネーターという奴ですね。パーサーのライブラリ。
 少しいじったあとにチュートリアルを軽く読んで、あとはサンプルを見ればだいたいの事はわかると思う。
+このページの最後に参考文献へのリンクも貼っておきますが、まずはいじりつつ必要な事だけ見ていくのが良いと思います。
 
 FParsec入門してprojectとfilterを`project([場所], [学年])`みたいなのと、`filter([専門] = "数学")` みたいなのをパースして実行する、というのを実装してみましょう。
 
@@ -756,3 +757,8 @@ runExpr "filter([専門] = \"数学\")" df
 ライブラリを少しつついてチュートリアルやサンプルを見て使い方を覚える、という流れには慣れてきたでしょうか。
 
 次の第二回から本格的にプログラムを開始していきます。
+
+FParsecとかパーサーコンビネータをもっとちゃんと勉強したい人向けに参考文献リンクを貼っておきます
+
+- [The "Understanding Parser Combinators" Series · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/series/understanding-parser-combinators.html) FParsecを意識した解説になっているので連続性はある
+- [Monadic Parser Combinators.pdf](http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf) 理論的な事だけ知りたいならこれが良いが、実装言語がGoferとか言われても…という気はするが、Haskellの入門くらいかじっておけば雰囲気で読める。著者のGraham HuttonとErik Meijerは数年後に[parsec-paper-letter.pdf](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf)というのも書いているが、勉強目的なら最初のだけで良いでしょう。関連文献などもあるし論文の体裁が得意な機械学習屋はこういう方が好みかもしれない。
