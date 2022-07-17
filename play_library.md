@@ -651,4 +651,100 @@ PlayArguのプロジェクトに `dotnet add` でDeedleも追加して、課題3
 
 ## FParsecをつついてみよう
 
-FParsec入門してprojectとfilterを`project([場所], [学年])`みたいなのと、`filter([専門] = "数学")` みたいなのをパースして実行する。
+ライブラリをつついてみよう、第三弾はFParsecです。
+
+- [stephan-tolksdorf/fparsec: A parser combinator library for F#](https://github.com/stephan-tolksdorf/fparsec)
+- [Tutorial](http://www.quanttec.com/fparsec/tutorial.html)
+- [fparsec/Samples at master · stephan-tolksdorf/fparsec](https://github.com/stephan-tolksdorf/fparsec/tree/master/Samples)
+
+FParsecはいわゆるパーサーコンビネーターという奴ですね。パーサーのライブラリ。
+少しいじったあとにチュートリアルを軽く読んで、あとはサンプルを見ればだいたいの事はわかると思う。
+
+FParsec入門してprojectとfilterを`project([場所], [学年])`みたいなのと、`filter([専門] = "数学")` みたいなのをパースして実行する、というのを実装してみましょう。
+
+### まずはいじってみる
+
+いつものように、`play_library/3_playfparsec` というブランチを作り、
+PlayFParsecというプロジェクトを作り、そしてScratch.fsxを足します。
+
+そして以下のように書きます。
+
+```
+#r "nuget: FParsec"
+open FParsec
+
+run pfloat "1.25"
+```
+
+これでとりあえず動くと思います。
+
+なお、以下のように書くとエラーが出ると思いますが、
+
+```
+let ws = spaces
+let float_ws = pfloat .>> ws
+```
+
+その次に以下の行を足すとエラーが消えるはずです。
+
+```
+run float_ws "1.25 "
+```
+
+これはFParsecをfsharp scriptで試す時の落とし穴で、使う側のコードが無いと型が確定しないのでこうなります。
+とりあえず開発の途中の段階ではrunをどこかに書いておくようにするといいでしょう。
+
+### 課題9: チュートリアルを4.6（floatのリストのパース）までやってみる
+
+とりあえずチュートリアルを4.6まで進めてみましょう。
+
+[Tutorial](http://www.quanttec.com/fparsec/tutorial.html)
+
+これはcommitはして欲しいですが、私に見せなくてもいいです。
+
+### projectのパースをする
+
+次に、 `project([場所], [学年])` をパースしてみましょう。
+一気にやるのはちょっと大変なので順番に進めます。
+
+### 課題10: カラム名のパーサーを書こう
+
+まずはカラム名のパースです。
+
+`[場所]`
+
+のパースを考えます。チュートリアルの4.3と似ていますが、中身がpfloatじゃないですね。
+`[`から始まり、`]` まで。変なエスケープとかは考えないでいいでしょう。
+
+チュートリアルの4.7のstringLiteralのパーサーがこれをもっと複雑にした事をしているので、それを見つつ書いてみましょう。
+名前はpColumnにしますか。
+
+ここまで書けたら一旦見せて下さい。
+
+### 課題11: projectのパーサーを書こう
+
+課題10を元に、projectのパーサーを書きます。
+
+`project`から始まり、 `(`が続き、カラム名のカンマ区切りが続き、`)`で終わります。
+返す型もちゃんと作りましょう。
+
+パーサーの名前はpProjectとします。
+
+### 課題12: filterのパーサーを書こう
+
+同様にフィルタを書きます。パーサーの名前はpFilterにします。
+
+引数は将来的にはandやorも対応しますが、まずは条件は一つにします。
+つまり、いつも `[カラム名] = "文字列"` の形で、カンマとかも無しで一つだけです。
+
+### 課題13: 両者のパースをくっつけて課題5のPlayDeedleとくっつけよう
+
+filterかprojectをパースする、pExpressionを作り、それを課題5で作ったfilterやprojectとつなげてみましょう。
+このくらいならまだScratch.fsxに全部書いてしまって良いと思います。
+
+## 第一回の終わりに
+
+これで第一回は終わりです。
+ライブラリを少しつついてチュートリアルやサンプルを見て使い方を覚える、という流れには慣れてきたでしょうか。
+
+次の第二回から本格的にプログラムを開始していきます。
