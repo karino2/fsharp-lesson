@@ -742,6 +742,14 @@ run float_ws "1.25 "
 filterかprojectをパースする、pExpressionを作り、それを課題5で作ったfilterやprojectとつなげてみましょう。
 このくらいならまだScratch.fsxに全部書いてしまって良いと思います。
 
+以下が動く感じのrunExprを作ります。結果はDeedleのFrameを返すでいいでしょう。
+
+```
+runExpr "project([場所], [学年])" df
+
+runExpr "filter([専門] = \"数学\")" df
+ ```
+
 ## 第一回の終わりに
 
 これで第一回は終わりです。
