@@ -35,6 +35,7 @@ plugins:
 
 header_pages:
   - play_library.md
+  - toyrel.md
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
