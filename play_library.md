@@ -727,7 +727,6 @@ run float_ws "1.25 "
 課題10を元に、projectのパーサーを書きます。
 
 `project`から始まり、 `(`が続き、カラム名のカンマ区切りが続き、`)`で終わります。
-返す型もちゃんと作りましょう。
 
 パーサーの名前はpProjectとします。
 
@@ -738,10 +737,67 @@ run float_ws "1.25 "
 引数は将来的にはandやorも対応しますが、まずは条件は一つにします。
 つまり、いつも `[カラム名] = "文字列"` の形で、カンマとかも無しで一つだけです。
 
-### 課題13: 両者のパースをくっつけて課題5のPlayDeedleとくっつけよう
+### 課題13: 両者のパース結果を返す型を作って返す
 
-filterかprojectをパースする、pExpressionを作り、それを課題5で作ったfilterやprojectとつなげてみましょう。
+さて、課題12まででfilterとprojectのパーサーが出来ました。
+次にこのfilterかprojectのどちらかをパースする、Expressionのパース、pExpressionを作りましょう。
+
+
+### 課題14: projectのパース結果を返す型をつくり、それを返そう
+
+（なお、この課題の前に、試しに課題16を解いてみると、この課題の理解が進みます。この課題の意味がわからない場合は先に課題16を解いてみましょう）
+
+ここまで書いたものをそのまま返していると、以下を実行した時に
+
+```
+let res = run pExpression "project([場所], [学年])"
+```
+
+単に文字列のリストとか文字のタプルなどが返ってきていて、
+それがprojectなのかfilterなのかなどがわかりにくくなっていると思います。
+
+「いやいや、リストはprojectでタプルがfilterだよ」とか言ってはいけません。
+そこで、両者の型を別々に作り、それを返すようにしましょう。
+手始めにpProjectだけやってみます。
+
+なお、すでにやっている人はこの課題とこの次の課題はスキップしてOKです。
+
+最終的に目指すのは、以下のような型を定義し、
+
+```
+type ProjectExpression =
+  // なにか埋める
+
+type FilterExpression =
+  // なにか埋める
+
+type Expression =
+| ProjectExpression
+| FilterExpression
+```
+
+pExpressionが `string->ParseResult<Expression, unit>` となるようにします。
+突然ここから始めるのは大変かもしれないので、まずはprojectだけ始めます。
+
+まずProjectExpressionの型を考えます。レコード型で、この処理を行う（deedleとつなげる事をイメージ）時に必要になる物を考えます。
+課題8のproject関数の引数を見て、それに必要な情報が含まれるような型にすると良いでしょう。
+
+で、次にpProjectProjecExpressionを「返す」ようにパーサーを変更します。
+
+返す方法としては、チュートリアルの`|>>`, `stringReturn`, `pipe2`などを参考にしてみてください。
+
+で、pProjectからProjectExpressionを返すようにします。
+
+### 課題15: filterも型を作って、pExpressionでExpressionを返すようにする
+
+次にfilterでも同じ作業をして、最後にpExpressionからExpressionを返すようにしましょう。
+
+### 課題16: 両者のパースをくっつけて課題5のPlayDeedleとくっつけよう
+
+pExpressionを課題5で作ったfilterやprojectとつなげてみましょう。
 このくらいならまだScratch.fsxに全部書いてしまって良いと思います。
+
+課題5の段階では引数に型が無かったと思いますが、課題15で作ったProjectExpressionやFilterExpressionを引数にとるように変更してつなげましょう。
 
 以下が動く感じのrunExprを作ります。結果はDeedleのFrameを返すでいいでしょう。
 
@@ -749,7 +805,7 @@ filterかprojectをパースする、pExpressionを作り、それを課題5で�
 runExpr "project([場所], [学年])" df
 
 runExpr "filter([専門] = \"数学\")" df
- ```
+```
 
 ## 第一回の終わりに
 
