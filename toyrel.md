@@ -45,15 +45,29 @@ relationは全てcsvで保存される。
 toyrel上では拡張子を取り除いたものがrelationの名前として使われる。
 
 ```
-シラバスcls = project (シラバス) (class)
-インデックスcls = project (インデックス) (class)
-result = difference (シラバスcls) (インデックスcls)
+> シラバスcls = project (シラバス) (class)
+> インデックスcls = project (インデックス) (class)
+> result = difference (シラバスcls) (インデックスcls)
 ```
 
 ```
-シラバスと建物 = join (シラバス) (建物) (シラバス.専門 = 建物.所属)
+> シラバスと建物 = join (シラバス) (建物) (シラバス.専門 = 建物.所属)
 ```
 
 relationは全てその場で適当に作られたランダムな名前のファイルに保存される。
 左辺がある場合はその名前のcsvに保存される。
+
+```
+> project (シラバス) (専門, 学年)
+Relation zzybac returned.
+> print zzybac
+専門   学年
+----  ----
+数学    1
+物理    1
+数学    2
+```
+
+printでリレーションを表示する。
+同じ行は削除される事に注意。
 
