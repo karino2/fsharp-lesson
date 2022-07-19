@@ -992,11 +992,11 @@ pnumberの時はfloatで、identifierの時は変数名の文字列でしょう�
 例えば以下のような型が考えられます。
 
 ```
-type Factor = Number of int
+type Factor = Number of float
             | Identifier of string
 ```
 
-一応Discriminated Unionの復習を簡単にしておくと、この右辺が型構築子になります。
+一応Discriminated Unionの復習を簡単にしておくと、右辺が型構築子になります。
 
 だから以下のように使える。
 
