@@ -2,20 +2,6 @@
 title: "第二回 Relational Algebraの処理系、ToyRelを作ろう"
 layout: page
 ---
-<style>
-   .column{
-        padding: 0.5em 1em;
-        margin: 2em 0;
-        color: #5d627b;
-        background: white;
-        border-top: solid 5px #5d627b;
-        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.22);
-    }
-    .post-content h1 {
-       font-size: 34px;
-    }
-</style>
-
 第二回では [LEAP RDBMS : Home](http://leap.sourceforge.net/) のようなrelational algebraの処理系を作ってみます。
 いわゆるリレーショナルデータベースのおもちゃを作る感じです。
 名前をtoyのrelational algebraという事でToyRelと呼ぶ事にします。
