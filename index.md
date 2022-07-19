@@ -57,3 +57,9 @@ F# for fun and profitはそのほかの記事もいろいろ読む事をおす�
 
 [第一回 まずはライブラリをつついてみよう](play_library.md)
 
+## 第二回 Relational Algebraの処理系、ToyRelを作ろう
+
+本格的なプログラムとして、[LEAP RDBMS : Home](http://leap.sourceforge.net/)に類似のRelational Algebra処理系を作ります。
+
+[第二回 Relational Algebraの処理系、ToyRelを作ろう](toyrel.md)
+

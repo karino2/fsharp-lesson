@@ -100,9 +100,90 @@ projectは最終的にはかなり本格的なExpressionの仕様が必要にな
 
 ### databaseという概念
 
+将来的には複数のデータベースというのを持てるようにしたいと思っています。
+データベースはリレーションの集まりです。
+ディレクトリをデータベースとして扱いたい。
+
+useでデータベースを切り替える。
+
+例えばシラバスや成績などのデータベースと、住所とオーダーのデータベースなどというような。
+
+ただ当面はとりあえず一つとしたい。
+
+ToyRelのプロジェクトにdatabaseというディレクトリを作って、その中にsource/dataのcsvをコピーするシェルスクリプトを作り、
+普段の作業はそれに対してやります。
+ちょくちょくクリアしたくなるので、スクリプトはディレクトリ削除して作り直す所からやる感じにしておいてください。
+
+setupdb.shとかそんな感じの名前で。別にbatファイルでもps1ファイルでもいいです。
+
+当面はここのパスを決め打ちで作業していきます。
+つまり、"シラバス"といったら、`source/ToyRel/database/シラバス.csv`を意味します。
+
 ### projectの文法
 
+projectは最初の引数がカッコでくくったexpressionというもので、そのあとにカラムの名前のリストが並びます。
+expressionは後述するので後回しにして、それ以外は以下のようなイメージ。（厳密な文法という訳じゃないので雰囲気で読み取ってください）
+
+```
+project_expression = 'project' expression columnlist
+
+columnlist = column
+  | column ',' columnlist
+
+column = '[' string ']'
+     | identifier
+
+identifier = nondigitchar normalchar*
+
+nondigitchar = ([a-zA-Z]|p{IsHiragana}|p{IsKatakana}|p{IsCJKUnifiedIdeographs})
+normalchar = nondigitchar | [0-9_]
+```
+
+stringとかはまぁ適当に(閉じ大かっこ以外とかでいいと思う)。
+IsHiraganaとかは以下を参考に。 [.NET 正規表現での文字クラス - Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/character-classes-in-regular-expressions#SupportedNamedBlocks)
+
+注意したい事としては
+
+- 識別子は1文字目数字は禁止とする（パースで数字の即値と区別が難しいのでだいたいは禁止されている）
+- カタカナや漢字を使いたいのでその辺は真面目にする
+
+という感じで。
+
 ### expressionの暫定的な仕様
+
+expressionは中を評価するとrelationになっているようなものです。
+まず考えるべきは以下の２つです。
+
+- リレーションの名前をそのままカッコでくくったもの
+- projectなどの結果
+
+例えば、１つ目の例は以下になります。
+
+```
+project (シラバス) 専門, 学年
+```
+
+この時、１つ目のカッコの中はリレーションの名前になります。
+
+２つ目の例としては以下のようなものが考えられます。
+
+```
+project (project (シラバス) 専門, 学年, 場所) 専門, 学年
+```
+
+これをパースしやすいように書くのはちょっと文法力が必要かもしれません。とりあえず一番雑に書くと以下みたいな感じになるでしょうか？
+
+```
+expression =  '(' identifier ')'
+           |'(' 'project' expression columnlist ')'
+```
+
+createParserForwardedToRefを使うともうちょっといい感じに分解できるかもしれません。
+とりあえず動くものを作った上でその辺の試行錯誤はしてみたください。
+
+### 課題1: 暫定版projectのパーサーと型を作ろう
+
+とりあえず上記のような感じの仕様で型とパーサーを作ってみてください。
 
 
 ## 実装するものの概要
