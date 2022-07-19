@@ -49,7 +49,7 @@ ToyRelとしては、relational modelとしてcsvファイルを使います。r
 以下のような処理を実行すると、ランダムに生成された名前のrelationが保存されます。
 
 ```
-> project (シラバス) (専門, 学年)
+> project (シラバス) 専門, 学年
 Relation zzybac returned.
 ```
 
@@ -71,7 +71,7 @@ Relation zzybac returned.
 以下のような文を実行すると、
 
 ```
-> シラバス_専門_学年 = project (シラバス) (専門, 学年)
+> シラバス_専門_学年 = project (シラバス) 専門, 学年
 ```
 
 「シラバス_専門_学年.csv」というファイルが生成されて、中身は先程と同じ。
