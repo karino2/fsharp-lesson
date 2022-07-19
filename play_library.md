@@ -1294,7 +1294,7 @@ pExpressionが `string->ParseResult<Expression, unit>` となるようにしま�
 
 でも突然ここから始めるのは大変かもしれないので、まずはprojectの型を作って返す所から始めましょう、
 
-### 課題13: projectのパーサーの返す型を作ろう
+### 課題13: pProjectのパーサーの返す型を作ろう
 
 まずProjectExpressionの型を考えます。レコード型で、この処理を行う（deedleとつなげる事をイメージ）時に必要になる物を考えます。
 課題8のproject関数の引数を見て、それに必要な情報が含まれるような型にすると良いでしょう。
@@ -1305,9 +1305,9 @@ pExpressionが `string->ParseResult<Expression, unit>` となるようにしま�
 
 で、pProjectからProjectExpressionを返すようにします。
 
-### 課題14: filterも型を作って返すようにし、projectとfilterの両方をパースするpExpressionを作る
+### 課題14: pFilterも型を作って返すようにし、projectとfilterの両方をパースするpExpressionを作る
 
-次にfilterでも同じ作業をして、最後にpExpressionからExpressionを返すようにしましょう。
+次にpFilterでも同じ作業をして、最後にpExpressionからExpressionを返すようにしましょう。
 
 ### 課題15: 両者のパースをくっつけて課題5のPlayDeedleとくっつけよう
 
