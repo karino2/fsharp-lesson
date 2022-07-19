@@ -17,7 +17,7 @@ layout: page
 上のリンクから買ってくれるとちょっとアフィリエイトが入って嬉しいくらい。
 牛の本とか持ってるなら買わなくてもいいと思います（自分は昔読んだが捨ててしまって手元に無い…）
 
-## toyrelとrelational model
+## ToyRelとrelational modelとrelational algebra
 
 RDBの基礎は、relational modelとrelational algebraです。詳細は上記書籍を参照してもらうとして、
 ここでは実装上の簡単な説明を行います。
@@ -29,7 +29,7 @@ rowが重複しないテーブルと思っておけばだいたいよろしい�
 relational algebraの各演算がまたrelational modelを返すので、この演算は代数をなす、という事ですが、
 実装的に重要なのは、演算の結果もテーブルも区別がなく同じrelational modelになる、という事です。
 
-toyrelとしては、relational modelとしてcsvファイルを使います。relationの名前として、csvファイルのbasename、つまり拡張子を取り除いたものを使います。
+ToyRelとしては、relational modelとしてcsvファイルを使います。relationの名前として、csvファイルのbasename、つまり拡張子を取り除いたものを使います。
 
 実装するrelational algebraとしては、以下を実装する事にします。
 
@@ -41,7 +41,8 @@ toyrelとしては、relational modelとしてcsvファイルを使います。r
 - product
 - join
 
-本格的なrelational algebra処理系となるので、全仕様を最初に詳細に決めるのは難しいし理解をするのも大変なので、これを徐々にすすめていこうと思います。
+本格的なrelational algebra処理系となるので、全仕様を最初に詳細に決めるのは難しいし理解をするのも大変です。
+そこで、これを徐々にすすめていく過程で何を作るかを明らかにしていこうと思います。
 
 ## こんなものを動かしたい、というイメージ
 
