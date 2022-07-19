@@ -903,6 +903,31 @@ let float_ws = pfloat .>> ws
 
 なにか書く。
 
+
+### パーサーの参考文献
+
+文法とかパーサーをより本格的に学びたいなら、コンパイラのコースや教科書を読むのが良いでしょう。
+
+[Compilers - edX](https://www.edx.org/course/compilers)
+
+無料のオンラインコースならこちら。Week2〜Week4が文法とパーサーの真面目な解説です。ただ期限が来るとコンテンツにアクセスできなくなる（もう一回enrollすれば見れるんだけど）のがちょっとかったるい。
+自分は別の所で勉強しているので復習したい所だけをたまにenrollしては見ているが、なかなか出来は良いと思う。
+
+<iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B00D2WQAE8&linkId=ed4cca3cbb4a5c8c72621a31d3dceb24"></iframe>
+
+虎本。コンパイラでは虎本とDragon bookの２つが有名だが、Dragon bookはkindleになってないので自分は主にこの辺を調べたくなったら手元の虎本を参照している。
+日本語版もあるけれど読んだ事無いので英語版をおすすめしておく。
+別に日本語版でもいいかもしれない。知らない。
+
+パースは割とこうした教科書の話題からはみ出た重要な話題が近年は技術ブログなどでちょこちょこ出てきますが、
+そういうのは必要になったら調べるくらいで十分な気もする。
+
+FParsecとかパーサーコンビネータをもっとちゃんと勉強したい人向けにも、参考文献リンクを貼っておきます
+
+- [The "Understanding Parser Combinators" Series · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/series/understanding-parser-combinators.html) FParsecを意識した解説になっているので連続性はある
+- [Monadic Parser Combinators.pdf](http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf) 理論的な事だけ知りたいならこれが良いが、実装言語がGoferとか言われても…という気はするが、Haskellの入門くらいかじっておけば雰囲気で読める。著者のGraham HuttonとErik Meijerは数年後に[parsec-paper-letter.pdf](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf)というのも書いているが、勉強目的なら最初のだけで良いでしょう。関連文献などもあるし論文の体裁が得意な機械学習屋はこういう方が好みかもしれない。
+
+
 ### 課題11: projectのパーサーを書こう
 
 課題10を元に、projectのパーサーを書きます。
@@ -1004,7 +1029,3 @@ runExpr "filter([専門] = \"数学\")" df
 
 次の第二回から本格的にプログラムを開始していきます。
 
-FParsecとかパーサーコンビネータをもっとちゃんと勉強したい人向けに参考文献リンクを貼っておきます
-
-- [The "Understanding Parser Combinators" Series · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/series/understanding-parser-combinators.html) FParsecを意識した解説になっているので連続性はある
-- [Monadic Parser Combinators.pdf](http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf) 理論的な事だけ知りたいならこれが良いが、実装言語がGoferとか言われても…という気はするが、Haskellの入門くらいかじっておけば雰囲気で読める。著者のGraham HuttonとErik Meijerは数年後に[parsec-paper-letter.pdf](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/parsec-paper-letter.pdf)というのも書いているが、勉強目的なら最初のだけで良いでしょう。関連文献などもあるし論文の体裁が得意な機械学習屋はこういう方が好みかもしれない。
