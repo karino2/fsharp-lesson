@@ -1255,16 +1255,17 @@ let pProjcet = ... >>. eachColumn .>> (str_ws2 ")")
 引数は将来的にはandやorも対応しますが、まずは条件は一つにします。
 つまり、いつも `[カラム名] = "文字列"` の形で、カンマとかも無しで一つだけです。
 
-### 課題13: projectのパーサーの返す型を作ろう
+
+### Expressionのパーサーとその返すべき型を考える
 
 さて、課題12まででfilterとprojectのパーサーが出来ました。
-次にこのfilterかprojectのどちらかをパースするパーサーを作りましょう。
+次にこのfilterかprojectのどちらかをパースするパーサーを作りたい。
 
-filterとprojectのどちらか、という事を表す言葉は何が適切かは難しい所ですね。
-ステートメントかExpressionとかがプログラムの用語ではよく使われます。
-LEAPではexpressionと呼んでいるので、ここでもExpressionとしておきましょう。
+filterとprojectのどちらか、という事を表す言葉がなにか欲しい所ですね。
+プログラムの用語ではステートメントかExpressionとかがよく使われます。
+第二回で作ろうとしている物の参考にしている[LEAP RDBMS : Home](http://leap.sourceforge.net/)ではexpressionと呼んでいるので、ここでもExpressionとしておきましょう。
 
-という事でExpressionをパースするパーサー、pExpressionを作りましょう。
+という事でExpressionをパースするパーサー、pExpressionを作りたい。
 ですが、単純に以下のように書くと、返す型が違う、と怒られるはずです。
 
 ```
@@ -1273,7 +1274,7 @@ let pExpression = pFilter
 ```
 
 pFilterとpProjectのどちらなのかの情報を保持しつつ、pExpressionとしては共通の型を返す必要があります。
-これはDiscriminated Unionの出番です。
+これはいかにもDiscriminated Unionの出番です。
 
 最終的に目指すのは、以下のような型を定義し、
 
@@ -1291,7 +1292,9 @@ type Expression =
 
 pExpressionが `string->ParseResult<Expression, unit>` となるようにします。
 
-でも突然ここから始めるのは大変かもしれないので、まずはprojectだけ始めます。
+でも突然ここから始めるのは大変かもしれないので、まずはprojectの型を作って返す所から始めましょう、
+
+### 課題13: projectのパーサーの返す型を作ろう
 
 まずProjectExpressionの型を考えます。レコード型で、この処理を行う（deedleとつなげる事をイメージ）時に必要になる物を考えます。
 課題8のproject関数の引数を見て、それに必要な情報が含まれるような型にすると良いでしょう。
