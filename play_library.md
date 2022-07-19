@@ -768,6 +768,17 @@ factor = number
 ```
 
 ここではnumberとかidentifierは最初から与えられるものという前提になっています。
+通常numberはintかfloatっぽい文字列、identifierは`[a-zA-Z_]`で始まってアルファベットと数字が続くようなものと定義される事が多いです。
+
+縦棒で並べたものが「or」という意味で、並べたどれかのうちの一つ、という事を意味します。例えば、以下の場合
+
+```
+factor = number
+       | identifier
+```
+
+「factorとは、numberまたはidentifier」と読みます。
+
 
 下から順番に見ていくと、factorというのが数字か文字（変数）、で、掛け算割り算の項がtermとして定義されて、
 exprとはtermを足したり引いたりしたもの、となっています。
