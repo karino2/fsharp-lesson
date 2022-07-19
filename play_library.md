@@ -913,7 +913,7 @@ let float_ws = pfloat .>> ws
 無料のオンラインコースならこちら。Week2〜Week4が文法とパーサーの真面目な解説です。ただ期限が来るとコンテンツにアクセスできなくなる（もう一回enrollすれば見れるんだけど）のがちょっとかったるい。
 自分は別の所で勉強しているので復習したい所だけをたまにenrollしては見ているが、なかなか出来は良いと思う。
 
-本なら虎本が自分はよく参照する。
+書籍なら虎本を自分はよく参照する。
 
 <iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B00D2WQAE8&linkId=ed4cca3cbb4a5c8c72621a31d3dceb24"></iframe>
 
