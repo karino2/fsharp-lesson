@@ -916,8 +916,11 @@ let float_ws = pfloat .>> ws
 <iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B00D2WQAE8&linkId=ed4cca3cbb4a5c8c72621a31d3dceb24"></iframe>
 
 虎本。コンパイラでは虎本とDragon bookの２つが有名だが、Dragon bookはkindleになってないので自分は主にこの辺を調べたくなったら手元の虎本を参照している。
+3章のParsingは十分以上の内容になっていると思う（読む時は2のLexical Analysisから読む方が良いかも）。
 日本語版もあるけれど読んだ事無いので英語版をおすすめしておく。
 別に日本語版でもいいかもしれない。知らない。
+
+どちらも割と本格的な内容なので、ここまで知らんでもなぁ、という気が個人的にはします。
 
 パースは割とこうした教科書の話題からはみ出た重要な話題が近年は技術ブログなどでちょこちょこ出てきますが、
 そういうのは必要になったら調べるくらいで十分な気もする。
