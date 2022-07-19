@@ -71,3 +71,13 @@ Relation zzybac returned.
 printでリレーションを表示する。
 同じ行は削除される事に注意。
 
+{% capture comment1 %}
+**コメントテスト**
+これは何か囲み記事
+
+空行も使える
+{% endcapture %}
+{% include myquote.html body=comment1 %}
+
+
+
