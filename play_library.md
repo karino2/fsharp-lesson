@@ -1135,7 +1135,7 @@ FParsecを意識した解説になっているので連続性はある。ただ�
 引数は将来的にはandやorも対応しますが、まずは条件は一つにします。
 つまり、いつも `[カラム名] = "文字列"` の形で、カンマとかも無しで一つだけです。
 
-### 課題13: 両者のパースのどちらかを行う、pExpressionを作ろう
+### 課題13: projectのパーサーの返す型を作ろう
 
 さて、課題12まででfilterとprojectのパーサーが出来ました。
 次にこのfilterかprojectのどちらかをパースするパーサーを作りましょう。
@@ -1145,25 +1145,15 @@ filterとprojectのどちらか、という事を表す言葉は何が適切か�
 LEAPではexpressionと呼んでいるので、ここでもExpressionとしておきましょう。
 
 という事でExpressionをパースするパーサー、pExpressionを作りましょう。
-
-### 課題14: projectのパース結果を返す型をつくり、それを返そう
-
-（なお、この課題の前に、試しに課題16を解いてみると、この課題の理解が進みます。この課題の意味がわからない場合は先に課題16を解いてみましょう）
-
-ここまで書いたものをそのまま返していると、以下を実行した時に
+ですが、単純に以下のように書くと、返す型が違う、と怒られるはずです。
 
 ```
-let res = run pExpression "project([場所], [学年])"
+let pExpression = pFilter
+      <|> pProject
 ```
 
-単に文字列のリストとか文字のタプルなどが返ってきていて、
-それがprojectなのかfilterなのかなどがわかりにくくなっていると思います。
-
-「いやいや、リストはprojectでタプルがfilterだよ」とか言ってはいけません。
-そこで、両者の型を別々に作り、それを返すようにしましょう。
-手始めにpProjectだけやってみます。
-
-なお、すでにやっている人はこの課題とこの次の課題はスキップしてOKです。
+pFilterとpProjectのどちらなのかの情報を保持しつつ、pExpressionとしては共通の型を返す必要があります。
+これはDiscriminated Unionの出番です。
 
 最終的に目指すのは、以下のような型を定義し、
 
@@ -1180,22 +1170,23 @@ type Expression =
 ```
 
 pExpressionが `string->ParseResult<Expression, unit>` となるようにします。
-突然ここから始めるのは大変かもしれないので、まずはprojectだけ始めます。
+
+でも突然ここから始めるのは大変かもしれないので、まずはprojectだけ始めます。
 
 まずProjectExpressionの型を考えます。レコード型で、この処理を行う（deedleとつなげる事をイメージ）時に必要になる物を考えます。
 課題8のproject関数の引数を見て、それに必要な情報が含まれるような型にすると良いでしょう。
 
-で、次にpProjectProjecExpressionを「返す」ようにパーサーを変更します。
+で、次にpProjectがProjecExpressionを「返す」ようにパーサーを変更します。
 
 返す方法としては、チュートリアルの`|>>`, `stringReturn`, `pipe2`などを参考にしてみてください。
 
 で、pProjectからProjectExpressionを返すようにします。
 
-### 課題15: filterも型を作って、pExpressionでExpressionを返すようにする
+### 課題14: filterも型を作って返すようにし、projectとfilterの両方をパースするpExpressionを作る
 
 次にfilterでも同じ作業をして、最後にpExpressionからExpressionを返すようにしましょう。
 
-### 課題16: 両者のパースをくっつけて課題5のPlayDeedleとくっつけよう
+### 課題15: 両者のパースをくっつけて課題5のPlayDeedleとくっつけよう
 
 pExpressionを課題5で作ったfilterやprojectとつなげてみましょう。
 このくらいならまだScratch.fsxに全部書いてしまって良いと思います。
