@@ -903,7 +903,151 @@ let float_ws = pfloat .>> ws
 
 ### パーサーコンビネータとはなにか
 
-なにか書く。
+パーサーコンビネータとは、パーサーのライブラリの一種です。
+文法のような記述からパーサーを作ります。
+この文法のような記述を単なるホスト言語の言語機能による所が特徴です（言語内DSLと呼ばれる事もあります）。
+
+パーサーコンビネータは、個々のパーサーを関数で表します。
+どの関数が「パーサー」になっているかを意識してコードを読むのがポイントです。
+
+パーサーコンビネータには
+
+1. 最初から定義されているパーサー（pfloatなど）
+2. パーサーを生成する為の関数（pstring, stringReturnなど）
+3. パーサーを合成する演算 (`.>>, >>., >>, <|>`など)
+
+の３つが提供されているのが普通です（2と3は抽象的には同じものとも見る事が出来ますが、ここでは分けておきましょう）。
+
+2と1を区別して、どれがパーサーなのかに着目するのがパーサーコンビネータのコードを理解するコツとなります。
+その区別の為、パーサーを表す関数はpで始めるという紳士協定がなんとなくありますが、公式ドキュメント自体そこまで徹底している訳でも無いので、
+あくまで目安という事で良いでしょう（そもそもpstringはパーサーじゃないし）。
+
+返すものを考えなければ、`>>`と`<|>`の２つだけで、先程の文法とだいたい同じ事が書けます。
+
+例えば以下のような文法を考えましょう。
+
+```
+pnumber = pint32
+       | pfloat
+```
+
+これをそのままFParsecで以下のように書いてみます。
+
+```
+let pnumber = pint32
+            <|> pfloat
+```
+
+するとpfloatの所でエラーになります。これは左側がint32を返すのに右側がfloatを返すので、pnumberとしてはどっちを返して良いかわからない、という事になります。
+簡単のため、どちらもfloatを返すというように変更してみましょう。
+
+その為にはpint32の結果をfloatにキャストする必要があります。
+このパーサーの要素が確定した時に返す値を変えるのは、`|>>`という関数です。
+
+```
+let pintToF = pint32 |>> (fun i->(float)i)
+```
+
+floatにキャストするだけなら、float(i)と関数のように呼び出せるという事を知っていれば、funをかます必要もありません。
+
+```
+let pintToF = pint32 |>> float
+run pintToF "123"
+```
+
+これでパースした結果がfloatになります。これを用いてpnumberは以下のように書けます。
+
+```
+let pnumber = pintToF
+            <|> pfloat
+```
+
+これを以下の文法と見比べると、
+
+```
+pnumber = pint
+        | pfloat
+```
+
+似通っている事がわかるでしょう。
+
+### 課題 10.1 pidentifierを書け
+
+あとから挟まった課題なので、ナンバリング直すの面倒なので小数で10.1に。有理数は稠密なので安心。
+
+簡単の為、isLetterで始まってisLetter か isDigitが続く文字列、という感じのパーサーを書いてください。
+これは単に次の解説で必要なだけなので、文字列が変えればなんでもいいです。
+
+### pfactorを定義してみる
+
+同様にして、factorを定義してみます。
+文法は以下のようでした。
+
+```
+pfactor = pnumber
+       | pidentifier
+```
+
+さて、pfactorは何を返すべきでしょうか？それはパーサーコンビネータを使う人、つまり我々が決めないとけません。
+
+pnumberの時はfloatで、identifierの時は変数名の文字列でしょう。
+
+こういう「AまたはB」を表す型は、F#ではそのままDisciminated Unionで定義する事が出来ます。
+
+例えば以下のような型が考えられます。
+
+```
+type Factor = Number of int
+            | Identifier of string
+```
+
+一応Discriminated Unionの復習を簡単にしておくと、この右辺が型構築子になります。
+
+だから以下のように使える。
+
+```
+let fnum = Number 3.0
+let fid = Identifier "hogehoge"
+```
+
+fnumもfidも型はFactorとなります。Discriminated Unionについての詳細は以下。
+
+- [Discriminated Unions - F# - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/discriminated-unions)
+- [Discriminated Unions - F# for fun and profit](https://fsharpforfunandprofit.com/posts/discriminated-unions/#:~:text=In%20F%23%2C%20a%20sum%20type%20is%20called%20a,like%2C%20but%20must%20start%20with%20an%20uppercase%20letter.)
+
+
+ということで、このFactorを返すようにしてみましょう。
+
+```
+let pfactor = (pnumber |>> (fun f-> Number f))
+       <|> (pidentifier |>> (fun id-> Identifier id)
+```
+
+NumberもIdentifierも関数のように使えるじゃん、と気づけば以下のように書ける事も分かります（慣れないと読みにくいかもしれませんが）
+
+```
+let pfactor = (pnumber |>> Number)
+       <|> (pidentifier |>> Identifier)
+
+run pfactor "123.4"
+run pfactor "abc"
+```
+
+これでpnumberでもpidentifierでも、結果はFactorになるのでpfactorの型が確定しました。
+
+何を返すか、という事のあたりで記述はややこしいですが、そこを無視すれば以下のようになります。
+
+```
+let pfactor = pnumber
+       <|> pidentifier
+```
+
+このように、文法の記述とプログラムの記述がほとんど同じ、というのがパーサーコンビネターのアイデアです。
+一方でこれは単なるF#の関数なので、いろいろな便利関数を作る事ができるというのが、パーサーを文法から自動生成するタイプのライブラリと比べた、
+パーサーコンビネータの利点です。
+
+そしてパーサーコンビネータでは、文法にプラスして各項目で何を返すかを考えて、左辺では型が定まるようにプログラムをしてくのが一般的な考え方となります。
+そして両者がorの関係にある場合はDiscriminated Unionでそのまま対応づけられる所がF#のメリットと言えます
 
 
 ### パーサーの参考文献
