@@ -171,18 +171,21 @@ project (シラバス) 専門, 学年
 project (project (シラバス) 専門, 学年, 場所) 専門, 学年
 ```
 
-これをパースしやすいように書くのはちょっと文法力が必要かもしれません。とりあえず一番雑に書くと以下みたいな感じになるでしょうか？
+以上をそのまま書くと以下のようになります。
 
 ```
 expression =  '(' identifier ')'
-           |'(' 'project' expression columnlist ')'
+           |'(' project_expression ')'
 ```
 
-createParserForwardedToRefを使うともうちょっといい感じに分解できるかもしれません。
-とりあえず動くものを作った上でその辺の試行錯誤はしてみたください。
+さて、これをそのまま実装しようとしてみると、pExpressionを実装する時にはpProjectExpressionが必要で、
+pProjectExpressionを実装する時にはpExpressionが必要になってしまいます。
 
-### 課題1: 暫定版projectのパーサーと型を作ろう
+文法的は再帰で定義していくものなので、左再帰で無い限りは再帰は問題無いはずですが、
+実際にどのように書けば良いでしょう？
 
-とりあえず上記のような感じの仕様で型とパーサーを作ってみてください。
+そこで出てくるのが `createParserForwardedToRef` です。
+
+### createParserForwardedToRefを使ってexpressionの再帰を解決する
 
 
