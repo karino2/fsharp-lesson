@@ -1016,7 +1016,7 @@ fnumもfidも型はFactorとなります。Discriminated Unionについての詳
 
 ```
 let pfactor = (pnumber |>> (fun f-> Number f))
-       <|> (pidentifier |>> (fun id-> Identifier id)
+       <|> (pidentifier |>> (fun id-> Identifier id))
 ```
 
 NumberもIdentifierも関数のように使えるじゃん、と気づけば以下のように書ける事も分かります（慣れないと読みにくいかもしれませんが）
