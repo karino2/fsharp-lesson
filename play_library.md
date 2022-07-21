@@ -1304,7 +1304,7 @@ pExpressionが `string->ParseResult<Expression, unit>` となるようにしま�
 
 で、次にpProjectがProjecExpressionを「返す」ようにパーサーを変更します。
 
-返す方法としては、チュートリアルの`|>>`, `stringReturn`, `pipe2`などを参考にしてみてください。
+返す方法としては、チュートリアルの`|>>`, `pipe2`などを参考にしてみてください。
 
 で、pProjectからProjectExpressionを返すようにします。
 
