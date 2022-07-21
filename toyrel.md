@@ -38,6 +38,7 @@ ToyRelとしては、relational modelとしてcsvファイルを使います。r
 - union
 - difference
 - intersect
+- rename
 - product
 - join
 
@@ -78,8 +79,6 @@ LEAPのソースコードに書かれているページ数は手元の第二版�
 TODO: 最初数行のテーブルを書く
 
 TODO: それぞれのテーブルを簡単に説明（書籍にあるのと同じ内容でいいでしょう）
-
-
 
 
 ## こんなものを動かしたい、というイメージ
@@ -188,6 +187,7 @@ IsHiraganaとかは以下を参考に。 [.NET 正規表現での文字クラス
 - カタカナや漢字を使いたいのでその辺は真面目に対応する
 
 という感じで。
+なおLEAPではcolumnlistはカッコでくくていたけれど、toyrelではカッコは無しで行きたいと思います。
 
 ### expressionの暫定的な仕様
 
