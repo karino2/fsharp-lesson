@@ -188,4 +188,42 @@ pProjectExpressionを実装する時にはpExpressionが必要になってしま
 
 ### createParserForwardedToRefを使ってexpressionの再帰を解決する
 
+expressionの定義にはproject_expressionが必要で、project_expressionの定義にはexpressionが必要、
+という状態を解決する為の機能として、FParsecには `createParserForwardedToRef()` という関数が提供されています。
+
+これは、実体の無い仮のパーサーを返して、とりあえずそれを使ってルールを定義したあとに、その定義したルールを使って仮のパーサーの実体をあとから定義する、
+という事を可能とします。
+
+例として、pExpressionを仮のパーサーとして生成してpProjectExpressionを定義してみましょう。
+
+```
+let pExpression, pExpressionRef = createParserForwardedToRef()
+```
+
+Refについては後述します。こうやって得た仮のパーサーを使ってpProjectExpressionを定義する。
+
+```
+let pProjectExpression = (str "project") >>. pExpression .>>. pColumnList
+```
+
+このように、まだ定義していないpExpressionを使ってpProjectExpressionが定義出来ました。
+
+次に、このpProjectExpressionを使ってpExpressionを実際に定義します。
+この実際に定義する時に重要になるのが先程 `createParserForwardedToRef()` で得た二番目の戻り、 `pExpressionRef` です。
+これは変更という副作用が必要なので通常のletでは無く`:=`を使います。
+
+```
+pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
+               <|> (pstring "(") >>. pProjectExpression .>> (pstring ")")
+```
+
+この右辺でpProjectExpressionを使っている事に注目してください。
+
+もちろんこのまま書くと、pidentifierとpProjectExpressionの返りがコンパチブルじゃない的なエラーが出てくると思います。
+でもその解決はここまで進めた読者なら自分で出来るでしょう。
+
+### 課題1: pExpressionとpProjectExpressionをここまでの仕様で完成させよ
+
+ちゃんと返す型も作ってください。
+パースだけでいいです。
 
