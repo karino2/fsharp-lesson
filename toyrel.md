@@ -292,6 +292,6 @@ pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
 ### 以下を動かす
 
 ```
-r2=(project (subject) (class)) difference (project (index) (class))
+r2=(project (subject) class) difference (project (index) class)
 print r2
 ```
