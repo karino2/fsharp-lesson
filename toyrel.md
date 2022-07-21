@@ -19,10 +19,14 @@ layout: page
 
 ## ToyRelとrelational modelとrelational algebra
 
-RDBの基礎は、relational modelとrelational algebraです。詳細は上記書籍を参照してもらうとして、
+RDBの基礎は、relational modelとrelational algebraです。
+
+[Relational algebra - Wikipedia](https://en.wikipedia.org/wiki/Relational_algebra#:~:text=In%20database%20theory%2C%20relational%20algebra,Codd.)
+
+より詳細なRelational algebraについては上記書籍を参照してもらうとして、
 ここでは実装上の簡単な説明を行います。
 
-relational modelとは、データベースのテーブルというのは、なんらかの制約を満たしたタプルの集合とする、というモデルです。
+relational modelとは「データベースのテーブルというのは、なんらかの制約を満たしたタプルの集合とする」というモデルです。
 rowが重複しないテーブルと思っておけばだいたいよろしい。
 
 そしてrelational algebraというのはこのrelational model同士を演算して新しいrelational modelを作るという合成方法です。
