@@ -332,6 +332,8 @@ Dictionaryに突っ込んで同じ行が出ないようにする。
 
 せっかくなので型も作ろう。Relationという名前にしますかね。
 
+TODO: この辺でRelational Modelのタプルとかの用語も一応解説しておく。
+
 ## リレーションの保存
 
 toyrelではトップレベルで評価されたリレーションは必ずcsvに保存されます。
@@ -366,12 +368,26 @@ projectだけだといまいち面白い事が出来ないので、次にdiffere
 
 ### differenceの説明
 
-`df1 - df2` で、df1だけにあってdf2に無いrowだけが残る。Union Comparableじゃない時はエラー。
+`rel1 difference rel2` で、rel1だけにあってrel2に無いrowだけが残る。Union Comparableじゃない時はエラー。
 とりあえずはfailwithで落とす。
+
+文法としては、
+
+```
+DifferenceExpression = Expression "difference" Expression
+```
+
+で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃と思う）
+
 
 ### 処理の実装
 
+まずはパースが終わったあとの処理から書く。
+rel2を全部辞書に入れて、rel1のrowsでfilterして辞書に入ってなかったら流す感じにする。
+
 ### パース
+
+上記文法でパースしてつなげる。
 
 ### 以下を動かす
 
