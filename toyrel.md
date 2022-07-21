@@ -187,13 +187,13 @@ normalchar = nondigitchar | [0-9_]
 stringとかはまぁ適当に(閉じ大かっこ以外とかでいいと思う)。
 IsHiraganaとかは以下を参考に。 [.NET 正規表現での文字クラス - Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/character-classes-in-regular-expressions#SupportedNamedBlocks)
 
-注意したい事としては
+細かい所は違っていても良いのですが、注意したい事としては
 
 - 識別子は1文字目数字は禁止とする（パースで数字の即値と区別が難しいのでだいたいは禁止されている）
 - カタカナや漢字を使いたいのでその辺は真面目に対応する
 
-という感じで。
-なおLEAPではcolumnlistはカッコでくくていたけれど、toyrelではカッコは無しで行きたいと思います。
+という所は満たしたい。
+なおLEAPではcolumnlistはカッコでくくっていたけれど、toyrelではここのカッコは無しで行きたいと思います。
 
 ### expressionの暫定的な仕様
 
@@ -326,23 +326,49 @@ EvalProjectExpressionでは最初のExpressionの処理でEvalExpressionを処�
 {% endcapture %}
 {% include myquote.html body=recursive %}
 
+### rowをdistinctにする
 
+csvで同じ内容の行を２つ作って、df.Rows.Getした結果を比較してイコールがtrueになる事を確認。
+Dictionaryに突っ込んで同じ行が出ないようにする。
 
-### rowを一意にする
+せっかくなので型も作ろう。Relationという名前にしますかね。
 
 ## リレーションの保存
 
+toyrelではトップレベルで評価されたリレーションは必ずcsvに保存されます。
+左辺の変数がある時はそれがファイルのbasenmaeになります。
+左辺の変数が無い時はランダムで振られたファイル名になります。
+
+まずは左辺が無いケースでランダムのファイル名に保存する場合を考えましょう。
+
 ### ランダムファイル名の生成
+
+とりあえず長すぎず変な文字が無い無難なbasenameを作りましょう。
+とりあえず`[a-z][A-Z]`だけで8文字くらいでいいかしら？
 
 ### 保存
 
-### 左辺を含むパース
+dfを basename + ".csv"という名前でデータベースのディレクトリに保存する。
 
 ### printの実装
 
+printのパースと実行を実装しましょう。
+
+### 左辺を含むパース
+
+`> hoge = (シラバス)`
+
+みたいに左辺がある時は `hoge.csv` になるようにします。
+まずは文法を考える所から始めましょう。
+
 ## differenceの実装
 
+projectだけだといまいち面白い事が出来ないので、次にdifferenceを実装してみます。
+
 ### differenceの説明
+
+`df1 - df2` で、df1だけにあってdf2に無いrowだけが残る。Union Comparableじゃない時はエラー。
+とりあえずはfailwithで落とす。
 
 ### 処理の実装
 
@@ -354,3 +380,7 @@ EvalProjectExpressionでは最初のExpressionの処理でEvalExpressionを処�
 r2=(project (subject) class) difference (project (index) class)
 print r2
 ```
+
+### エラーを実装する
+
+エラーメッセージを保持するべく、Unon型で。中身は文字列だけでいいでしょう。
