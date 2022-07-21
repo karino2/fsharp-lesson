@@ -110,14 +110,20 @@ useでデータベースを切り替える。
 
 ただ当面はとりあえず一つとしたい。
 
-ToyRelのプロジェクトにdatabaseというディレクトリを作って、その中にsource/dataのcsvをコピーするシェルスクリプトを作り、
+基本的なrelational algebraのサンプルとして、LEAPのソースに含まれている
+
+<iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B00OD5CB50&linkId=031b79722ee8b82c89df4ef320cc8118"></iframe>
+
+の例に使われているデータをsource/data/tandp下に作っておきました。（LEAPのソースはGPLなのでこれを再配布したい時はご注意を）
+
+ToyRelのプロジェクトにdatabase/masterというディレクトリを作って、その中にsource/data/tandpのcsvと `シラバス.csv` をコピーするシェルスクリプトを作り、
 普段の作業はそれに対してやります。
-ちょくちょくクリアしたくなるので、スクリプトはディレクトリ削除して作り直す所からやる感じにしておいてください。
+開発時はちょくちょくクリアしたくなると思うので、スクリプトはディレクトリを削除して作り直す所からやる感じにしておいてください。
 
 setupdb.shとかそんな感じの名前で。別にbatファイルでもps1ファイルでもいいです。
 
 当面はここのパスを決め打ちで作業していきます。
-つまり、"シラバス"といったら、`source/ToyRel/database/シラバス.csv`を意味します。
+つまり、"シラバス"といったら、`source/ToyRel/database/master/シラバス.csv`を意味します。
 
 ### projectの文法
 
@@ -145,7 +151,7 @@ IsHiraganaとかは以下を参考に。 [.NET 正規表現での文字クラス
 注意したい事としては
 
 - 識別子は1文字目数字は禁止とする（パースで数字の即値と区別が難しいのでだいたいは禁止されている）
-- カタカナや漢字を使いたいのでその辺は真面目にする
+- カタカナや漢字を使いたいのでその辺は真面目に対応する
 
 という感じで。
 
@@ -225,5 +231,5 @@ pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
 ### 課題1: pExpressionとpProjectExpressionをここまでの仕様で完成させよ
 
 ちゃんと返す型も作ってください。
-パースだけでいいです。
+パースだけでいいです。ちょっと大きめの課題なので、一気に出来ないようなら言って下さい。分割します。
 
