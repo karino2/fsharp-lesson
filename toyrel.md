@@ -269,6 +269,8 @@ pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
 
 ### projectでdfを返す所まで実装してみよう
 
+### rowを一意にする
+
 ## リレーションの保存
 
 ### ランダムファイル名の生成
@@ -279,7 +281,7 @@ pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
 
 ### printの実装
 
-## differenceを実装してみる
+## differenceの実装
 
 ### differenceの説明
 
