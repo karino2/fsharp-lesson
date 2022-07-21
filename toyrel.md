@@ -267,3 +267,29 @@ pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
 ちゃんと返す型も作ってください。
 パースだけでいいです。ちょっと大きめの課題なので、一気に出来ないようなら言って下さい。分割します。
 
+### projectでdfを返す所まで実装してみよう
+
+## リレーションの保存
+
+### ランダムファイル名の生成
+
+### 保存
+
+### 左辺を含むパース
+
+### printの実装
+
+## differenceを実装してみる
+
+### differenceの説明
+
+### 処理の実装
+
+### パース
+
+### 以下を動かす
+
+```
+r2=(project (subject) (class)) difference (project (index) (class))
+print r2
+```
