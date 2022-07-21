@@ -89,6 +89,8 @@ TODO: Wikipediaのrelational algebraの例もcsvに含めたい気はする。�
 
 ## こんなものを動かしたい、というイメージ
 
+TODO: ここはWikipediaのrelational algebraのデータを揃えたあとにそちらの例に揃えたい。誰かやって。
+
 以下のような処理を実行すると、ランダムに生成された名前のrelationが保存されます。
 
 ```
@@ -120,9 +122,6 @@ Relation zzybac returned.
 「シラバス_専門_学年.csv」というファイルが生成されて、中身は先程と同じ。
 
 あまり考えずに書いているので、実装してみるともうちょっと仕様は変わるかも。
-
-
-TODO: tandpのデータの説明を足したあとに、tandpでのdifferenceとかjoinの例をここに書く
 
 
 ## プロジェクトの名前と場所
