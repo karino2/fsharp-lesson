@@ -34,7 +34,7 @@ ToyRelとしては、relational modelとしてcsvファイルを使います。r
 実装するrelational algebraとしては、以下を実装する事にします。
 
 - project
-- select
+- restrict (第一回でfilterと呼んでたもの、RAではselectと呼ばれる事も多い)
 - union
 - difference
 - intersect
