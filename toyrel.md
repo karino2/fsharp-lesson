@@ -270,10 +270,43 @@ pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
 
 ### 課題1: pExpressionとpProjectExpressionをここまでの仕様で完成させよ
 
+ブランチ名は `toyrel/1_pexpression` でお願いします。
+
 ちゃんと返す型も作ってください。
 パースだけでいいです。ちょっと大きめの課題なので、一気に出来ないようなら言って下さい。分割します。
 
 ### projectでdfを返す所まで実装してみよう
+
+まずは第一回と同じように、ProjectExpressionを処理する関数を作ってみましょう。
+擬似コードっぽく関数の型を示すと以下みたいな感じでどうでしょう？
+
+```
+evalExpression: Expression -> Frame -> Frame
+evalProjectExpression: ProjectExpression -> Frame -> Frame
+```
+
+パイプでdfを流していくと思うので、引数の順番は expr dfがよさそうか。
+
+EvalExpressionはパターンマッチしてこの時点ではリレーションの名前のみとProjectExpressionに処理を分岐。どちらもdfを返す。
+
+EvalProjectExpressionでは最初のExpressionの処理でEvalExpressionを処理するので、相互再帰になりそうです。
+
+相互再帰は以下でどうにかなりそうか？
+
+[Recursive Functions: The rec Keyword - F# - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/functions/recursive-functions-the-rec-keyword#mutually-recursive-functions)
+
+{% capture recursive %}
+**再帰の型や関数や文法を書くコツ**  
+
+文法では再帰の定義を行います。
+また、F#では型も良く再帰的に定義されます。
+また、F#では今回のように関数が再帰する事も良くあります。
+
+この手の再帰について書く場合には、
+{% endcapture %}
+{% include myquote.html body=recursive %}
+
+
 
 ### rowを一意にする
 
