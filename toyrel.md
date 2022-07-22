@@ -386,8 +386,8 @@ rel2を全部辞書に入れて、rel1のrowsでfilterして辞書に入って�
 ### 以下を動かす
 
 ```
-r2=(project (subject) class) difference (project (index) class)
-print r2
+> r2 = (project (Employee) DeptName) difference (project (Dept) DeptName)
+> print r2
 ```
 
 ### エラーを実装する
