@@ -20,6 +20,7 @@ layout: page
 ## ToyRelとrelational modelとrelational algebra
 
 RDBの基礎は、relational modelとrelational algebraです。
+relational algebraについてはWikipediaの記事でもだいたいは理解出来るでしょう。
 
 [Relational algebra - Wikipedia](https://en.wikipedia.org/wiki/Relational_algebra)
 
@@ -34,6 +35,7 @@ relational algebraの各演算がまたrelational modelを返すので、この�
 実装的に重要なのは、演算の結果もテーブルも区別がなく同じrelational modelになる、という事です。
 
 ToyRelとしては、relational modelとしてcsvファイルを使います。relationの名前として、csvファイルのbasename、つまり拡張子を取り除いたものを使います。
+カラムの型としてはとりあえずIntとStringだけ考えています（Floatもサポートしたくなったら追加するかも）。
 
 実装するrelational algebraとしては、以下を実装する事にします。
 
