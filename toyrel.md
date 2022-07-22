@@ -21,7 +21,7 @@ layout: page
 
 RDBの基礎は、relational modelとrelational algebraです。
 
-[Relational algebra - Wikipedia](https://en.wikipedia.org/wiki/Relational_algebra#:~:text=In%20database%20theory%2C%20relational%20algebra,Codd.)
+[Relational algebra - Wikipedia](https://en.wikipedia.org/wiki/Relational_algebra)
 
 より詳細なRelational algebraについては上記書籍を参照してもらうとして、
 ここでは実装上の簡単な説明を行います。
@@ -49,47 +49,14 @@ ToyRelとしては、relational modelとしてcsvファイルを使います。r
 本格的なrelational algebra処理系となるので、全仕様を最初に詳細に決めるのは難しいし理解をするのも大変です。
 そこで、これを徐々にすすめていく過程で何を作るかを明らかにしていこうと思います。
 
-## tandpディレクトリのデータ紹介
+## wikipediaディレクトリのデータ紹介
 
-基本的なrelational algebraのサンプルとして、LEAPのソースに含まれている
+Wikipediaの[Relational algebra - Wikipedia](https://en.wikipedia.org/wiki/Relational_algebra)と同じデータを、
+sources/data/wikipedia下に置きました。
 
-<iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B00OD5CB50&linkId=031b79722ee8b82c89df4ef320cc8118"></iframe>
-
-の例に使われているデータをsource/data/tandp下に作っておきました。（LEAPのソースはGPLなのでこれを再配布したい時はご注意を）
-
-tandpはLEAPのソースコードで使われていた名前ですが、おそらく書籍のタイトル、Theory and Practice of Relational Databasesの最初のTheory and Practiceを略してt and pから来ていると思います。
-
-LEAPのソースコードに書かれているページ数は手元の第二版とはずれてるので自分の調べたページ数を以下に書いておきます。
-
-**図書館**
-
-- book.csv (p57, Example 4.1)
-- index.csv (p57, Example 4.1)
-- subject.csv (p57, Example 4.1)
-- auction.csv (p60, Example 4.2)
-
-**divideのサンプル(p65, Example 4.7)**
-
-- lc.csv
-- q.csv
-
-**ファッション雑貨店の在庫管理データベース(p67〜p68、4.3)**
-
-- goods.csv
-- delivery.csv
-- stock.csv
-
-
-TODO: 最初数行のテーブルを書く
-
-TODO: それぞれのテーブルを簡単に説明（書籍にあるのと同じ内容でいいでしょう）
-
-TODO: Wikipediaのrelational algebraの例もcsvに含めたい気はする。誰かPRください。
-
+詳細はWikipedia側を見て下さい。
 
 ## こんなものを動かしたい、というイメージ
-
-TODO: ここはWikipediaのrelational algebraのデータを揃えたあとにそちらの例に揃えたい。誰かやって。
 
 以下のような処理を実行すると、ランダムに生成された名前のrelationが保存されます。
 
@@ -120,6 +87,27 @@ Relation zzybac returned.
 ```
 
 「シラバス_専門_学年.csv」というファイルが生成されて、中身は先程と同じ。
+
+differenceなどは以下のような感じになる。（Wikipediaの方も参照の事）
+
+```
+> emp_dept = project (Employee) DeptName
+> dept_dept = project (Dept) DeptName
+> (emp_dept) difference (dept_dept)
+Relation aabzzc returned.
+
+> print aabzzc
+DeptName
+----
+Human Resources
+```
+
+以下のように書いても同じ結果になります。
+
+```
+> (project (Employee) DeptName) difference (project (Dept) DeptName)
+```
+
 
 あまり考えずに書いているので、実装してみるともうちょっと仕様は変わるかも。
 
@@ -154,7 +142,7 @@ useでデータベースを切り替える。
 
 ただ当面はとりあえず一つとしたい。
 
-ToyRelのプロジェクトにdatabase/masterというディレクトリを作って、その中にsource/data/tandpのcsvと `シラバス.csv` をコピーするシェルスクリプトを作り、
+ToyRelのプロジェクトにdatabase/masterというディレクトリを作って、その中にsource/data/wikipediaのcsvと `シラバス.csv` をコピーするシェルスクリプトを作り、
 普段の作業はそれに対してやります。
 開発時はちょくちょくクリアしたくなると思うので、スクリプトはディレクトリを削除して作り直す所からやる感じにしておいてください。
 
@@ -399,3 +387,40 @@ print r2
 ### エラーを実装する
 
 エラーメッセージを保持するべく、Unon型で。中身は文字列だけでいいでしょう。
+
+## ファイル構成などを考える
+
+この辺で型とかファイルとかちゃんと考える。projectが終わったあたりでもいいかも。
+
+
+## tandpディレクトリのデータ紹介
+
+後でもうちょっと適切な場所に置く。別ページが良いかも。
+
+基本的なrelational algebraのサンプルとして、LEAPのソースに含まれている
+
+<iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B00OD5CB50&linkId=031b79722ee8b82c89df4ef320cc8118"></iframe>
+
+の例に使われているデータをsource/data/tandp下に作っておきました。（LEAPのソースはGPLなのでこれを再配布したい時はご注意を）
+
+tandpはLEAPのソースコードで使われていた名前ですが、おそらく書籍のタイトル、Theory and Practice of Relational Databasesの最初のTheory and Practiceを略してt and pから来ていると思います。
+
+LEAPのソースコードに書かれているページ数は手元の第二版とはずれてるので自分の調べたページ数を以下に書いておきます。
+
+**図書館**
+
+- book.csv (p57, Example 4.1)
+- index.csv (p57, Example 4.1)
+- subject.csv (p57, Example 4.1)
+- auction.csv (p60, Example 4.2)
+
+**divideのサンプル(p65, Example 4.7)**
+
+- lc.csv
+- q.csv
+
+**ファッション雑貨店の在庫管理データベース(p67〜p68、4.3)**
+
+- goods.csv
+- delivery.csv
+- stock.csv
