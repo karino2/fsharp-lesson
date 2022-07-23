@@ -183,7 +183,7 @@ Relation zzybac returned.
 
 「シラバス_専門_学年.csv」というファイルが生成されて、中身は先程と同じ。
 
-differenceなどは以下のような感じになる。（Wikipediaの方も参照の事）
+differenceなどはwikipediaディレクトリのデータを使うと以下のような感じになる。（Wikipediaの記事の方も参照の事）
 
 ```
 > emp_dept = project (Employee) DeptName
