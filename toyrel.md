@@ -214,7 +214,7 @@ Human Resources
 
 ブランチは`toyrel/...`の形式の名前にしていきましょう。
 
-また、FParsecとDeedleはfsprojに加えておいてください。（Arguは使うか未定なのでまだいいです）
+また、FParsecとDeedleはfsprojに加えておいてください。（Arguは今回は使わないのでいいです）
 
 ## まずはprojectを簡易的に実装してみる
 
@@ -254,7 +254,7 @@ setupdb.shとかそんな感じの名前で。別にbatファイルでもps1フ�
 ### projectの文法
 
 projectは最初の引数がカッコでくくったexpressionというもので、そのあとにカラムの名前のリストが並びます。
-expressionは後述するので後回しにして、それ以外は以下のようなイメージ。（厳密な文法という訳じゃないので雰囲気で読み取ってください）
+expressionは後述するので後回しにして、それ以外は以下のようなイメージ。
 
 ```
 project_expression = 'project' expression columnlist
@@ -270,6 +270,10 @@ identifier = nondigitchar normalchar*
 nondigitchar = ([a-zA-Z]|p{IsHiragana}|p{IsKatakana}|p{IsCJKUnifiedIdeographs})
 normalchar = nondigitchar | [0-9_]
 ```
+
+以後このように、第二回ではふんわりした文法のようなものが提示される事がありますが、これはあくまでアイデアを伝える為のものであって、
+実際に実装する時にはちゃんと自分なりに考えて良さそうな文法にしてください。
+とくに、途中の文法要素を表すようなものを間に導入したりした方が良い場合は多いと思います。
 
 stringとかはまぁ適当に(閉じ大かっこ以外とかでいいと思う)。
 IsHiraganaとかは以下を参考に。 [.NET 正規表現での文字クラス - Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/character-classes-in-regular-expressions#SupportedNamedBlocks)
@@ -466,6 +470,10 @@ printのパースと実行を実装しましょう。
 みたいに左辺がある時は `hoge.csv` になるようにします。
 まずは文法を考える所から始めましょう。
 
+### listの実装
+
+データベース内のリレーションの一覧を出力。
+
 ## モジュール構成などを考える
 
 この辺で型とかファイルとかちゃんと考える。
@@ -488,6 +496,7 @@ DifferenceExpression = Expression "difference" Expression
 
 で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃と思う）
 
+この辺でUnion Comparableの説明をする。
 
 ### 処理の実装
 
@@ -508,4 +517,80 @@ rel2を全部辞書に入れて、rel1のrowsでfilterして辞書に入って�
 ### エラーを実装する
 
 エラーメッセージを保持するべく、Union型で。中身は文字列だけでいいでしょう。
+
+## restrictの実装
+
+第一回でfilterと読んでたものの実装。
+
+filterの条件は以下みたいな感じで。
+
+```
+binop = '<' | '<=' | '=' | '>=' | '<>'
+binoprand = value | colname
+
+cond_atom = binoprand binop binoprand
+cond = cond_atom
+     | cond_atom "and" cond
+     | cond_atom "or" cond
+```
+
+これもまたいつものように実際に実装する人が文法は真面目に考えて下さい。
+
+これくらいは守って欲しい、という事については以下に並べておきます。
+
+- 等価は`=`
+- ノットイコールは`<>`
+- `[学年]=[専門]` のようなカラム名同士や、 `[学年]=1`のようなカラム名と値の両方が許されます
+- 値はとりあえず整数と文字列は対応する（小数とかはやりたければどうぞ）
+
+TODO: この辺でthetaの話をする
+
+## theta-joinの実装
+
+joinはtheta-joinだけでいいでしょう。
+以下が動くように。
+
+```
+> join (Employee) (Dept) (Employee.DeptName = Dept.DeptName)
+```
+
+joinのconditionではrelationのprefixは必須とします。
+
+とりあえず小手調べにproductを先に実装する。
+
+## replの実装
+
+radline使ってreplを作る
+
+## 細々としたものの対応
+
+- `@last`
+- 複数データベース
+
+## renameの実装
+
+一応実装しておく。
+
+```
+> rename (シラバス.専門) 科目
+```
+
+- リレーションは最初のカッコでわかるので別途は指定しない
+- rename対象はidentifierか`[`とかでくくったもの（colname)
+
+## 残りを一通り実装する
+
+- union
+- intersect
+
+この辺はやらなくてもいいけれどここまでやったらか一応。
+
+## コマンドにしてみる
+
+一応シングルバイナリー（ただしランタイムは含めない奴）にしてみる。
+
+## いろいろ書いてみよう
+
+- Wikipediaの例を一通りやる
+- tandpもやってみるといいかも（よさげな課題をピックアップしてtandp.mdの方に書く）
 
