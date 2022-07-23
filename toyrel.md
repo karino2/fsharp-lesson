@@ -130,6 +130,9 @@ ERDに関しては理論だけでは無くて訓練も重要で、そうした�
 
 <iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4798110663&linkId=d16b70a4d08fd1e3da37295ee773b78f"></iframe>
 
+なお、このToyRelではあえてRelational Modelそのままに近いものを実装していきます。
+ERA的な要素は一切出さないように気をつけています。
+
 {% endcapture %}
 {% include myquote.html body=comment_ra %}
 
