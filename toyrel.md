@@ -54,6 +54,12 @@ ToyRelとしては、relational modelとしてcsvファイルを使います。r
 - product
 - join
 
+また、relational algebra以外のコマンドとしては以下を実装します。
+
+- use (db変更)
+- print
+- list
+
 本格的なrelational algebra処理系となるので、全仕様を最初に詳細に決めるのは難しいし理解をするのも大変です。
 そこで、これを徐々にすすめていく過程で何を作るかを明らかにしていこうと思います。
 
@@ -565,7 +571,7 @@ radline使ってreplを作る
 ## 細々としたものの対応
 
 - `@last`
-- 複数データベース
+- 複数データベース対応 (`use`の実装)
 
 ## renameの実装
 
