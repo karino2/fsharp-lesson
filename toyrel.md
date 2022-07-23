@@ -63,7 +63,7 @@ ToyRelとしては、relational modelとしてcsvファイルを使います。r
 
 実装の上ではあまり理論を知る必要も無いのですが、数学的には非常に単純なので理解も容易で、
 けれどその表現力の高さや実社会に与えた影響の大きさという点からも、
-Relational Algebraは学ぶ意義の多いものに思います。
+Relational Algebra（略してRA）は学ぶ意義の多いものに思います。
 
 現代の観点からするとテーブルを抽象的にテーブルと考えるという事自体が普通に感じられすぎて、
 どこが革新的なのかが分かりにくい。
@@ -117,10 +117,11 @@ Relational Modelのポイントとしては、テーブルを
 テーブルの設計としては少し抽象的過ぎて重要なセマンティクスの幾つかを失ってしまってもいます。
 そこでテーブル設計としてはRelational Modelの問題点を解決した後発のEntity-Relationshipモデルが一般的に使われています。
 EARとかERと良く略されていますね。
-ER図とかERDとかは実務でも良く出てきますね。このRelationshipがRelationと似ているので混乱しやすいので初学者は注意が必要です（両者は関連しているので類似しているのですが）。
+ER図とかERDとかは実務でも良く出てきますね。このRelationshipがRelationと似ているので混乱しやすいので初学者は注意が必要です。
+両者は関連しているので類似していて、primary keyを導入する事でEntityをRAの意味でのRelationで表現するというのはテーブル設計の基礎でもあります。
 
-理論的な話を真面目に学ぶなら先述のTheory and Practice of Relational Databaseが良い本だと思いますが、
-ERDに関しては訓練も重要で、そうした演習書としては楽々ERDレッスンが優れていると思います。
+この辺の理論的な話を真面目に学ぶならDBの教科書、たとえば先述のTheory and Practice of Relational Databaseは良い本だと思います。
+ERDに関しては理論だけでは無くて訓練も重要で、そうした演習書としては楽々ERDレッスンが優れていると思います。
 
 - [楽々ERDレッスン 第1回：「お持ち帰りご注文用紙」編：CodeZine（コードジン）](https://codezine.jp/article/detail/154)
 - [楽々ERDレッスン 第2回：「図書館の予約申込書」編：CodeZine（コードジン）](https://codezine.jp/article/detail/175)
