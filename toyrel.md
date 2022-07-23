@@ -116,7 +116,7 @@ Relational Modelのポイントとしては、テーブルを
 なお、クエリとしてはほぼ完成されているRelational ModelとRelational Algebraですが、
 テーブルの設計としては少し抽象的過ぎて重要なセマンティクスの幾つかを失ってしまってもいます。
 そこでテーブル設計としてはRelational Modelの問題点を解決した後発のEntity-Relationshipモデルが一般的に使われています。
-EARとかERと良く略されていますね。
+ERとかEAR(Entity-Attribute-Relationship)と良く略されていますね。
 ER図とかERDとかは実務でも良く出て来るので見た事がある人も多いと思います。このRelationshipがRelationと似ているので混乱しやすいので初学者は注意が必要です。
 両者は関連しているので類似している訳で、primary keyを導入する事でEntityをRAの意味でのRelationで表現するというのはテーブル設計の基礎ですらありますが。
 
@@ -131,7 +131,7 @@ ERDに関しては理論だけでは無くて訓練も重要で、そうした�
 <iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4798110663&linkId=d16b70a4d08fd1e3da37295ee773b78f"></iframe>
 
 なお、このToyRelではあえてRelational Modelそのままに近いものを実装していきます。
-ERA的な要素は一切出さないように気をつけています。
+EAR的な要素は一切出さないように気をつけています。
 
 {% endcapture %}
 {% include myquote.html body=comment_ra %}
@@ -456,6 +456,11 @@ printのパースと実行を実装しましょう。
 みたいに左辺がある時は `hoge.csv` になるようにします。
 まずは文法を考える所から始めましょう。
 
+## モジュール構成などを考える
+
+この辺で型とかファイルとかちゃんと考える。
+この時点ではCommon, Parser, Evalくらいか。
+
 ## differenceの実装
 
 projectだけだといまいち面白い事が出来ないので、次にdifferenceを実装してみます。
@@ -492,8 +497,5 @@ rel2を全部辞書に入れて、rel1のrowsでfilterして辞書に入って�
 
 ### エラーを実装する
 
-エラーメッセージを保持するべく、Unon型で。中身は文字列だけでいいでしょう。
+エラーメッセージを保持するべく、Union型で。中身は文字列だけでいいでしょう。
 
-## ファイル構成などを考える
-
-この辺で型とかファイルとかちゃんと考える。projectが終わったあたりでもいいかも。
