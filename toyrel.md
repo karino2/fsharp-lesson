@@ -282,7 +282,7 @@ normalchar = nondigitchar | [0-9_]
 とくに、途中の文法要素を表すようなものを間に導入したりした方が良い場合は多いと思います。
 
 stringとかはまぁ適当に(閉じ大かっこ以外とかでいいと思う)。
-IsHiraganaとかは以下を参考に。 [.NET 正規表現での文字クラス - Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/character-classes-in-regular-expressions#SupportedNamedBlocks)
+IsHiraganaとかは次の「正規表現の文字クラスで遊ぼう」で解説します。
 
 identifierは左辺の変数としてもあとで使うので、ファイル名として使えるものである必要があります。
 細かい所は違っていても良いのですが、注意したい事としては
@@ -300,6 +300,123 @@ columnの名前としてはファイル名で使えないものが含まれて�
 それは大かっこでくくる方で対応したい。
 
 なおLEAPではcolumnlistはカッコでくくっていたけれど、toyrelではここのカッコは無しで行きたいと思います。たぶん要らない気がするので。
+
+まずはこのようなpIdentifierを作る所から始めてみましょう。
+
+### 正規表現の文字クラスで遊ぼう
+
+さて、pIdentifierにひらがなとかカタカナとか出てくると正規表現を使う事になりそう。
+FParsecのregexという関数に正規表現の文字列を渡すとそれにマッチするパーサーを返してくれます
+
+```
+let pNum = regex "[0-9]+"
+
+run pNum "123abc"
+```
+
+という事で、目的のidentifierにマッチする正規表現を書ければ良さそう。
+正規表現自体は知っていると思うのだけれど、ひらがなとかカタカナとか漢字というのはなかなか知らない人も居ると思うので、
+ちょっとその辺をつついてみましょう。
+こういう時はScratch.fsxで書いてみるのが良い。
+
+F# では正規表現には別段特別な何かは無く、.NET のRegexクラスを使います。
+
+まずは以下のコードをScratch.fsxで実行してみましょう。
+
+```
+open System.Text.RegularExpressions
+
+Regex.IsMatch("123abc", "[0-9]+")
+```
+
+IsMatchは第一引数に対して、第二引数のパターンがマッチするかどうかを調べます。
+どこがマッチしたかを知りたければMatchを使います。
+
+```
+Regex.Match("123abc", "[0-9]+")
+```
+
+ただ今回は文字クラスになれるのが目的なのでIsMatchで十分でしょう。
+
+ひらがなにマッチする正規表現は、「文字クラス」というもので指定出来ます。`\p`のあとに中括弧でくくくって文字クラスを書くと、それにマッチします。
+たとえばひらなな一文字は`\p{IsHiragana}`でマッチします。
+試してみましょう。
+
+```
+Regex.IsMatch("あ", "\p{IsHiragana}")
+Regex.IsMatch("ア", "\p{IsHiragana}")
+```
+
+これは通常の文字のパターンとして、他の正規表現と組み合わせる事が出来ます。
+例えばひらがなかカタカナ一文字とマッチさせたければ、縦棒でつなげれば良い。
+
+```
+Regex.IsMatch("あ", "\p{IsHiragana}|\p{IsKatakana}")
+Regex.IsMatch("ア", "\p{IsHiragana}|\p{IsKatakana}")
+Regex.Match("あアほげいか123", "(\p{IsHiragana}|\p{IsKatakana})+")
+```
+
+123にはマッチしてない事に注目してください。
+
+どんな文字クラスがあるかは以下に一覧がありますが、膨大なので使う予定のものだけ見るくらいでいいでしょう。
+
+ [.NET 正規表現での文字クラス - Microsoft Docs](https://docs.microsoft.com/ja-jp/dotnet/standard/base-types/character-classes-in-regular-expressions#SupportedNamedBlocks)
+
+
+### 課題0: identifierにマッチする正規表現を書け
+
+仕様自体は自分で考えてそれっぽいのを決めて欲しいですが、以下には全体マッチして欲しい。
+
+```
+abc
+_abc123
+abc_123
+専門
+フロア
+```
+
+そして以下には全体マッチはしないで欲しい（.や*はその手前までマッチはしても良い）
+
+```
+123
+abc.def
+abc*
+abc:def
+abc def
+```
+
+ブランチ名は `toyrel/0_regexp` でお願いします。
+
+なお、github上で私が見るために、どれはマッチしてどれはマッチしなかったのかをScratch.fsxのテストコードの上にコメントを書いてください。（一言コメントでいいです）
+
+### 正規表現とregexを使ってpIdentifierを作る
+
+正規表現さえ出来てしまえば、FPrasecのregexを使ってそれにマッチするパーサーが作れます。
+正規表現は上で作った課題に差し替えてもらうとして、以下みたいな感じで作れるでしょう。
+
+```
+let pIdentifier = regex "[_a-zA-Z][0-9a-zA-Z_]*"
+```
+
+regexについては以下を参照。
+
+[FParsec.CharParsers](https://www.quanttec.com/fparsec/reference/charparsers.html#members.regex)
+
+このpIdentifierを使って適当に大かっこの方のパーサー、pSBracketColumnとつなげればpColumnになりそうです。
+
+```
+let notSBracket s = s <> '[' and s <> ']'
+let pSBracketColumn = (str "[") >>. many1Satisfy notSBracket .>> (str "]")
+
+let pColumn = pIdentifier
+           <|> pSBracketColumn
+```
+
+pSBracketColumnの定義は適当に今書いたので、もうちょっと真面目に考えた方がいいかもしれません（別にこのくらいでもいい気もしますが）
+
+SQLなどでは大かっこはフィールド名に空白などが入っているケースで使われます。なので空白は含んだ名前がパース出来るといいでしょう。
+例えば`[理学部 物理学科]`みたいな。
+
 
 ### expressionの暫定的な仕様
 
