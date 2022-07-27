@@ -386,6 +386,8 @@ abc.def
 abc*
 abc:def
 abc def
+(abc)
+abc+def
 ```
 
 ブランチ名は `toyrel/0_regexp` でお願いします。
