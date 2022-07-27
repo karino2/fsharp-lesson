@@ -644,7 +644,7 @@ HashSetはimmutable版を使うかmutable版を使うかで少し実装が分か
 
 mutableなHashSetは、`open System.Collections.Generic`にあります。
 
-[HashSet<T> Class - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
+[HashSet Class - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
 
 rowの型は`ObjectSeries<string>`だと思うので、以下のような感じで使います。
 
@@ -681,7 +681,7 @@ let distinct1 rows =
 
 F# なのでimmutableな方がいいのでは？的な向きの為に、そっちの実装も。
 
-[ImmutableHashSet<T> Class - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable.immutablehashset-1?view=net-6.0)
+[ImmutableHashSet Class - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable.immutablehashset-1?view=net-6.0)
 
 たぶんfoldでdictと現在のリストを返せばいいはず。ImmutableHashSetの説明を書いて課題も作る。
 
