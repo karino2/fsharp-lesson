@@ -227,7 +227,7 @@ Human Resources
 まずはウォームアップも兼ねて、identifierのパーサー、pIdentifierから実装しましょう。
 
 identifierというのは普通の言語では変数や関数名に使われるなにか、を意味します。
-例えば以下のident1とかident2とかident3はidentifierです。
+例えば以下のident1とかident2とかident3の場所に来るのがidentifierです。
 
 ```
 ident1 = project (ident2) idnet3, ident4
