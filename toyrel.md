@@ -409,7 +409,6 @@ projectは最終的にはかなり本格的なExpressionの仕様が必要にな
 
 という事でここでは、そんな暫定的な仕様から始めたいと思います。
 
-
 ### projectの文法
 
 projectは最初の引数がカッコでくくったexpressionというもので、そのあとにカラムの名前のリストが並びます。
@@ -594,12 +593,98 @@ evalProjectExpressionでは最初のExpressionの処理でevalExpressionを処�
 {% endcapture %}
 {% include myquote.html body=recursive %}
 
-### rowをdistinctにする
+## rowをdistinctにする
 
-csvで同じ内容の行を２つ作って、df.Rows.Getした結果を比較してイコールがtrueになる事を確認。
-Dictionaryに突っ込んで同じ行が出ないようにする。
+さて、ここまでだと、rowに重複が生まれる場合があります。
+例えば以下のようにすると、
 
-せっかくなので型も作ろう。Relationという名前にしますかね。
+```
+> project (シラバス) 専門, 学年
+```
+
+「数学,1」などの行が複数残るはずです。
+Relational Algebraとしてはこうした重複は削除する必要がある。
+
+そこでdfを渡して、rowの重複を除去したdfを返す、distinctを作りましょう。
+
+普通に実装するならrowをfilterする時にそこまで存在していなかったらtrueを返しつつSetに詰めて、Setに入ってたらフィルタする、
+みたいなコードで良さそうです。
+こういう事をするにはSeriresで頑張るよりは、seqとかlistにしてしまう方が簡単でしょう。
+
+という事でseqとかにして一意になるようにフィルタリングして、それをFrameに戻す、という作戦でいきます。
+
+方針が決まった所で、まずはSet周りの事を簡単に見てみる事から始めましょう。
+
+### rowの比較周りの話
+
+Deedleのrowは内容が同じなら違う行でもイコールの比較はtrueを返します。
+例えば以下を実行してみてください。
+
+```
+let df = Frame.ReadCsv "../../data/シラバス.csv"
+let rows = df.Columns[ ["専門"; "学年"] ].Rows.Values |> Seq.toList
+
+rows[0] = rows[1]
+```
+
+行が違っていても、値が同じであれば両者はイコールとなります。
+ハッシュ値も同じになります。
+
+一方で、大小の比較はありません。
+
+なんでこんな話をしているかというと、Setは普通バランス木で実装されているので、大小比較がないと使えないからです。
+大小の比較が無くてイコールとハッシュだけあるケースでは、HashSetを使います。
+
+（もしsusumu2357さんあたりがハッシュとか分からん、という事なら言って下さい。解説足します）
+
+HashSetはimmutable版を使うかmutable版を使うかで少し実装が分かれます。
+せっかくなので両方やってみますか。
+
+### mutableなHashSetをいじる
+
+mutableなHashSetは、`open System.Collections.Generic`にあります。
+
+[HashSet<T> Class (System.Collections.Generic) - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
+
+rowの型は`ObjectSeries<string>`だと思うので、以下のような感じで使います。
+
+```
+let rowSet = HashSet<ObjectSeries<string>>()
+rowSet.Add(rows[0])
+rowSet.Contains(rows[1])
+```
+
+これは副作用があるので、例えば
+
+```
+let distinct1 rows =
+   let rowSet = HashSet<ObjectSeries<string>>()
+   let pred row =
+     # ここになにか書く
+   Seq.filter pred rows
+```
+
+のような感じで実装出来ると思います。
+
+これを課題にしましょう。
+
+### 課題2: rowのseqを一意にする、distinct1を書け
+
+上記のコメント部を埋めて、distinct1を完成させましょう。
+ここのrowsはseqとします。（さっきは対話的操作の為にSeq.toListをかませていたので注意）。
+
+ブランチ名は`toyrel/2_distinct_mut`にしましょうか。
+
+ヒント： Addの所で文句を言われた時には `|> ignore` を足す必要があるでしょう。
+
+### immutableな場合のImmutableHashSetでも実装してみる
+
+F# なのでimmutableな方がいいのでは？的な向きの為に、そっちの実装も。
+
+[ImmutableHashSet<T> Class (System.Collections.Immutable) - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable.immutablehashset-1?view=net-6.0)
+
+たぶんfoldでdictと現在のリストを返せばいいはず。ImmutableHashSetの説明を書いて課題も作る。
+
 
 ## リレーションの保存
 
