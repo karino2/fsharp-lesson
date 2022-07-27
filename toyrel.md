@@ -644,7 +644,7 @@ HashSetはimmutable版を使うかmutable版を使うかで少し実装が分か
 
 mutableなHashSetは、`open System.Collections.Generic`にあります。
 
-[HashSet<T> Class (System.Collections.Generic) - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
+[HashSet<T> Class - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
 
 rowの型は`ObjectSeries<string>`だと思うので、以下のような感じで使います。
 
@@ -681,10 +681,16 @@ let distinct1 rows =
 
 F# なのでimmutableな方がいいのでは？的な向きの為に、そっちの実装も。
 
-[ImmutableHashSet<T> Class (System.Collections.Immutable) - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable.immutablehashset-1?view=net-6.0)
+[ImmutableHashSet<T> Class - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable.immutablehashset-1?view=net-6.0)
 
 たぶんfoldでdictと現在のリストを返せばいいはず。ImmutableHashSetの説明を書いて課題も作る。
 
+### Relation型を作る
+
+dfのうちrowに重複の無いものを表す型として、Relation型をつくりましょう。
+中身はdfを持つだけの型で良いでしょう。
+
+このRelationを使ってdistinct, project, あとcsvをロードする関数(readCsvしてdistinctするなにか）を書いてみましょう。
 
 ## リレーションの保存
 
@@ -694,6 +700,10 @@ toyrelではトップレベルで評価されたリレーションは必ずcsv�
 
 まずは左辺が無いケースでランダムのファイル名に保存する場合を考えましょう。
 
+### 保存
+
+dfを basename + ".csv"という名前でデータベースのディレクトリに保存する。
+
 ### ランダムファイル名の生成
 
 とりあえず長すぎず変な文字が無い無難なbasenameを作りましょう。
@@ -701,10 +711,6 @@ toyrelではトップレベルで評価されたリレーションは必ずcsv�
 
 leapのソースを見ると最初二文字は`zz`で固定、残りは `(rand() % 26)+97`、になっていた。
 `[a-z]` っぽい。文字数は6文字っぽい。随分短いが、まぁそれくらいでいいかもしれない。長いと打ちづらいしね。
-
-### 保存
-
-dfを basename + ".csv"という名前でデータベースのディレクトリに保存する。
 
 ### printの実装
 
@@ -719,7 +725,7 @@ printのパースと実行を実装しましょう。
 みたいに左辺がある時は `hoge.csv` になるようにします。
 まずは文法を考える所から始めましょう。
 
-### listの実装
+### listコマンドの実装
 
 データベース内のリレーションの一覧を出力。
 
