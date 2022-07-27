@@ -607,13 +607,12 @@ Relational Algebraとしてはこうした重複は削除する必要がある�
 
 そこでdfを渡して、rowの重複を除去したdfを返す、distinctを作りましょう。
 
-普通に実装するならrowをfilterする時にそこまで存在していなかったらtrueを返しつつSetに詰めて、Setに入ってたらフィルタする、
-みたいなコードで良さそうです。
-こういう事をするにはSeriresで頑張るよりは、seqとかlistにしてしまう方が簡単でしょう。
+distinct関連はListやSeqにdistinctという関数があるので、
+それを使うのが良さそう。
 
-という事でseqとかにして一意になるようにフィルタリングして、それをFrameに戻す、という作戦でいきます。
+[Seq (FSharp.Core)](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-collections-seqmodule.html#distinct)
 
-方針が決まった所で、まずはSet周りの事を簡単に見てみる事から始めましょう。
+という事でRowsをまずはSeqにして、それをSeq.distinctを使って、そのあとdfに戻す感じにしましょう。
 
 ### rowの比較周りの話
 
@@ -630,60 +629,35 @@ rows[0] = rows[1]
 行が違っていても、値が同じであれば両者はイコールとなります。
 ハッシュ値も同じになります。
 
-一方で、大小の比較はありません。
+### 課題2: dfのrowを一意にしたdf2を返す、distinct1を作れ
 
-なんでこんな話をしているかというと、Setは普通バランス木で実装されているので、大小比較がないと使えないからです。
-大小の比較が無くてイコールとハッシュだけあるケースでは、HashSetを使います。
-
-（もしsusumu2357さんあたりがハッシュとか分からん、という事なら言って下さい。解説足します）
-
-HashSetはimmutable版を使うかmutable版を使うかで少し実装が分かれます。
-せっかくなので両方やってみますか。
-
-### mutableなHashSetをいじる
-
-mutableなHashSetは、`open System.Collections.Generic`にあります。
-
-[HashSet Class - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
-
-rowの型は`ObjectSeries<string>`だと思うので、以下のような感じで使います。
+まずは、以下のような感じで、単純にdfのrowをdistinctにする関数を作りましょう。
 
 ```
-let rowSet = HashSet<ObjectSeries<string>>()
-rowSet.Add(rows[0])
-rowSet.Contains(rows[1])
+type Distinct1 = Frame -> Frame
 ```
 
-これは副作用があるので、例えば
+この手の表記の見方を簡単に。
+まずこれは実装する目標となる関数の型を表しています。
+型の名前は大文字始まり。
+
+そして実際の関数は先頭を小文字にした関数名で実装するのがコンベンションです。
+つまりこの場合は、以下のような実装になる。
 
 ```
-let distinct1 rows =
-   let rowSet = HashSet<ObjectSeries<string>>()
-   let pred row =
-     # ここになにか書く
-   Seq.filter pred rows
+let distinct1 df = ...
 ```
 
-のような感じで実装出来ると思います。
+上記のtype文は基本的には使わなくていいです。
+使う場合はdistinctを例えば以下のような定義に変えれば使えます。
 
-これを課題にしましょう。
+```
+let (distinct1: Distinct1) = fun df ->
+```
 
-### 課題2: rowのseqを一意にする、distinct1を書け
-
-上記のコメント部を埋めて、distinct1を完成させましょう。
-ここのrowsはseqとします。（さっきは対話的操作の為にSeq.toListをかませていたので注意）。
-
-ブランチ名は`toyrel/2_distinct_mut`にしましょうか。
-
-ヒント： Addの所で文句を言われた時には `|> ignore` を足す必要があるでしょう。
-
-### immutableな場合のImmutableHashSetでも実装してみる
-
-F# なのでimmutableな方がいいのでは？的な向きの為に、そっちの実装も。
-
-[ImmutableHashSet Class - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.immutable.immutablehashset-1?view=net-6.0)
-
-たぶんfoldでdictと現在のリストを返せばいいはず。ImmutableHashSetの説明を書いて課題も作る。
+Distinctを使わない定義の方が実装が簡潔なので、別に使わなくてもいいです。
+ただこの形にするとdfなどが型推論で型がtype定義から引き継がれるので、
+いちいちdfに型指定しなくてもFrame型になるというメリットはあります。
 
 ### Relation型を作る
 
