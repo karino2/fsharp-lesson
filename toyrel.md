@@ -677,13 +677,16 @@ Relationの作り方は２つくらいあります。
 Relationを普通のsingle case unionで作り、中身はFrameでいいでしょう。
 generics型もreadCsvして返ってきた型を参考に具体的に指定してしまって良いと思います。
 
+single case unionについては以下を参照の事。
+
+[Single case union types · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/designing-with-types-single-case-dus.html)
+
+
 このRelationを使ってdistinct, project, あとcsvをロードする関数(readCsvしてdistinctするなにか）を書いてみましょう。
 
 ### Relation型を作る意義などについて考える
 
-[Single case union types · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/designing-with-types-single-case-dus.html)
-
-この辺をまじえつつ、pureな型とその入出力的な話を書く。
+この辺で、pureな型とその入出力的な話を書く。
 
 ### 課題4: modle Relationを作りADTしよう
 
