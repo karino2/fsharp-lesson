@@ -652,7 +652,7 @@ let distinct1 df = ...
 使う場合はdistinctを例えば以下のような定義に変えれば使えます。
 
 ```
-let (distinct1: Distinct1) = fun df ->
+let distinct1: Distinct1 = fun df ->
 ```
 
 Distinctを使わない定義の方が実装が簡潔なので、別に使わなくてもいいです。
@@ -661,10 +661,40 @@ Distinctを使わない定義の方が実装が簡潔なので、別に使わな
 
 ### Relation型を作る
 
-dfのうちrowに重複の無いものを表す型として、Relation型をつくりましょう。
-中身はdfを持つだけの型で良いでしょう。
+さてこのままではrowが重複しているdfとしていないdfが、型の上では区別出来ません。
+そこで、rowが重複していないFrameを表すRelationという型をつくりましょう。
+
+Relationの作り方は２つくらいあります。
+
+- 普通にRelation型を作る
+- module RelationのT型とする
+
+いい機会なので、上と下のやり方でそれぞれどう違うかを試してみましょう。
+まずは上のやり方でやってみます。
+
+### 課題3: Relationの型をつくれ
+
+Relationを普通のsingle case unionで作り、中身はFrameでいいでしょう。
+generics型もreadCsvして返ってきた型を参考に具体的に指定してしまって良いと思います。
 
 このRelationを使ってdistinct, project, あとcsvをロードする関数(readCsvしてdistinctするなにか）を書いてみましょう。
+
+### Relation型を作る意義などについて考える
+
+[Single case union types · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/designing-with-types-single-case-dus.html)
+
+この辺をまじえつつ、pureな型とその入出力的な話を書く。
+
+### 課題4: modle Relationを作りADTしよう
+
+Relationという型を作ると、その型に関する操作がいろいろ必要になる事に気づくと思います。
+こうしたものは、Relationの型の周辺だけが知っていれば良い情報です。
+
+この考えを反転させて、型というものがその関連する操作によって定義されるという考え方を、Abstract Data Typeといいます。
+数学などで足し算というものを、交換法則だとか結合法則がどうだとかで再定義するようなものです。
+ある型を、それに適用出来る演算でその定義とする考え方。
+
+この辺もなんか書くが、もうちょっと具体例が増えてからの方がいいかも？
 
 ## リレーションの保存
 
