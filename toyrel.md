@@ -687,6 +687,7 @@ single case unionについては以下を参照の事。
 ### Relation型を作る意義などについて考える
 
 この辺で、pureな型とその入出力的な話を書く。
+ロード、distinct、projectを使う人にとってはもうFrame型は見えない、という話とか。
 
 ### 課題4: modle Relationを作りADTしよう
 
