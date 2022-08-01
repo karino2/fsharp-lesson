@@ -1309,11 +1309,11 @@ pExpressionが `string->ParseResult<Expression, unit>` となるようにしま�
 {% capture singlecase_union %}
 **Single case unionについて**  
 
-この課題ではsingle case unionを使っている人が多かったのですが、皆わりと混乱しているようで、case identifierの名前が意味が分からなくなってしまっているケースが散見されます。
+この課題ではSingle case unionを使っている人が多かったのですが、皆わりと混乱しているようで、case identifierの名前が意味が分からなくなってしまっているケースが散見されます。
 Single case unionではコンベンションとして型名とcase identifierは同じ名前にする事になっています。
 意味的におかしい変な名前にしてしまうなら、素直にコンベンションに従うのが良いでしょう。
 
-その辺の話について、ブログを書きましたので参照ください。＞ [F#のsingle case union入門](https://karino2.github.io/2022/08/01/single_case_union.html)
+その辺の話について、ブログを書きましたので参照ください。＞ [F#のSingle case union入門](https://karino2.github.io/2022/08/01/single_case_union.html)
 {% endcapture %}
 {% include myquote.html body=singlecase_union %}
 
