@@ -1309,7 +1309,7 @@ pExpressionが `string->ParseResult<Expression, unit>` となるようにしま�
 {% capture singlecase_union %}
 **Single case unionについて**  
 
-この課題ではSingle case unionを使っている人が多かったのですが、皆わりと混乱しているようで、case identifierの名前が意味が分からなくなってしまっているケースが散見されます。
+この課題ではsingle case unionを使っている人が多かったのですが、皆わりと混乱しているようで、case identifierの名前が意味が分からなくなってしまっているケースが散見されます。
 Single case unionではコンベンションとして型名とcase identifierは同じ名前にする事になっています。
 意味的におかしい変な名前にしてしまうなら、素直にコンベンションに従うのが良いでしょう。
 
