@@ -1306,6 +1306,18 @@ pExpressionが `string->ParseResult<Expression, unit>` となるようにしま�
 
 返す方法としては、チュートリアルの`|>>`, `pipe2`などを参考にしてみてください。
 
+{% capture singlecase_union %}
+**Single case unionについて**  
+
+この課題ではSingle case unionを使っている人が多かったのですが、皆わりと混乱しているようで、case identifierの名前が意味が分からなくなってしまっているケースが散見されます。
+Single case unionではコンベンションとして型名とcase identifierは同じ名前にする事になっています。
+意味的におかしい変な名前にしてしまうなら、素直にコンベンションに従うのが良いでしょう。
+
+その辺の話について、ブログを書きましたので参照ください。＞ [F#のsingle case union入門](https://karino2.github.io/2022/08/01/single_case_union.html)
+{% endcapture %}
+{% include myquote.html body=singlecase_union %}
+
+
 ### 課題14: pProjectも型を作って返すようにし、projectとfilterの両方をパースするpExpressionを作る
 
 次にpProjectでも同じ作業をして、最後にpExpressionからExpressionを返すようにしましょう。
