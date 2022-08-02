@@ -549,13 +549,15 @@ project (project (シラバス) 専門, 学年, 場所) 専門, 学年
 擬似コードっぽく関数の型を示すと以下みたいな感じでどうでしょう？
 
 ```
-evalExpression: Expression -> Frame -> Frame
-evalProjectExpression: ProjectExpression -> Frame -> Frame
+evalExpression: Expression -> Frame
+evalProjectExpression: ProjectExpression -> Frame
 ```
 
 パイプでdfを流していくと思うので、引数の順番は expr dfがよさそうか。
 
 evalExpressionはパターンマッチしてこの時点ではリレーションの名前のみとProjectExpressionに処理を分岐。どちらもdfを返す。
+リレーションの名前のみの場合は、そのリレーションを開いてdfを返す。ProjectExpressionの場合は、evalProjectExpressionを呼んでdfを返す。
+
 
 evalProjectExpressionでは最初のExpressionの処理でevalExpressionを処理するので、相互再帰になりそうです。
 
