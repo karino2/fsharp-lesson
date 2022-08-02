@@ -519,11 +519,11 @@ let pProjectExpression = (str "project") >>. pExpression .>>. pColumnList
 
 次に、このpProjectExpressionを使ってpExpressionを実際に定義します。
 この実際に定義する時に重要になるのが先程 `createParserForwardedToRef()` で得た二番目の戻り、 `pExpressionRef` です。
-これは変更という副作用が必要なので通常のletでは無く`:=`を使います。
+これは変更という副作用が必要なので通常のletでは無く`<-`を使います。（FParsecのチュートリアルでは`:=`が使われていますが、[F# 6ではdeprecated](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/symbol-and-operator-reference/#reference-cell-operators-deprecated)となっています。）
 
 ```
-pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
-               <|> (pstring "(") >>. pProjectExpression .>> (pstring ")")
+pExpressionRef.Values <- (pstring "(") >>. pidentifier .>> (pstring ")")
+                         <|> (pstring "(") >>. pProjectExpression .>> (pstring ")")
 ```
 
 この右辺でpProjectExpressionを使っている事に注目してください。
