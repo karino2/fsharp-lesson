@@ -378,7 +378,7 @@ abc def
 abc+def
 ```
 
-ブランチ名は `toyrel/0_regexp` でお願いします。
+ブランチ名は `toyrel/1_pexpression` でお願いします。
 
 なお、github上で私が見るために、どれはマッチしてどれはマッチしなかったのかをScratch.fsxのテストコードの上にコメントを書いてください。（一言コメントでいいです）
 
@@ -519,11 +519,11 @@ let pProjectExpression = (str "project") >>. pExpression .>>. pColumnList
 
 次に、このpProjectExpressionを使ってpExpressionを実際に定義します。
 この実際に定義する時に重要になるのが先程 `createParserForwardedToRef()` で得た二番目の戻り、 `pExpressionRef` です。
-これは変更という副作用が必要なので通常のletでは無く`:=`を使います。
+これは変更という副作用が必要なので通常のletでは無く`<-`を使います。（FParsecのチュートリアルでは`:=`が使われていますが、[F# 6ではdeprecated](https://docs.microsoft.com/en-us/dotnet/fsharp/language-reference/symbol-and-operator-reference/#reference-cell-operators-deprecated)となっています。）
 
 ```
-pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
-               <|> (pstring "(") >>. pProjectExpression .>> (pstring ")")
+pExpressionRef.Values <- (pstring "(") >>. pidentifier .>> (pstring ")")
+                         <|> (pstring "(") >>. pProjectExpression .>> (pstring ")")
 ```
 
 この右辺でpProjectExpressionを使っている事に注目してください。
@@ -533,7 +533,6 @@ pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
 
 ### 課題1: pExpressionとpProjectExpressionをここまでの仕様で完成させよ
 
-ブランチ名は `toyrel/1_pexpression` でお願いします。
 
 ちゃんと返す型も作ってください。
 パースだけでいいです。ちょっと大きめの課題なので、一気に出来ないようなら言って下さい。分割します。
@@ -550,13 +549,15 @@ project (project (シラバス) 専門, 学年, 場所) 専門, 学年
 擬似コードっぽく関数の型を示すと以下みたいな感じでどうでしょう？
 
 ```
-evalExpression: Expression -> Frame -> Frame
-evalProjectExpression: ProjectExpression -> Frame -> Frame
+evalExpression: Expression -> Frame
+evalProjectExpression: ProjectExpression -> Frame
 ```
 
 パイプでdfを流していくと思うので、引数の順番は expr dfがよさそうか。
 
 evalExpressionはパターンマッチしてこの時点ではリレーションの名前のみとProjectExpressionに処理を分岐。どちらもdfを返す。
+リレーションの名前のみの場合は、そのリレーションを開いてdfを返す。ProjectExpressionの場合は、evalProjectExpressionを呼んでdfを返す。
+
 
 evalProjectExpressionでは最初のExpressionの処理でevalExpressionを処理するので、相互再帰になりそうです。
 
