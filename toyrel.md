@@ -533,7 +533,6 @@ pExpressionRef.Values <- (pstring "(") >>. pidentifier .>> (pstring ")")
 
 ### 課題1: pExpressionとpProjectExpressionをここまでの仕様で完成させよ
 
-
 ちゃんと返す型も作ってください。
 パースだけでいいです。ちょっと大きめの課題なので、一気に出来ないようなら言って下さい。分割します。
 
@@ -542,6 +541,30 @@ pExpressionRef.Values <- (pstring "(") >>. pidentifier .>> (pstring ")")
 ```
 project (project (シラバス) 専門, 学年, 場所) 専門, 学年
 ```
+
+{% capture recursive_type %}
+**型が相互に依存する場合の書き方（andを使う)**  
+
+さて、この課題では、場合によってはExpressionがProjectExpressionを参照するけれど、
+ProjectExpressionではExpressionを参照したい、という事が起こる人もいるでしょう。
+こういう時に、F#ではandを使うトリックで定義する事が出来ます。
+
+例えば以下のように書くと、
+
+```
+type CalculatorState = {
+     display: CalculatorDisplay
+}
+and CalculatorDisplay = string
+```
+
+CalculatorStateの中でまだ出てきてないCalculatorDisplayを使う事が出来ます。
+同様に相互を参照するような型もこの方法で定義する事が出来ます。
+
+このandを使った例についてのもう少し詳しい解説は、
+[Calculator Walkthrough: Part 1 - F# for fun and profit](https://fsharpforfunandprofit.com/posts/calculator-design/#defining-the-calculatorstate-type)の「Defining the CalculatorState type」のあたりに書いてあります。
+{% endcapture %}
+{% include myquote.html body=recursive_type %}
 
 ### 第一回と同じ感じのprojectでdfを返す所まで実装してみよう
 
