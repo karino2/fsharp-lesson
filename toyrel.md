@@ -378,7 +378,7 @@ abc def
 abc+def
 ```
 
-ブランチ名は `toyrel/0_regexp` でお願いします。
+ブランチ名は `toyrel/1_pexpression` でお願いします。
 
 なお、github上で私が見るために、どれはマッチしてどれはマッチしなかったのかをScratch.fsxのテストコードの上にコメントを書いてください。（一言コメントでいいです）
 
@@ -533,7 +533,6 @@ pExpressionRef := (pstring "(") >>. pidentifier .>> (pstring ")")
 
 ### 課題1: pExpressionとpProjectExpressionをここまでの仕様で完成させよ
 
-ブランチ名は `toyrel/1_pexpression` でお願いします。
 
 ちゃんと返す型も作ってください。
 パースだけでいいです。ちょっと大きめの課題なので、一気に出来ないようなら言って下さい。分割します。
