@@ -195,9 +195,9 @@ differenceなどはwikipediaディレクトリのデータを使うと以下の�
 > emp_dept = project (Employee) DeptName
 > dept_dept = project (Dept) DeptName
 > (emp_dept) difference (dept_dept)
-Relation aabzzc returned.
+Relation zzaabc returned.
 
-> print aabzzc
+> print zzaabc
 DeptName
 ----
 Human Resources
@@ -869,11 +869,67 @@ char (r.Next( (int 'a'), (int 'z')+1))
 そちらの方が連続で呼ばれた時に良い乱数が出来るので、
 関数の中で毎回作ってはいけません。
 
-### printの実装
+### Relationの保存とprintの仕様
 
-printのパースと実行を実装しましょう。
+ToyRelでは、左辺の無いExpressionは全てランダムの名前に保存され、その名前が返されます。
+保存されたRelationを表示するには、専用のprintというコマンドを使うという仕様にしたい。
 
-### 左辺を含むパース
+例えば以下のようなexpressionを実行すると、
+
+```
+> project (シラバス) 専門, 学年
+```
+
+以下のように表示されるだけで、結果は表示されない。
+
+```
+Relation zzybac returned.
+```
+
+結果を表示するには以下のようにprint命令を実行する。
+
+```
+> print zzybac
+専門   学年
+----  ----
+数学    1
+物理    1
+数学    2
+```
+
+という事で、このようになるように保存とprintを実装していきましょう。
+
+printとしては、いつもidentifierが来るだけ、でいいでしょうかね。
+文法的には以下みたいな感じでどうでしょう？
+
+```
+print_stmt = "print" identifier
+```
+
+という事で以上を前提に保存とprintを実装していきましょう。
+
+とりあえずstmtと呼びましたが、他の名前でも良いです。Expresisonでは無いなにか、という事が分かれば良い。
+こういう時に良く使われる用語としては、ステートメントとかコマンドとかですね。
+
+### 課題7: 保存とprintを実装せよ
+
+保存については現時点ではまだ全体的な所が見えていないので、
+Relationを課題6で作ったランダムな名前に保存する関数を作り、
+これを手動で呼ぶ、という事で実装してください。
+
+そしてprint文をパースして実行しましょう。
+
+printはexpressionでは無いので、Expressionの一部では無く、Expressionかprint_stmtのどちらかを持つ文法要素を上に作る方が良いでしょうね。
+
+関数としては現時点では場合分けは手動でも良いです。
+とりあえずprint_stmtをパースする関数と、
+パースした結果を実行する関数を好きに作ってください。
+
+なお、ランダムなファイル名は既存のファイル名とぶつかる可能性があります。
+これはもう上書きしてしまう、という潔い仕様にしたい。
+zzで始まる名前はシステムが使うテンポラリな名前、という事で。
+
+### 左辺を含むExpressionのパース
 
 ```
 > hoge = (シラバス)
@@ -881,10 +937,12 @@ printのパースと実行を実装しましょう。
 
 みたいに左辺がある時は `hoge.csv` になるようにします。
 まずは文法を考える所から始めましょう。
+これもすでに存在するファイルがあったら上書きで良いです。
 
 ### listコマンドの実装
 
 データベース内のリレーションの一覧を出力。
+これもprint_stmtと同様に、Expressioでは無いなにかですね。
 
 ## モジュール構成などを考える
 
