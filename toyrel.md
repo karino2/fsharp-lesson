@@ -921,8 +921,6 @@ joinはtheta-joinだけでいいでしょう。
 > join (Employee) (Dept) (Employee.DeptName = Dept.DeptName)
 ```
 
-joinのconditionではrelationのprefixは必須とします。
-
 とりあえず小手調べにproductを先に実装する。
 
 ## replの実装
