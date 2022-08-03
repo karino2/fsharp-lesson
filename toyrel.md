@@ -949,6 +949,10 @@ zzで始まる名前はシステムが使うテンポラリな名前、という
 この辺で型とかファイルとかちゃんと考える。
 この時点ではCommon, Parser, Evalくらいか。
 
+## replの実装
+
+radline使ってreplを作る
+
 ## differenceの実装
 
 projectだけだといまいち面白い事が出来ないので、次にdifferenceを実装してみます。
@@ -1027,9 +1031,6 @@ joinはtheta-joinだけでいいでしょう。
 
 とりあえず小手調べにproductを先に実装する。
 
-## replの実装
-
-radline使ってreplを作る
 
 ## 細々としたものの対応
 
