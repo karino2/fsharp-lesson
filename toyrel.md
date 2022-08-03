@@ -799,7 +799,7 @@ Relationという名前のmoduleを作り、そこにTという型をつくり�
 抽象データ型については以下にも解説を書いてみました。
 特にJavaとかJavaScriptとかの言語に慣れている人には一度オブジェクトという事は忘れて抽象データ型を理解してみる事をおすすめします。
 
-[抽象データ型とはなんぞや？](https://karino2.github.io/2022/07/28/abstract_data_type.html)
+[blog: 抽象データ型とはなんぞや？](https://karino2.github.io/2022/07/28/abstract_data_type.html)
 {% endcapture %}
 {% include myquote.html body=adt %}
 
