@@ -707,6 +707,8 @@ Relation型の作り方は２つくらい考えられます。
 
 ### 課題3: Relationの型をつくれ
 
+ブランチ名は `toyrel/3_relation_type`でお願いします。
+
 Relationを普通のsingle case unionで作り、中身はFrameでいいでしょう。
 generics型もreadCsvして返ってきた型を参考に具体的に指定してしまって良いと思います。
 
@@ -769,8 +771,12 @@ moduleを使う手法を使ってみましょう。
 
 ### 課題4: module Relationを作りADTしよう
 
+こちらもブランチは課題3と同様のものを使ってOKです。比較したいので。という事でブランチ名は `toyrel/3_relation_type`のままでお願いします。
+
 Relationという名前のmoduleを作り、そこにTという型をつくり、Relationの中を知る必要のある関数をこのモジュールにまとめましょう。
 そしてprojectなどはRelation.Tを使うように書き直してみましょう。
+
+このmoduleを作って整理したコードと課題3のコードを比較してみましょう。整理していく過程で、より自然に構造が出来ていくように感じませんでしたか？
 
 {% capture adt %}
 **抽象データ型の話**  
