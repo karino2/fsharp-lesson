@@ -653,12 +653,12 @@ rows[0] = rows[1]
 行が違っていても、値が同じであれば両者はイコールとなります。
 ハッシュ値も同じになります。
 
-### 課題2: dfのrowを一意にしたdf2を返す、distinct1を作れ
+### 課題2: dfのrowを一意にしたdf2を返す、distinctを作れ
 
 まずは、以下のような感じで、単純にdfのrowをdistinctにする関数を作りましょう。
 
 ```
-type Distinct1 = Frame -> Frame
+type Distinct = Frame -> Frame
 ```
 
 この手の表記の見方を簡単に。
@@ -669,26 +669,35 @@ type Distinct1 = Frame -> Frame
 つまりこの場合は、以下のような実装になる。
 
 ```
-let distinct1 df = ...
+let distinct df = ...
 ```
 
 上記のtype文は基本的には使わなくていいです。
 使う場合はdistinctを例えば以下のような定義に変えれば使えます。
 
 ```
-let distinct1: Distinct1 = fun df ->
+let distinct: Distinct = fun df ->
 ```
 
 Distinctを使わない定義の方が実装が簡潔なので、別に使わなくてもいいです。
 ただこの形にするとdfなどが型推論で型がtype定義から引き継がれるので、
 いちいちdfに型指定しなくてもFrame型になるというメリットはあります。
 
-### Relation型を作る
+## Relation型を作る
 
 さてこのままではrowが重複しているdfとしていないdfが、型の上では区別出来ません。
-そこで、rowが重複していないFrameを表すRelationという型をつくりましょう。
 
-Relationの作り方は２つくらいあります。
+F#では、ある型の変数がなんらかの制約をもったサブセットになっている場合は、
+なるべくそのサブセット用の型を作る方が望ましい。
+間違って想定しているサブセットで無い値が来ない事をコンパイル時に保証する為です。
+
+ある型の変数を作る所で必ず制約を満たしているかチェックすれば、それ以後はその型が全てその制約を満たしている、と考える事が出来ます。
+特にimmutableに書いていれば一度満たした制約が満たされなくなる事は無いので特にそうです。
+
+このrowが重複していないFrameは、Relational Algebraの用語では「Relation」と言います。
+そこでここでも、rowが重複していないFrameを表すRelationという型をつくりましょう。
+
+Relation型の作り方は２つくらい考えられます。
 
 - 普通にRelation型を作る
 - module RelationのT型とする
@@ -705,26 +714,88 @@ single case unionについては以下を参照の事。
 
 [Single case union types · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/designing-with-types-single-case-dus.html)
 
-
 このRelationを使ってdistinct, project, あとcsvをロードする関数(readCsvしてdistinctするなにか）を書いてみましょう。
 
 ### Relation型を作る意義などについて考える
 
-この辺で、pureな型とその入出力的な話を書く。
-ロード、distinct、projectを使う人にとってはもうFrame型は見えない、という話とか。
+Relationのように解いている問題領域で使われている語彙の型を作るというのは、多くの場合に良いアイデアです。
+今回ではRelational Algebraの問題を解いているので、Relational Algebraの論文（Relational Modelの論文）に出てくる概念を型にした方が良いと思える時には、
+積極的に作っていきたい。
 
-### 課題4: modle Relationを作りADTしよう
+Relationの型のように、Frameの中で特定の性質を満たしているもの、というような、ある型のサブセットを表すような型を作る時には、
+Relation型の変数を作る関数を一つだけ作り他の場所ではそれを使うようにし、
+そのRelation型の変数を作る関数で制約をチェックするというのがおすすめの方法です。
 
-Relationという型を作ると、その型に関する操作がいろいろ必要になる事に気づくと思います。
-こうしたものは、Relationの型の周辺だけが知っていれば良い情報です。
+エラー処理などは最初のうちは手抜きでfailwithで落としたりすると思いますが、
+そうした手抜きの場所がコード全体に散らばるのでは無く特定の関数に局所化しておく、
+というのが、あとに真面目に処理するように変更する時にも重要です。
+型でそうした対応をしなくても良い部分が明確になっているのは重要です。
 
-この考えを反転させて、型というものがその関連する操作によって定義されるという考え方を、Abstract Data Typeといいます。
-数学などで足し算というものを、交換法則だとか結合法則がどうだとかで再定義するようなものです。
-ある型を、それに適用出来る演算でその定義とする考え方。
+制約を満たしている範囲内での大多数のコードと、それと外の世界とのやり取りをする少数のコード、
+というふうにコードを分割するように心がけると良いでしょう。
+
+以下の冒頭は、同じような解説があるので読んでおくと良いです。
+
+[Calculator Walkthrough: Part 1 · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/calculator-design.html)
+
+また以下は、少し長いですがとても良く書けているのでおすすめです。
+
+[The "Designing with types" Series · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/series/designing-with-types.html)
+
+### moduleを使って抽象データ型を作る
+
+Relationという型を作ったけれど、現状ではRelationという型を作るのに使う関数は必ずこれを使う、
+などという事は、コードの上では分かりにくいと思います。
+またdistinctなどはこの関数以外では使いようが無い事も分かります。
+
+また、例えば以下のような関数があれば、
+
+```
+type ToFrame: Relation -> Frame
+```
+
+それ以外の所ではRelationの型がどういうふうに構成されているかを知る必要は無い。
+
+このようにある型とその型に対する操作だけをもって型とみなす考え方を抽象データ型（Abstract Data Type, ADTと略す事も）といいます。
+そして型を抽象データ型にする事をdata abstractionと呼びます。
+
+抽象データ型自体は紳士協定でも成り立つ考え方ですが、ここではより抽象データ型である事がコード上で明白になるように、
+moduleを使う手法を使ってみましょう。
+
+具体的には以下のあたりを参考にすると良いでしょう。
+
+- [Single case union types · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/designing-with-types-single-case-dus.html)の「Creating modules for wrapper types」のあたり
+
+
+### 課題4: module Relationを作りADTしよう
+
+Relationという名前のmoduleを作り、そこにTという型をつくり、Relationの中を知る必要のある関数をこのモジュールにまとめましょう。
+そしてprojectなどはRelation.Tを使うように書き直してみましょう。
+
+{% capture adt %}
+**抽象データ型の話**  
+
+型というものがその関連する操作によって定義されるという考え方を、Abstract Data Typeといいます。
+型がもともと集合を表すようなものとするなら、ある演算を満たす集合を考えるというのは代数構造を考える事になれた人にとっては自然な考えでしょう。
+
+抽象データ型というのは非常に強力な考え方で、F# では頻繁に出て来ます。
+そしてこの抽象データ型をどういうふうにより抽象にしていくか、と考えるのは、プログラムを書いていく時の良い考え方です。
+
+例えば上記のToFrameなどはあまりに直接的過ぎて、あまり抽象度は高くない。
+何が良いか、というのは、実際に使う側のコードを見て考えます。
+使う側がみんな似たような処理をしているなら、それは抽象データ型の方のモジュールに移す方が良いかもしれません。
+
+結果として、例えばRowのValuesあたりを取る関数と、それらからRelationを作る関数、という組み合わせの方が適切だ、
+と感じるかもしれません。
+こういうのは最初に良い抽象をバーンと思いつくというよりは、
+書いた使う側のコードを眺めて、それをもとに考えていく、という、プログラムという作業の中で継続的に行っていくべき作業です。
+
+抽象データ型については以下にも解説を書いてみました。
+特にJavaとかJavaScriptとかの言語に慣れている人には一度オブジェクトという事は忘れて抽象データ型を理解してみる事をおすすめします。
 
 [抽象データ型とはなんぞや？](https://karino2.github.io/2022/07/28/abstract_data_type.html)
-
-この辺もなんか書くが、もうちょっと具体例が増えてからの方がいいかも？
+{% endcapture %}
+{% include myquote.html body=adt %}
 
 ## リレーションの保存
 
