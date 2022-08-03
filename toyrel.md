@@ -1029,6 +1029,9 @@ joinはtheta-joinだけでいいでしょう。
 > join (Employee) (Dept) (Employee.DeptName = Dept.DeptName)
 ```
 
+- conditionにrelationの名前が無い場合は左のrelation、右のrelationの順番に探して最初にマッチしたものとみなす（両方にあってもエラーにせず１つ目の名前と思って振る舞う）
+- relationが匿名の場合にはrelationの名前指定は出来ない
+
 とりあえず小手調べにproductを先に実装する。
 
 
