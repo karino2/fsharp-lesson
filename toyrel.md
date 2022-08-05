@@ -996,25 +996,35 @@ zzで始まる名前はシステムが使うテンポラリな名前、という
 最終的に必要なものとして、文字列を渡すとここまで実装してきたものが動くような関数を作りたい（すでに作っている人もいるかもしれませんがそれは問題ありません）。
 それを念頭にモジュール構成を考えていきます。
 
+### 参考になりそうな外部サイト
+
+どういうモジュール構成にするのがいいのかは他人のコードを見るのも割と参考になります。とりあえず自分のプロジェクトで参考になりそうなのを挙げておきます。
+
+- [karino2/csvplr: dplyr like unix command line tool for csv.](https://github.com/karino2/csvplr) これはやっている事が似ているが、規模が小さいのでいろいろ手抜き。
+- [karino2/uit: Unique it file sync and manage system.](https://github.com/karino2/uit) こちらは割とでかいので、今回出てくるような問題は一通り解決されていると思うが、やっている事は結構違う。
+
+また、似たようなトピックを扱うF# for Fun and Profitの記事も参考になります。
+
+- [Organizing modules in a project · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/recipe-part3.html)
+- [Refactoring to remove cyclic dependencies · F# for Fun and Profit](https://swlaschin.gitbooks.io/fsharpforfunandprofit/content/posts/removing-cyclic-dependencies.html)
+
+
 ### 基本的な構成
 
 いくつかの選択には自由度があるところなのでそこは各自が考えてほしいですが、おおまかな方針は説明しておきます。
 
 まずこれまでのコードを.fsファイルに構成していきます。
-この時点では、パーサー、パーサーの返す型、返された型を実行するもの、の３つが大きな構成要素としてあると思います。
-とりあえずこれらを、Parser.fs, Common.fs, Eval.fsの３つに分けてください。
+この時点では、パーサーと、パースされた結果をを実行するもの、の2つが大きな構成要素としてあると思います。
+とりあえずこれらを、Parser.fs, Eval.fsの2つに分けて、それぞれParserモジュールとEvalモジュールにしてください。
 
 EvalはParserには依存せず、ParserもEvalには依存しないようにしたい。
-どちらもCommonには依存する。
 
-これだとParserとEvalをつなげる人が居ないので、もう一人登場人物が必要そうな気がします。でもProgram.fsでやってもいいかもしれない。
-この辺は好みが出る所ですね。
-登場人物を増やすなら、各自で名前を考えて下さい。
+他にもいろいろモジュールが必要になると思います。それらは各自で名前を考えて下さい。
 
 ### コンパイルの順序の設定
 
 F#はコンパイルの時の順番に依存する言語です。
-だからどの順番にコンパイルするかは指定する必要があります。例えばCommonより先にParserをコンパイルするとエラーになります。
+だからどの順番にコンパイルするかは指定する必要があります。
 
 順番の設定は以下の左側のボタンを押して出てくるSOLUTION EXPLORERで行います。
 
@@ -1022,6 +1032,15 @@ F#はコンパイルの時の順番に依存する言語です。
 
 ここでファイルを選んで、その横の上矢印、下矢印で順番を変える事が出来ます。
 fsprojをエディタで開いて変更しても良いですが、UIからやる方が無難でしょう。
+
+### 型や共通するものだけを入れたファイルを作る
+
+モジュール間の依存を考えていくと、他のものに依存していないモジュール、というのが大切な事に気づくと思います。
+自分はそういうものをCommon.fsというファイルに置く事が多いので、そうしても良いでしょう。
+
+また、型の定義は普通何にも依存せずに書けるので、Types.fsという共通で使う型を定義するファイルを作るのも良くF#のプロジェクトでは見られます。
+
+この辺は好きな方を選んで良いと思います。
 
 ### fsxからの実行
 
@@ -1052,12 +1071,14 @@ open Common
 {% endcapture %}
 {% include myquote.html body=repldriven %}
 
+### 課題10: モジュールファイルに再構成せよ
 
+という事で実際に.fsのモジュールに分けてみましょう。
 
+## REPLの実装
 
-## replの実装
-
-radline使ってreplを作る
+そろそろREPLが欲しくなってきたのでREPLを作る。
+radline使ってREPLを作る。
 
 ## differenceの実装
 
