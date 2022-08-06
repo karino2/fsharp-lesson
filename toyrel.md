@@ -1129,8 +1129,56 @@ fsxで着想を得ていろいろと確認し、それらをfsへ整理してい
 
 ## REPLの実装
 
-そろそろREPLが欲しくなってきたのでREPLを作る。
-radline使ってREPLを作る。
+他の部分とはあまり関わらない所ですが、せっかくなのでまともなREPLも作る事にしましょう。
+最終的な出口とのつなぎが分かる方がコードのデザインを考えやすいですし。
+
+単に `Console.ReadLine()` などを使っても良いのですが、これではバックスペースや矢印キーなので編集出来ないので複雑なrelational algebraを書く時にはやや辛い。
+
+もうちょっとまともなeditting experienceが欲しいので、radlineを使う事にします。
+
+### radline入門
+
+Unix系のコンソールだとこういう時にはreadlineというライブラリが使われる事が多いですが、
+dotnetだとあまり定番を知りません。
+以前radlineというライブラリをredditで見かけて少し触った所期待通り動いたので、
+今回はこれを使う事にします。
+
+- [spectreconsole/radline: A .NET library to read and display keyboard input.](https://github.com/spectreconsole/radline)
+- [NuGet Gallery - RadLine 0.6.0](https://www.nuget.org/packages/RadLine)
+
+いつものようにプロジェクトにdotnetコマンドで追加して、以下のようなコードをProgram.fsに書いて動かしてみてください。
+
+```
+open RadLine
+
+let lineEditor = LineEditor()
+lineEditor.Prompt <- LineEditorPrompt(">", ".")
+
+let rec repl () =
+  let text = lineEditor.ReadLine(System.Threading.CancellationToken.None).Result
+  printfn "read: %s" text
+  repl ()
+
+repl ()
+```
+
+基本的にはこれで十分と思います。
+
+なおデフォルトではコントロールと矢印の上と下でヒストリーっぽいのですが、Macだと他にかぶって動かないですね。
+以下のようにしたら、Ctrl-Pでヒストリーバックが見れるようになりました。
+
+```
+open System
+lineEditor.KeyBindings.Add<PreviousHistoryCommand>(ConsoleKey.P, ConsoleModifiers.Control)
+```
+
+Ctrl-NとPくらいはサポートしても良いかもしれません。（しなくてもOK）
+
+### 課題11: REPLとインテグレートせよ
+
+コンソール周りはあまりF5の実行やfsxと相性が良くないので、VS Codeからでは無くコンソールからdotnet runで実行するようにしましょう。
+あまり開発効率は良くないので、
+なるべくREPL周辺にはコードを書かないようにして、普段の開発はfsxなどから試していけるように書いていくのがいいと思います。
 
 ## differenceの実装
 
