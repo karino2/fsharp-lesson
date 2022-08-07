@@ -1316,9 +1316,9 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 
 ### 課題12: differenceの実装、エラー処理無し
 
-とりあえずUnion comparableでない時はfailwithで落とす感じで実装してみます。
+とりあえずUnion comparableでない時はfailwithで落とす感じで実装して、この次の課題でエラー処理を追加する事にします。
 
-とりあえず以下が動くように実装します。
+まず以下が動くように実装します。
 
 ```
 > r2 = (project (Employee) DeptName) difference (project (Dept) DeptName)
