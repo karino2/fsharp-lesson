@@ -1180,18 +1180,31 @@ Ctrl-NとPくらいはサポートしても良いかもしれません。（し�
 あまり開発効率は良くないので、
 なるべくREPL周辺にはコードを書かないようにして、普段の開発はfsxなどから試していけるように書いていくのがいいと思います。
 
+### いろいろprojectを実行してみよう
+
+せっかく作ったので、いくつか試してみましょう。
+
+- [tandp.md](tandp.md)の図書館データベースについて、この図書館に所蔵されている本の著者の一覧を表示しましょう。
+- wikipediaデータベースのデータで、Employeeの名前の一覧を表示してみましょう。
+
+その他いくつか自分でも試してみて下さい。
+
 ## differenceの実装
 
 projectだけだといまいち面白い事が出来ないので、次にdifferenceを実装してみます。
 
 ### differenceの説明
 
+Relational algebraでのdifferenceはいわゆるset differenceです。
+
 `(project (Employee) DeptName) difference (project (Dept) DeptName)` みたいに書くと、
-Employeeリレーションの中にあるDeptNameで、Deptリーレションには無いものの一覧が出る。
+Employeeリレーションの中にあるDeptNameで、Deptリーレションには無いものの一覧が出ます。
+
+set differenceについては詳細は以下。
 
 [Complement (set theory)#Relative compliment - Wikipedia](https://en.wikipedia.org/wiki/Complement_%28set_theory%29#Relative_complement)
 
-`rel1 difference rel2` の形で、rel1だけにあってrel2に無いrowだけが残る、という機能です。
+２つのリレーション、rel1とrel2に対して、`rel1 difference rel2` の形で、rel1だけにあってrel2に無いrowだけが残る、という機能です。
 
 文法としては、
 
@@ -1199,7 +1212,7 @@ Employeeリレーションの中にあるDeptNameで、Deptリーレションに
 DifferenceExpression = Expression "difference" Expression
 ```
 
-で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃と思う）
+で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃なので同じシンタックスを採用）
 
 ### Union comparable
 
@@ -1217,16 +1230,19 @@ differenceの仕様としては、Union Comparableじゃない時はエラーに
 Relational AlgebraでのUnion Comparableは普通順番は関係ないのですが、ToyRelとしては順番も同じじゃないと駄目としましょう。
 これは多くのSQLでもそうなっています。
 
-型はcsvを読んだ時にDeedleが推測する型をカラムの型としましょう。
+型については次の「Deedleにおけるカラムの型」を参照ください。
 
 ### Deedleにおけるカラムの型
+
+ToyRelのカラムの型は、csvを読んだ時にDeedleが推測する型をカラムの型としましょう。
+
+Deedleがどういう型とguessしたかは、以下のように取れる。
 
 ```
 let cts = df.ColumnTypes |> Seq.toList
 ```
 
-みたいな感じで取れる。
-F#ではtypeofで比較する。
+これらはType型です。言語上から型を表すクラスを取るのは特殊な命令が必要で、F#ではtypeofで取得出来ます。
 
 ```
 cts.[0] = typeof<Int32>
@@ -1245,9 +1261,9 @@ let testTp (tp:Type) =
   | _ -> "other"
 ```
 
-[f# - match with typeof in fsharp - Stack Overflow](https://stackoverflow.com/questions/9632591/match-with-typeof-in-fsharp)
+以下のStackoverflowに同じ話題があり、`typeof<String>`はリテラルじゃないのでパターンマッチの対象では無いとの事。いまいち自分も納得出来ていないが。
 
-`typeof<String>`はリテラルじゃないのでパターンマッチの対象では無いとの事。いまいち自分も納得出来ていないが。
+[f# - match with typeof in fsharp - Stack Overflow](https://stackoverflow.com/questions/9632591/match-with-typeof-in-fsharp)
 
 ### F# でのsetについて
 
@@ -1332,9 +1348,26 @@ Union Comperableじゃない場合、projectでカラム名が間違ってる場
 
 少しここの型の設計は真面目に考えましょう。
 
+### いろいろdifferenceを試してみよう
+
+せっかくdifferenceを実装したので、いろいろ試してみましょう。
+
+- [tandp.md](tandp.md)の図書館データベースで、図書館にまったく本が存在しないsubjectの一覧を取り出す
+- wikipediaデータベースでEmployeeの居ない部署を取り出す
+
+他にもなにかやってみてください。（良さげなのを思いついたら、ここに追加するPRくれると嬉しい）
+
 ## restrictの実装
 
 第一回でfilterと呼んでたものの実装。（第一回を書いている時点ではこの名前に気づいていなかったのでfilterと呼んでいたが、最初からrestrictにするんだった…）
+
+[tandp.md](tandp.md)の図書館データベースの例だと、以下のようにすると、
+
+```
+> restrict auction (sell_price>purchse_price)
+```
+
+sell_priceがpurchase_priceより大きなものだけが残る、という感じの機能です。
 
 restrictの条件は以下みたいな感じで。
 
@@ -1357,7 +1390,31 @@ cond = cond_atom
 - `[学年]=[専門]` のようなカラム名同士や、 `[学年]=1`のようなカラム名と値の両方が許されます
 - 値はとりあえず整数と文字列は対応する（小数とかはやりたければどうぞ）
 
-TODO: この辺でtheta-comperableの話をする
+###　　theta-comperableとはなにか
+
+reistrictの条件は、theta-comperableである必要があります。
+theta-comperableとは、カラム1とカラム2が、何らかの演算thetaに対して定義されていて、
+trueかfalseの値を取ること、というのが定義です。
+
++とか-とかを一般化してthetaと言っている訳ですね。
+
+例えば`学年`のカラムは整数です。
+`専門`は文字列です。
+だからこの２つの大小比較は出来ない（イコールも出来ないとして良いです）。
+だからこれはtheta comperableでは無い。
+
+また、`[専門] = 1`のように、文字列と数字の比較もtheta comperableでは無い（`[專門]="1"`のように右辺が文字列ならOKです）。
+
+andやorは両方がboolでないといけない。片方が文字列や数字はNGとします。
+
+そしてrestrictの条件はtheta-comperableでなくてはいけなくて、
+theta-comperableじゃない場合はエラーとして処理したい。
+
+union comperableの時と同様、それを表すエラーを作って返してください。
+
+### restrictを動かしてみる
+
+[tandp.md](tandp.md)の図書館データベースで、indexから作者がヘミングウェイでクラスがc3のものを取り出せ。
 
 ## theta-joinの実装
 
@@ -1372,6 +1429,23 @@ joinはtheta-joinだけでいいでしょう。
 - relationが匿名の場合にはrelationの名前指定は出来ない
 
 とりあえず小手調べにproductを先に実装する。
+
+theta-joinはprodctしたテーブルに対するrestirctを実行していると考えられる。
+
+### productの仕様
+
+- ２つのリレーションの片方にしか無いカラム名はそのまま
+- 両方にあるカラム名は２つ目にリレーション名のprefixを.でつける
+
+例
+
+```
+> (Employee) product (Dept)
+Name EmpId DeptName Dept.DeptName Manager
+...
+```
+
+理論上は偶然Dept.DeptNameという名前のカラムがEmployeeの方にあると取り出すことができなくなりますが、実用上は困らないので問題無いかと（実際に起こる時は後述のrenameをすれば良い）
 
 
 ## 細々としたものの対応
