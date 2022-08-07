@@ -1249,37 +1249,37 @@ let testTp (tp:Type) =
 
 `typeof<String>`はリテラルじゃないのでパターンマッチの対象では無いとの事。いまいち自分も納得出来ていないが。
 
-### F# での辞書について
+### F# でのsetについて
 
-differenceの実装は、rel2を全部辞書に入れて、rel1のrowsでfilterして辞書に入ってなかったら流す感じにしますか。
-この場合、辞書を使う必要があるでしょう。
+differenceの実装は、rel2を全部setに入れて、rel1のrowsでfilterしてsetに入ってなかったら流す感じにしますか。
+この場合、setを使う必要があるでしょう。
 
-F#の辞書には大きくimmutableの辞書とmutableの辞書があります。
-immutableな辞書は一度構築したら要素の追加などの必要が無い場合に向いています。
-mutableな辞書はアイテムを追加していく必要のある用途に向いています。
+F#のsetには大きくimmutableのsetとmutableのsetがあります。
+immutableなsetは一度構築したら要素の追加などの必要が無い場合に向いています。
+mutableなsetはアイテムを追加していく必要のある用途に向いています。
 
-今回のケースではimmutableな辞書で良いでしょう。
+今回のケースではimmutableなsetで良いでしょう。
 
-immutableな辞書を組み立てるにはKeyとValueのタプルのリストをdictという関数に渡します。
-
-```
-let hogeDic = [("hoge", 2); ("ika", 3)] |> dict
-```
-
-値を取るのは通常のインデクサで取る事が出来ます。
+immutableなsetを組み立てるには対象とする要素のリストをsetという関数に渡します。
 
 ```
-hogeDic["hoge"]
+let hogeSet = ["hoge"; "ika"] |> set
 ```
 
-キーが含まれているかどうかはContainsKeyで確認出来ます。
+キーが含まれているかどうかはContainsで確認出来ます。
 
 ```
-hogeDic.ContainsKey("ika")
+hogeSet.Contains("ika")
 ```
 
 このくらいの機能があればdifferenceを実装するには十分でしょう。
-mutableな辞書は使う時が来たら解説します。
+
+なおこれらの話はほとんど辞書でも同様です。辞書の場合はキーとValueのタプルのリストをdictという関数に渡します。
+値は以下のようにインデクサで取れます。
+
+```
+hogeDict["hoge"]
+```
 
 {% capture immutable %}
 **Multable vs Immutable**  
