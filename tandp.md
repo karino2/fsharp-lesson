@@ -46,3 +46,10 @@ purchase_priceが図書館が最初にその書籍を購入した時の価格、
 - goods.csv
 - delivery.csv
 - stock.csv
+
+ファッション雑貨店の在庫管理データベースです。
+商品はgoods.csvに一覧があります。
+
+たくさんの支社に対して商品を配送していて、その配送記録がdelivery.csvにあります。
+
+各支社の在庫がstock.csvにあります。
