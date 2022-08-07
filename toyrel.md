@@ -1214,7 +1214,38 @@ DifferenceExpression = Expression "difference" Expression
 
 differenceの仕様としては、Union Comparableじゃない時はエラーにしたい。
 
-TODO: この辺でDeedleのカラムの型の話を軽く書く
+ToyRelとしては型はcsvを読んだ時にDeedleが推測する型をカラムの型としましょう。
+これはcsvを使っている制約ですね。
+
+### Deedleにおけるカラムの型
+
+```
+let cts = df.ColumnTypes |> Seq.toList
+```
+
+みたいな感じで取れる。
+F#ではtypeofで比較する。
+
+```
+cts.[0] = typeof<Int32>
+cts.[0] = typeof<String>
+```
+
+ただmatchの時はそのままではなぜかうまく行かない。
+
+以下のようにwhenでは書ける。
+
+```
+let testTp (tp:Type) =
+  match tp with
+  | t when t = typeof<String> -> "string"
+  | t when t = typeof<Int32> -> "Int"
+  | _ -> "other"
+```
+
+[f# - match with typeof in fsharp - Stack Overflow](https://stackoverflow.com/questions/9632591/match-with-typeof-in-fsharp)
+
+`typeof<String>`はリテラルじゃないのでパターンマッチの対象では無いとの事。いまいち自分も納得出来ていないが。
 
 ### F# での辞書について
 
