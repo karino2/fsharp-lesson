@@ -1186,8 +1186,12 @@ projectだけだといまいち面白い事が出来ないので、次にdiffere
 
 ### differenceの説明
 
-`rel1 difference rel2` で、rel1だけにあってrel2に無いrowだけが残る。Union Comparableじゃない時はエラー。
-とりあえずはfailwithで落とす。
+`(project (Employee) DeptName) difference (project (Dept) DeptName)` みたいに書くと、
+Employeeリレーションの中にあるDeptNameで、Deptリーレションには無いものの一覧が出る。
+
+[Complement (set theory)#Relative compliment - Wikipedia](https://en.wikipedia.org/wiki/Complement_%28set_theory%29#Relative_complement)
+
+`rel1 difference rel2` の形で、rel1だけにあってrel2に無いrowだけが残る、という機能です。
 
 文法としては、
 
@@ -1197,28 +1201,47 @@ DifferenceExpression = Expression "difference" Expression
 
 で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃と思う）
 
-この辺でUnion Comparableの説明をする。
+### Union comparable
 
-### 処理の実装
+さて、unionやdifferenceはrowが一致しているかいないかを判定出来る必要があります。
+そのためには、
 
-まずはパースが終わったあとの処理から書く。
-rel2を全部辞書に入れて、rel1のrowsでfilterして辞書に入ってなかったら流す感じにする。
+- 各カラムの名前が同じ
+- 各カラムの型が同じ
 
-### パース
+という制約を満たしている必要がある。
+この制約をUnion comparableと呼びます。
 
-上記文法でパースしてつなげる。
+differenceの仕様としては、Union Comparableじゃない時はエラーにしたい。
 
-### 以下を動かす
+TODO: この辺でDeedleのカラムの型の話を軽く書く
+
+### F# での辞書について
+
+differenceの実装は、rel2を全部辞書に入れて、rel1のrowsでfilterして辞書に入ってなかったら流す感じにしますか。
+この場合、辞書を使う必要があるでしょう。
+
+F#の辞書には大きくimmutableの辞書とmutableの辞書があります。
+
+TODO: この辺で両者の比較とimmutableな辞書の簡単な使い方を紹介
+
+### 課題12: differenceの実装、エラー処理無し
+
+とりあえずUnion comparableでない時はfailwithで落とす感じで実装してみます。
+
+とりあえず以下が動くように実装します。
 
 ```
 > r2 = (project (Employee) DeptName) difference (project (Dept) DeptName)
 > print r2
 ```
 
-### エラーを実装する
+### 課題13: エラー処理を実装する
 
 エラーメッセージを保持するべく、Union型で。中身は文字列だけでいいでしょう。
 Union Comperableじゃない場合、projectでカラム名が間違ってる場合など。
+
+少しここの型の設計は真面目に考えましょう。
 
 ## restrictの実装
 
