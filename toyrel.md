@@ -1255,8 +1255,64 @@ differenceの実装は、rel2を全部辞書に入れて、rel1のrowsでfilter�
 この場合、辞書を使う必要があるでしょう。
 
 F#の辞書には大きくimmutableの辞書とmutableの辞書があります。
+immutableな辞書は一度構築したら要素の追加などの必要が無い場合に向いています。
+mutableな辞書はアイテムを追加していく必要のある用途に向いています。
 
-TODO: この辺で両者の比較とimmutableな辞書の簡単な使い方を紹介
+今回のケースではimmutableな辞書で良いでしょう。
+
+immutableな辞書を組み立てるにはKeyとValueのタプルのリストをdictという関数に渡します。
+
+```
+let hogeDic = [("hoge", 2); ("ika", 3)] |> dict
+```
+
+値を取るのは通常のインデクサで取る事が出来ます。
+
+```
+hogeDic["hoge"]
+```
+
+キーが含まれているかどうかはContainsKeyで確認出来ます。
+
+```
+hogeDic.ContainsKey("ika")
+```
+
+このくらいの機能があればdifferenceを実装するには十分でしょう。
+mutableな辞書は使う時が来たら解説します。
+
+{% capture immutable %}
+**Multable vs Immutable**  
+
+多くの関数型言語ではimmutableな辞書を中心に使う事を推奨していますが、
+F# は下のdotnetが別段immutable中心という訳でも無いので、mutableな辞書も簡単に使えます。
+
+immutableな辞書だと、要素を追加した時に新しく追加された辞書が返ってきます。
+これで頑張る事で多くのプログラムをimmutableな辞書で書く事は出来ます。
+辞書もなるべくimmutableなものの方が良い、という人もいるでしょう。
+
+ですがF#はdotnetに開かれた言語で、dotnetの多くの部分はmutableなオブジェクトを使っています。
+個人的にはF#の強みはそうした外の世界に開かれていて、dotnetの世界を自由にプログラム出来る事だと思っています。
+全てをimmutableにしようと頑張るよりも、mutableなドメインでは普通のC#のようにプログラムを書きつつ、
+ある領域ではimmutableに統一する、というような使い分けを一つの言語内で自由に出来る所がF#の面白さだと思っています。
+
+私見では、リストに関してはimmutableな方を主に使う方が良いと思っていますが、
+辞書に関しては素直にmutableなものを使う方がコードが簡単になる事も多く、
+他のdotnetのオブジェクトを扱うのと同じように辞書にも接する方が良いんじゃないか、と思っています。
+
+自分の辞書の使い分けとしては本文にも書いた通り、構築が終われば要素の追加が無い場合はimmutableな辞書を、
+継続的に要素を追加していくような用途ではmutableな辞書を使う事が多い。
+
+immutableが大切だ、という話は以下のF# for fun anc profitにも書いてあるので、
+こちらも読んだ上でどちらを使うかはみなさんが好きに判断したらいいと思います。
+
+[Immutability - F# for fun and profit](https://fsharpforfunandprofit.com/posts/correctness-immutability/)
+
+fsharp-lessonとしては、解説はmutableな辞書も使っていきますが、課題を全部immutableな辞書で解いてもOKです。
+
+{% endcapture %}
+{% include myquote.html body=immutable %}
+
 
 ### 課題12: differenceの実装、エラー処理無し
 
