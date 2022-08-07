@@ -1471,6 +1471,13 @@ Name EmpId DeptName Dept.DeptName Manager
 
 理論上は偶然Dept.DeptNameという名前のカラムがEmployeeの方にあると取り出すことができなくなりますが、実用上は困らないので問題無いかと（実際に起こる時は後述のrenameをすれば良い）
 
+### joinの実装
+
+productしたあとにrestrictするかのように動けば良いのだけれど、
+restrictのcondの指定でrelationの名前をつけてもつけなくても良い所は違いがある。
+そこだけ注意して実装。
+
+
 ### joinを動かしてみる
 
 tandp p68のQuery 4.3.4よりあとから例を持ってくる。
