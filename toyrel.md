@@ -1214,8 +1214,10 @@ DifferenceExpression = Expression "difference" Expression
 
 differenceの仕様としては、Union Comparableじゃない時はエラーにしたい。
 
-ToyRelとしては型はcsvを読んだ時にDeedleが推測する型をカラムの型としましょう。
-これはcsvを使っている制約ですね。
+Relational AlgebraでのUnion Comparableは普通順番は関係ないのですが、ToyRelとしては順番も同じじゃないと駄目としましょう。
+これは多くのSQLでもそうなっています。
+
+型はcsvを読んだ時にDeedleが推測する型をカラムの型としましょう。
 
 ### Deedleにおけるカラムの型
 
