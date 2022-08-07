@@ -1193,6 +1193,24 @@ Ctrl-NとPくらいはサポートしても良いかもしれません。（し�
 
 その他いくつか自分でも試してみて下さい。
 
+## 課題12: 複数データベース対応
+
+立ち上がった時には「database/master」データベースを見ていますが、以下のようにuseコマンドを発行すると、
+
+```
+> use library
+```
+
+以後は「database/library」を見る感じの機能を実装したい。
+
+useで切り替えてlistとか出来るように。
+
+パスはグローバル変数にmutableで適当にお茶を濁すか、Database型の変数をあらわに全関数に足すか、どっちでもいいです。
+（初期にどちらを選んだかがどの程度の影響をここで与えるかを味わっていただきたいところ）
+
+なお、グローバル変数でしのぐ場合、databaseの場所を表す部分とdatabase以下の部分は分けて定義してください（前者は起動したらもう変わらないはずの変数、後者はuseで切り替わる変数）。
+
+
 ## differenceの実装
 
 projectだけだといまいち面白い事が出来ないので、次にdifferenceを実装してみます。
@@ -1334,9 +1352,9 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 {% include myquote.html body=immutable %}
 
 
-### 課題12: differenceの実装、エラー処理無し
+### 課題13: differenceの実装、エラー処理無し
 
-とりあえずUnion comparableでない時はfailwithで落とす感じで実装して、この次の課題でエラー処理を追加する事にします。
+とりあえずUnion comparableでない時はfailwithで落とす感じで実装して、この次の課題でエラー処理を追加する事にします。（次の課題はフィードバックのやりとりが多い可能性があるので分けたい）
 
 まず以下が動くように実装します。
 
@@ -1345,7 +1363,7 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 > print r2
 ```
 
-### 課題13: エラー処理を実装する
+### 課題14: エラー処理を実装する
 
 エラーメッセージを保持するべく、Union型で。中身は文字列だけでいいでしょう。
 Union Comperableじゃない場合、projectでカラム名が間違ってる場合など。
@@ -1442,7 +1460,7 @@ theta-joinはprodctしたテーブルに対するrestirctを実行している�
 - ２つのリレーションの片方にしか無いカラム名はそのまま
 - 両方にあるカラム名は２つ目にリレーション名のprefixを.でつける
 
-例
+**例**
 
 ```
 > (Employee) product (Dept)
@@ -1452,11 +1470,9 @@ Name EmpId DeptName Dept.DeptName Manager
 
 理論上は偶然Dept.DeptNameという名前のカラムがEmployeeの方にあると取り出すことができなくなりますが、実用上は困らないので問題無いかと（実際に起こる時は後述のrenameをすれば良い）
 
+### joinを動かしてみる
 
-## 細々としたものの対応
-
-- `@last`
-- 複数データベース対応 (`use`の実装)
+tandp p68のQuery 4.3.4よりあとから例を持ってくる。
 
 ## renameの実装
 
@@ -1469,8 +1485,9 @@ Name EmpId DeptName Dept.DeptName Manager
 - リレーションは最初のカッコでわかるので別途は指定しない
 - rename対象はidentifierか`[`とかでくくったもの（colname)
 
-## 残りを一通り実装する
+## 細々としたものの対応
 
+- `@last`
 - union
 - intersect
 
@@ -1479,9 +1496,4 @@ Name EmpId DeptName Dept.DeptName Manager
 ## コマンドにしてみる
 
 一応シングルバイナリー（ただしランタイムは含めない奴）にしてみる。
-
-## いろいろ書いてみよう
-
-- Wikipediaの例を一通りやる
-- tandpもやってみるといいかも（よさげな課題をピックアップしてtandp.mdの方に書く）
 
