@@ -1379,7 +1379,7 @@ setを使って実装してみると、rowはcomperableじゃない的なこと�
 ### 課題14: エラー処理を実装する
 
 エラーメッセージを保持するべく、Union型で。中身は文字列だけでいいでしょう。
-Union Comperableじゃない場合、projectでカラム名が間違ってる場合など。
+Union Comparableじゃない場合、projectでカラム名が間違ってる場合など。
 
 少しここの型の設計は真面目に考えましょう。
 
@@ -1389,6 +1389,8 @@ Union Comperableじゃない場合、projectでカラム名が間違ってる場
 
 - [tandp.md](tandp.md)の図書館データベースで、図書館にまったく本が存在しないsubjectの一覧を取り出す
 - wikipediaデータベースでEmployeeの居ない部署を取り出す
+- wikipediaデータベースで`(project (Employee) DeptName) difference (project (Dept) Manager)`を実行して、Union Comparableじゃない（カラムが違う）エラーが出ることを確認する
+- wikipediaデータベースで`(project (Employee) EmpId) difference (project (EmployeeTypeMismatch) EmpId)`を実行して、Union Comparableじゃない（型が違う）エラーが出ることを確認する
 
 他にもなにかやってみてください。（良さげなのを思いついたら、ここに追加するPRくれると嬉しい）
 
