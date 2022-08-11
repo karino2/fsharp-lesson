@@ -1353,7 +1353,7 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 {% include myquote.html body=immutable %}
 
 
-### 課題13: differenceの実装、エラー処理無し
+### 課題13: differenceの実装をsetでやってエラーを確認
 
 とりあえずUnion comparableでない時はfailwithで落とす感じで実装して、この次の課題でエラー処理を追加する事にします。（次の課題はフィードバックのやりとりが多い可能性があるので分けたい）
 
@@ -1363,6 +1363,19 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 > r2 = (project (Employee) DeptName) difference (project (Dept) DeptName)
 > print r2
 ```
+
+setを使って実装してみると、rowはcomperableじゃない的なことを言われてエラーになると思うので、まずそのエラーを確認します。
+
+（補足：解説を書いた時には実装出来ないと気づいていなかったけど、教育的に良いので残す事にした）
+
+### 課題13.5: differenceの実装、エラー処理無し
+
+次にsetをHashSetに変えると実装出来ると思うので、HashSetで実装してみてください。
+
+[HashSet Class (System.Collections.Generic) - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
+
+なぜHashSetだと問題が無いのか、理由も考えてみてください。
+
 
 ### 課題14: エラー処理を実装する
 
