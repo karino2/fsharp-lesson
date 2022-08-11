@@ -1472,7 +1472,7 @@ joinはtheta-joinだけでいいでしょう。
 
 theta-joinはprodctしたテーブルに対するrestirctを実行していると考えられる。
 
-### productの仕様
+### 課題16: productの仕様
 
 - ２つのリレーションの片方にしか無いカラム名はそのまま
 - 両方にあるカラム名は２つ目にリレーション名のprefixを.でつける
@@ -1487,7 +1487,7 @@ Name EmpId DeptName Dept.DeptName Manager
 
 理論上は偶然Dept.DeptNameという名前のカラムがEmployeeの方にあると取り出すことができなくなりますが、実用上は困らないので問題無いかと（実際に起こる時は後述のrenameをすれば良い）
 
-### joinの実装
+### 課題17: joinの実装
 
 productしたあとにrestrictするかのように動けば良いのだけれど、
 restrictのcondの指定でrelationの名前をつけてもつけなくても良い所は違いがある。
