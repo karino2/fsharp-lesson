@@ -806,7 +806,7 @@ Relationという名前のmoduleを作り、そこにTという型をつくり�
 ## リレーションの保存
 
 toyrelではトップレベルで評価されたリレーションは必ずcsvに保存されます。
-左辺の変数がある時はそれがファイルのbasenmaeになります。
+左辺の変数がある時はそれがファイルのbasenameになります。
 左辺の変数が無い時はランダムで振られたファイル名になります。
 
 まずは左辺が無いケースでランダムのファイル名に保存する場合を考えましょう。
@@ -961,7 +961,7 @@ zzで始まる名前はシステムが使うテンポラリな名前、という
 それは最初の2文字をzzとする事でぶつからない名前というのを保証出来るようにし、最初からそういうファイル名は使わない、
 という制約によりいろいろな面倒を省いています。
 
-削除の周りをどうするか、といのは工夫の余地は多いものです。例えばgmailなどではメールは削除するとゴミ箱に入り、undoが出来ます。
+削除の周りをどうするか、というのは工夫の余地は多いものです。例えばgmailなどではメールは削除するとゴミ箱に入り、undoが出来ます。
 以前のメールソフトでは削除の前にダイアログを出して問い合わせる事が多かったのですが、この周辺はバグも多く使いにくいものでした。
 削除では無くゴミ箱に移動、という仕様にする事で、多くの面倒な問題を回避できるとともに、より使いやすくもなっています。
 
@@ -987,7 +987,7 @@ zzで始まる名前はシステムが使うテンポラリな名前、という
 ```
 
 現在のデータベース内のリレーションの一覧を出力する、という命令を実装します。
-これもprint_stmtと同様に、Expressioでは無いなにかですね。
+これもprint_stmtと同様に、Expressionでは無いなにかですね。
 
 ## モジュール構成などを考える
 
@@ -1016,7 +1016,7 @@ zzで始まる名前はシステムが使うテンポラリな名前、という
 いくつかの選択には自由度があるところなのでそこは各自が考えてほしいですが、おおまかな方針は説明しておきます。
 
 まずこれまでのコードを.fsファイルに構成していきます。
-この時点では、パーサーと、パースされた結果をを実行するもの、の2つが大きな構成要素としてあると思います。
+この時点では、パーサーと、パースされた結果を実行するもの、の2つが大きな構成要素としてあると思います。
 とりあえずこれらを、Parser.fs, Eval.fsの2つに分けて、それぞれParserモジュールとEvalモジュールにしてください。
 
 EvalはParserには依存せず、ParserもEvalには依存しないようにしたい。
@@ -1129,8 +1129,88 @@ fsxで着想を得ていろいろと確認し、それらをfsへ整理してい
 
 ## REPLの実装
 
-そろそろREPLが欲しくなってきたのでREPLを作る。
-radline使ってREPLを作る。
+他の部分とはあまり関わらない所ですが、せっかくなのでまともなREPLも作る事にしましょう。
+最終的な出口とのつなぎが分かる方がコードのデザインを考えやすいですし。
+
+単に `Console.ReadLine()` などを使っても良いのですが、これではバックスペースや矢印キーなので編集出来ないので複雑なrelational algebraを書く時にはやや辛い。
+
+もうちょっとまともなeditting experienceが欲しいので、radlineを使う事にします。
+
+### radline入門
+
+Unix系のコンソールだとこういう時にはreadlineという定番のライブラリがあるのですが、
+dotnetだと何が使われるのか良く知りません。
+
+以前radlineというライブラリをredditで見かけて少し触った所期待通り動いたので、
+今回はこれを使う事にします。
+
+- [spectreconsole/radline: A .NET library to read and display keyboard input.](https://github.com/spectreconsole/radline)
+- [NuGet Gallery - RadLine 0.6.0](https://www.nuget.org/packages/RadLine)
+
+いつものようにプロジェクトにdotnetコマンドで追加して、以下のようなコードをProgram.fsに書いて動かしてみてください。
+
+```
+open RadLine
+
+let lineEditor = LineEditor()
+lineEditor.Prompt <- LineEditorPrompt(">", ".")
+
+let rec repl () =
+  let text = lineEditor.ReadLine(System.Threading.CancellationToken.None).Result
+  printfn "read: %s" text
+  repl ()
+
+repl ()
+```
+
+基本的にはこの程度の機能にこれまでのコードをインテグレートすれば十分と思います。
+
+なおデフォルトではコントロールと矢印の上と下でヒストリーっぽいのですが、Macだと他にかぶって動かないですね。
+以下のようにしたら、Ctrl-Pでヒストリーバックが見れるようになりました。
+
+```
+open System
+lineEditor.KeyBindings.Add<PreviousHistoryCommand>(ConsoleKey.P, ConsoleModifiers.Control)
+```
+
+Ctrl-NとPくらいはサポートしても良いかもしれません。（しなくてもOK）
+
+### 課題11: REPLとインテグレートせよ
+
+コンソール周りはあまりF5の実行やfsxと相性が良くないので、VS Codeからでは無くコンソールからdotnet runで実行するようにしましょう。
+あまり開発効率は良くないので、
+なるべくREPL周辺にはコードを書かないようにして、普段の開発はfsxなどから試していけるように書いていくのがいいと思います。
+
+あとついでにquitも実装しておいてください。
+
+### いろいろprojectを実行してみよう
+
+せっかく作ったので、いくつか試してみましょう。
+
+- wikipediaデータベースのデータで、Employeeの名前の一覧を表示してみましょう。
+- [tandp.md](tandp.md)の図書館データベースについて、この図書館に所蔵されている本の著者の一覧を表示しましょう。
+- [tandp.md](tandp.md)の在庫管理データベースについて、商品を作っている生産者の一覧を表示しましょう。
+- [tandp.md](tandp.md)の在庫管理データベースについて、どこかの支社に一度でも配送したことなる生産者の一覧を表示しましょう。
+
+その他いくつか自分でも試してみて下さい。
+
+## 課題12: 複数データベース対応
+
+立ち上がった時には「database/master」データベースを見ていますが、以下のようにuseコマンドを発行すると、
+
+```
+> use library
+```
+
+以後は「database/library」を見る感じの機能を実装したい。
+
+useで切り替えてlistとか出来るように。
+
+パスはグローバル変数にmutableで適当にお茶を濁すか、Database型の変数をあらわに全関数に足すか、どっちでもいいです。
+（初期にどちらを選んだかがどの程度の影響をここで与えるかを味わっていただきたいところ）
+
+なお、グローバル変数でしのぐ場合、`.../database/`までと、database以下のmasterとかの部分は分けて定義してください（前者は起動したらもう変わらないはずの変数、後者はuseで切り替わる変数）。
+
 
 ## differenceの実装
 
@@ -1138,8 +1218,16 @@ projectだけだといまいち面白い事が出来ないので、次にdiffere
 
 ### differenceの説明
 
-`rel1 difference rel2` で、rel1だけにあってrel2に無いrowだけが残る。Union Comparableじゃない時はエラー。
-とりあえずはfailwithで落とす。
+Relational algebraでのdifferenceはいわゆるset differenceです。
+
+`(project (Employee) DeptName) difference (project (Dept) DeptName)` みたいに書くと、
+Employeeリレーションの中にあるDeptNameで、Deptリーレションには無いものの一覧が出ます。
+
+set differenceについては詳細は以下。
+
+[Complement (set theory)#Relative compliment - Wikipedia](https://en.wikipedia.org/wiki/Complement_%28set_theory%29#Relative_complement)
+
+２つのリレーション、rel1とrel2に対して、`rel1 difference rel2` の形で、rel1だけにあってrel2に無いrowだけが残る、という機能です。
 
 文法としては、
 
@@ -1147,34 +1235,174 @@ projectだけだといまいち面白い事が出来ないので、次にdiffere
 DifferenceExpression = Expression "difference" Expression
 ```
 
-で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃と思う）
+で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃なので同じシンタックスを採用）
 
-この辺でUnion Comparableの説明をする。
+### Union comparable
 
-### 処理の実装
+さて、unionやdifferenceはrowが一致しているかいないかを判定出来る必要があります。
+そのためには、
 
-まずはパースが終わったあとの処理から書く。
-rel2を全部辞書に入れて、rel1のrowsでfilterして辞書に入ってなかったら流す感じにする。
+- 各カラムの名前が同じ
+- 各カラムの型が同じ
 
-### パース
+という制約を満たしている必要がある。
+この制約をUnion comparableと呼びます。
 
-上記文法でパースしてつなげる。
+differenceの仕様としては、Union Comparableじゃない時はエラーにしたい。
 
-### 以下を動かす
+Relational AlgebraでのUnion Comparableは普通順番は関係ないのですが、ToyRelとしては順番も同じじゃないと駄目としましょう。
+これは多くのSQLでもそうなっています。
+
+型については次の「Deedleにおけるカラムの型」を参照ください。
+
+### Deedleにおけるカラムの型
+
+ToyRelのカラムの型は、csvを読んだ時にDeedleが推測する型をカラムの型としましょう。
+
+Deedleがどういう型とguessしたかは、以下のように取れる。
+
+```
+let cts = df.ColumnTypes |> Seq.toList
+```
+
+これらはType型です。言語上から型を表すクラスを取るのは特殊な命令が必要で、F#ではtypeofで取得出来ます。
+
+```
+cts.[0] = typeof<Int32>
+cts.[0] = typeof<String>
+```
+
+ただmatchの時はそのままではなぜかうまく行かない。
+
+以下のようにwhenでは書ける。
+
+```
+let testTp (tp:Type) =
+  match tp with
+  | t when t = typeof<String> -> "string"
+  | t when t = typeof<Int32> -> "Int"
+  | _ -> "other"
+```
+
+以下のStackoverflowに同じ話題があり、`typeof<String>`はリテラルじゃないのでパターンマッチの対象では無いとの事。いまいち自分も納得出来ていないが。
+
+[f# - match with typeof in fsharp - Stack Overflow](https://stackoverflow.com/questions/9632591/match-with-typeof-in-fsharp)
+
+### F# でのsetについて
+
+differenceの実装は、rel2を全部setに入れて、rel1のrowsでfilterしてsetに入ってなかったら流す感じにしますか。
+この場合、setを使う必要があるでしょう。
+
+F#のsetには大きくimmutableのsetとmutableのsetがあります。
+immutableなsetは一度構築したら要素の追加などの必要が無い場合に向いています。
+mutableなsetはアイテムを追加していく必要のある用途に向いています。
+
+今回のケースではimmutableなsetで良いでしょう。
+
+immutableなsetを組み立てるには対象とする要素のリストをsetという関数に渡します。
+
+```
+let hogeSet = ["hoge"; "ika"] |> set
+```
+
+キーが含まれているかどうかはContainsで確認出来ます。
+
+```
+hogeSet.Contains("ika")
+```
+
+このくらいの機能があればdifferenceを実装するには十分でしょう。
+
+なおこれらの話はほとんど辞書でも同様です。辞書の場合はキーとValueのタプルのリストをdictという関数に渡します。
+値は以下のようにインデクサで取れます。
+
+```
+hogeDict["hoge"]
+```
+
+{% capture immutable %}
+**Multable vs Immutable**  
+
+多くの関数型言語ではimmutableな辞書を中心に使う事を推奨していますが、
+F# は下のdotnetが別段immutable中心という訳でも無いので、mutableな辞書も簡単に使えます。
+
+immutableな辞書だと、要素を追加した時に新しく追加された辞書が返ってきます。
+これで頑張る事で多くのプログラムをimmutableな辞書で書く事は出来ます。
+辞書もなるべくimmutableなものの方が良い、という人もいるでしょう。
+
+ですがF#はdotnetに開かれた言語で、dotnetの多くの部分はmutableなオブジェクトを使っています。
+個人的にはF#の強みはそうした外の世界に開かれていて、dotnetの世界を自由にプログラム出来る事だと思っています。
+全てをimmutableにしようと頑張るよりも、mutableなドメインでは普通のC#のようにプログラムを書きつつ、
+ある領域ではimmutableに統一する、というような使い分けを一つの言語内で自由に出来る所がF#の面白さだと思っています。
+
+私見では、リストに関してはimmutableな方を主に使う方が良いと思っていますが、
+辞書に関しては素直にmutableなものを使う方がコードが簡単になる事も多く、
+他のdotnetのオブジェクトを扱うのと同じように辞書にも接する方が良いんじゃないか、と思っています。
+
+自分の辞書の使い分けとしては本文にも書いた通り、構築が終われば要素の追加が無い場合はimmutableな辞書を、
+継続的に要素を追加していくような用途ではmutableな辞書を使う事が多い。
+
+immutableが大切だ、という話は以下のF# for fun anc profitにも書いてあるので、
+こちらも読んだ上でどちらを使うかはみなさんが好きに判断したらいいと思います。
+
+[Immutability - F# for fun and profit](https://fsharpforfunandprofit.com/posts/correctness-immutability/)
+
+fsharp-lessonとしては、解説はmutableな辞書も使っていきますが、課題を全部immutableな辞書で解いてもOKです。
+
+{% endcapture %}
+{% include myquote.html body=immutable %}
+
+
+### 課題13: differenceの実装をsetでやってエラーを確認
+
+とりあえずUnion comparableでない時はfailwithで落とす感じで実装して、この次の課題でエラー処理を追加する事にします。（課題14はフィードバックのやりとりが多い可能性があるので分けたい）
+
+まず以下が動くように実装します。
 
 ```
 > r2 = (project (Employee) DeptName) difference (project (Dept) DeptName)
 > print r2
 ```
 
-### エラーを実装する
+setを使って実装してみると、rowはcomperableじゃない的なことを言われてエラーになると思うので、まずそのエラーを確認します。
+
+（補足：解説を書いた時には実装出来ないと気づいていなかったけど、教育的に良いので残す事にした）
+
+### 課題13.5: differenceの実装、エラー処理無し
+
+次にsetをHashSetに変えると実装出来ると思うので、HashSetで実装してみてください。
+
+[HashSet Class (System.Collections.Generic) - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
+
+なぜHashSetだと問題が無いのか、理由も考えてみてください。
+
+### 課題14: エラー処理を実装する
 
 エラーメッセージを保持するべく、Union型で。中身は文字列だけでいいでしょう。
 Union Comperableじゃない場合、projectでカラム名が間違ってる場合など。
 
+少しここの型の設計は真面目に考えましょう。
+
+### いろいろdifferenceを試してみよう
+
+せっかくdifferenceを実装したので、いろいろ試してみましょう。
+
+- [tandp.md](tandp.md)の図書館データベースで、図書館にまったく本が存在しないsubjectの一覧を取り出す
+- wikipediaデータベースでEmployeeの居ない部署を取り出す
+
+他にもなにかやってみてください。（良さげなのを思いついたら、ここに追加するPRくれると嬉しい）
+
 ## restrictの実装
 
 第一回でfilterと呼んでたものの実装。（第一回を書いている時点ではこの名前に気づいていなかったのでfilterと呼んでいたが、最初からrestrictにするんだった…）
+
+[tandp.md](tandp.md)の図書館データベースの例だと、以下のようにすると、
+
+```
+> restrict auction (sell_price>purchse_price)
+```
+
+sell_priceがpurchase_priceより大きなものだけが残る、という感じの機能です。
 
 restrictの条件は以下みたいな感じで。
 
@@ -1195,9 +1423,38 @@ cond = cond_atom
 - 等価は`=`
 - ノットイコールは`<>`
 - `[学年]=[専門]` のようなカラム名同士や、 `[学年]=1`のようなカラム名と値の両方が許されます
-- 値はとりあえず整数と文字列は対応する（小数とかはやりたければどうぞ）
+- 値はとりあえず整数と文字列は対応する（小数とかはやりたければどうぞ）。文字列は必ずダブルクオートで囲まれているとする
 
-TODO: この辺でtheta-comperableの話をする
+###　　theta-comperableとはなにか
+
+reistrictの条件は、theta-comperableである必要があります。
+theta-comperableとは、カラム1とカラム2が、何らかの演算thetaに対して定義されていて、
+trueかfalseの値を取ること、というのが定義です。
+
++とか-とかを一般化してthetaと言っている訳ですね。
+
+例えば`学年`のカラムは整数です。
+`専門`は文字列です。
+だからこの２つの大小比較は出来ない（イコールも出来ないとして良いです）。
+だからこれはtheta comperableでは無い。
+
+また、`[専門] = 1`のように、文字列と数字の比較もtheta comperableでは無い（`[專門]="1"`のように右辺が文字列ならOKです）。
+
+andやorは両方がboolでないといけない。片方が文字列や数字はNGとします。
+
+そしてrestrictの条件はtheta-comperableでなくてはいけなくて、
+theta-comperableじゃない場合はエラーとして処理したい。
+
+union comperableの時と同様、それを表すエラーを作って返してください。
+
+### 課題15: restrictを実装しよう
+
+ということでrestrictを実装してみてください。さらっと言ってますが、まぁまぁ難しいと思います。
+
+### restrictを動かしてみる
+
+- [tandp.md](tandp.md)の図書館データベースで、indexから作者がヘミングウェイでクラスがc3のものを取り出しましょう。
+- [tandp.md](tandp.md)の在庫管理データベースについて、L1支社に現在まだ在庫としてある商品（INSTOCK）のsell_priceとcost_priceの一覧を取り出しましょう。
 
 ## theta-joinの実装
 
@@ -1213,11 +1470,33 @@ joinはtheta-joinだけでいいでしょう。
 
 とりあえず小手調べにproductを先に実装する。
 
+theta-joinはprodctしたテーブルに対するrestirctを実行していると考えられる。
 
-## 細々としたものの対応
+### 課題16: productの仕様
 
-- `@last`
-- 複数データベース対応 (`use`の実装)
+- ２つのリレーションの片方にしか無いカラム名はそのまま
+- 両方にあるカラム名は２つ目にリレーション名のprefixを.でつける
+
+**例**
+
+```
+> (Employee) product (Dept)
+Name EmpId DeptName Dept.DeptName Manager
+...
+```
+
+理論上は偶然Dept.DeptNameという名前のカラムがEmployeeの方にあると取り出すことができなくなりますが、実用上は困らないので問題無いかと（実際に起こる時は後述のrenameをすれば良い）
+
+### 課題17: joinの実装
+
+productしたあとにrestrictするかのように動けば良いのだけれど、
+restrictのcondの指定でrelationの名前をつけてもつけなくても良い所は違いがある。
+そこだけ注意して実装。
+
+
+### joinを動かしてみる
+
+tandp p68のQuery 4.3.4よりあとから例を持ってくる。
 
 ## renameの実装
 
@@ -1230,8 +1509,9 @@ joinはtheta-joinだけでいいでしょう。
 - リレーションは最初のカッコでわかるので別途は指定しない
 - rename対象はidentifierか`[`とかでくくったもの（colname)
 
-## 残りを一通り実装する
+## 細々としたものの対応
 
+- `@last`
 - union
 - intersect
 
@@ -1240,9 +1520,4 @@ joinはtheta-joinだけでいいでしょう。
 ## コマンドにしてみる
 
 一応シングルバイナリー（ただしランタイムは含めない奴）にしてみる。
-
-## いろいろ書いてみよう
-
-- Wikipediaの例を一通りやる
-- tandpもやってみるといいかも（よさげな課題をピックアップしてtandp.mdの方に書く）
 
