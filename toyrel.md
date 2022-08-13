@@ -1100,7 +1100,7 @@ fsxで使う手頃なテストライブラリとかは自分は見つけられ�
 **REPL driven development**  
 
 REPLとはread-eval-print loopの略ですが、
-F#の文脈ではfsxを実行していう事を指す事になると思います。
+F#の文脈ではfsxを実行していく事を指す事になると思います。
 
 REPL driven developmentは正確な定義のある言葉では無いと思いますが、
 開発を主にfsx上で実行していきながら進めていくスタイルの事を言います。
