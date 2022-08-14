@@ -343,7 +343,7 @@ df.RowsDense
 
 ### 課題3: 専門が数学の行だけを持ったFrameを作ろう
 
-課題2では、型がSeiriesのSeriesになっていると思います。
+課題2では、型がSeriesのSeriesになっていると思います。
 これをFrameにしてください。
 
 [Deedle in 10 minutes using F#](https://fslab.org/Deedle/tutorial.html)の「Creating series and frames」を見ながら適当に試せば出来るでしょう。
