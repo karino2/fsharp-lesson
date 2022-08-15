@@ -1458,7 +1458,7 @@ union comparableの時と同様、それを表すエラーを作って返して�
 
 ということでrestrictを実装してみてください。さらっと言ってますが、まぁまぁ難しいと思います。
 
-restrictの条件としては、theta-comparableなカラムとthetaによる条件の他に、andやorも追加しましょう。
+restrictの条件としては、theta-comparableなカラムとthetaによる条件の他に、and, or, notも追加しましょう。
 andやorは両方がboolでないといけない。片方が文字列や数字はNGとします。（これもtheta-comparableでは無い、というエラーでいいでしょう）
 
 ### restrictを動かしてみる
