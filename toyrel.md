@@ -1469,20 +1469,35 @@ andやorは両方がboolでないといけない。片方が文字列や数字�
 ## theta-joinの実装
 
 joinはtheta-joinだけでいいでしょう。
-以下が動くように。
+以下のように、２つのrelationと、満たすべき制約を書いたjoinをtheta-joinといいます。
 
 ```
 > join (Employee) (Dept) (Employee.DeptName = Dept.DeptName)
 ```
 
+制約の所がtheta comparableなカラムに対するthetaの制約が書かれるのでtheta-joinと呼ばれるのだと思います。
+
+論理的にはEmployeeとDeptのproductを作り、それにrestrictをしたかのように振る舞う。
+conditionは少し細かい仕様が必要になるでしょう。例えば以下のような感じでどうでしょうか？
+
 - conditionにrelationの名前が無い場合は左のrelation、右のrelationの順番に探して最初にマッチしたものとみなす（両方にあってもエラーにせず１つ目の名前と思って振る舞う）
 - relationが匿名の場合にはrelationの名前指定は出来ない
 
-とりあえず小手調べにproductを先に実装する。
-
-theta-joinはprodctしたテーブルに対するrestirctを実行していると考えられる。
+とりあえず小手調べにproductを実装する事から始めます。
 
 ### 課題16: 以下の仕様のproductを実装
+
+productは集合の積という奴で、デカルト積などと言われるものです。
+
+[直積集合 - Wikipedia](https://ja.wikipedia.org/wiki/%E7%9B%B4%E7%A9%8D%E9%9B%86%E5%90%88)
+
+rowの数がめちゃくちゃ膨れ上がるので実用上は使う事は無いですが、
+論理的にはtheta-joinはprodctしたテーブルに対するrestirctを実行していると考えられる。
+
+集合の積は慣れ親しんだ概念と思いますが、
+カラムの名前をどうするか、という所はちょっと真面目に考える必要がある。
+
+以下のようにしましょう。
 
 - ２つのリレーションの片方にしか無いカラム名はそのまま
 - 両方にあるカラム名は２つ目にリレーション名のprefixを.でつける
@@ -1499,10 +1514,11 @@ Name EmpId DeptName Dept.DeptName Manager
 
 ### 課題17: joinの実装
 
-productしたあとにrestrictするかのように動けば良いのだけれど、
+productが実装出来たら、theta-joinを実装しましょう。
+
+productしたあとにrestrictするかのように動けば良いのだけれど、、
 restrictのcondの指定でrelationの名前をつけてもつけなくても良い所は違いがある。
 そこだけ注意して実装。
-
 
 ### joinを動かしてみる
 
