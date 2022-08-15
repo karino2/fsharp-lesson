@@ -1250,8 +1250,7 @@ DifferenceExpression = Expression "difference" Expression
 
 differenceの仕様としては、Union Comparableじゃない時はエラーにしたい。
 
-Relational AlgebraでのUnion Comparableは普通順番は関係ないのですが、ToyRelとしては順番も同じじゃないと駄目としましょう。
-これは多くのSQLでもそうなっています。
+カラムの順番も同じでないとUnion Comparableではありません。
 
 型については次の「Deedleにおけるカラムの型」を参照ください。
 
@@ -1433,17 +1432,20 @@ cond = cond_atom
 ### theta-comperableとはなにか
 
 reistrictの条件は、theta-comperableである必要があります。
-theta-comperableとは、カラム1とカラム2が、何らかの演算thetaに対して定義されていて、
+theta-comperableとは、カラム1とカラム2が、システムで定められている中の任意の比較演算thetaに対して定義されていて、
 trueかfalseの値を取ること、というのが定義です。
+カラム1とカラム2に対する性質です。
 
 +とか-とかを一般化してthetaと言っている訳ですね。
 
 例えば`学年`のカラムは整数です。
 `専門`は文字列です。
 だからこの２つの大小比較は出来ない（イコールも出来ないとして良いです）。
-だから `[学年] = [專門]` はtheta comperableでは無い。
+だから`学年`と`専門` はtheta comperableでは無い。
 
-また、`[専門] = 1`のように、文字列と数字の比較もtheta comperableでは無い（`[專門]="1"`のように右辺が文字列ならOKです）。
+オリジナルの定義ではカラムとカラムの間の性質ですが、だいたいはカラムと即値（`1`とか`"2"`とかの値）の間にも拡張している事が多いと思います。
+
+だから、`[専門]`と `1`のように、文字列のカラムと数字の比較もtheta comperableでは無いとしましょう（`[專門]`と`"1"`のようにダブルクオートで囲まれた文字列ならtheta-comperableです）。
 
 andやorは両方がboolでないといけない。片方が文字列や数字はNGとします。
 
