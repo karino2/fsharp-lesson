@@ -1355,7 +1355,11 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 
 ### 課題13: differenceの実装をsetでやってエラーを確認
 
-とりあえずUnion comparableでない時はfailwithで落とす感じで実装して、この次の課題でエラー処理を追加する事にします。（課題14はフィードバックのやりとりが多い可能性があるので分けたい）
+まずはsetでdifferenceを実装してみて、コンパイルエラーが出て実行出来ない事を確認しましょう。
+
+（補足：解説を書いた時には実装出来ないと気づいていなかったけど、教育的に良いので残す事にした）
+
+とりあえずUnion comparableでない時はfailwithで落とす感じで実装してみます。
 
 まず以下が動くように実装します。
 
@@ -1366,11 +1370,10 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 
 setを使って実装してみると、rowはcomperableじゃない的なことを言われてエラーになると思うので、まずそのエラーを確認します。
 
-（補足：解説を書いた時には実装出来ないと気づいていなかったけど、教育的に良いので残す事にした）
-
 ### 課題13.5: differenceの実装、エラー処理無し
 
 次にsetをHashSetに変えると実装出来ると思うので、HashSetで実装してみてください。
+この次の課題でエラー処理を追加する事にして、この時点ではfailwithで落としておいてください。（課題14はフィードバックのやりとりが多い可能性があるので分けたい）
 
 [HashSet Class (System.Collections.Generic) - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.hashset-1?view=net-6.0)
 
