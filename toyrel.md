@@ -1447,7 +1447,7 @@ trueかfalseの値を取ること、というのが定義です。
 
 だから、`[専門]`と `1`のように、文字列のカラムと数字の比較もtheta comparableでは無いとしましょう（`[專門]`と`"1"`のようにダブルクオートで囲まれた文字列ならtheta-comparableです）。
 
-thetaは `=, <>, <, <=, >, >=` です。
+thetaは `=, <>, <` などです。
 
 そしてrestrictの条件はtheta-comparableでなくてはいけなくて、
 theta-comparableじゃない場合はエラーとして処理したい。
