@@ -1516,9 +1516,10 @@ Name EmpId DeptName Dept.DeptName Manager
 
 productが実装出来たら、theta-joinを実装しましょう。
 
-productしたあとにrestrictするかのように動けば良いのだけれど、、
-restrictのcondの指定でrelationの名前をつけてもつけなくても良い所は違いがある。
-そこだけ注意して実装。
+productしたあとにrestrictするかのように動けば良いのだけれど、
+restrictのcondの指定でrelationの名前をつけてもつけなくても良い所は違いがある。（重複してないカラムでもcond内ではRelation名のprefixをつけて指定してもOKとします。普通SQLとかもそうなので）
+
+そこだけ注意して実装しましょう。
 
 ### joinを動かしてみる
 
