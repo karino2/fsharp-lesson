@@ -1523,7 +1523,29 @@ restrictのcondの指定でrelationの名前をつけてもつけなくても良
 
 ### joinを動かしてみる
 
-tandp p68のQuery 4.3.4よりあとから例を持ってくる。
+まずはWikipediaの例、[Relational algebra - Wikipedia](https://en.wikipedia.org/wiki/Relational_algebra)から。
+
+- Natural joinの所の例にあるEmployeeとDeptのjoin結果となるようなtheta-joinを書いてみよう
+- CarとBoatの例を動かせ（最初の人はcsvのPRもください…）
+
+[[tandp.md]]の「ファッション雑貨店の在庫管理データベース」に対して、p67以降の例を動かしてみましょう（以下に書いたものです）
+
+- 4.3.1 商品を提供している全producerを調べよ
+- 4.3.2 支社に配送している全producerを調べよ
+- 4.3.3 L1支社に配送されてまだin stockな状態の全商品の、sell_priceとcost_priceを以下の２つの方法で調べよ
+  - P1にL1支社でin stockなrowの一覧を入れ、次にP1からsell_price, cost_priceを取り出して表示する、という２つのクエリに分けるやり方
+  - 上と同じものをかっこを使ってネストして一文にしたやり方
+- 4.3.4 以下の条件を満たすproducer, product_code, descriptionを表示せよ：全てのブランチで、届いた日と同じ日に売れたもの。（以下ヒントを書くので、自分で好きに書いたあとにヒントの通りにも書いてみて下さい）
+  - r1にstockのうちdate_inとdate_outが等しいものだけを入れる
+  - r2でr1とdeliveryを、ブランチとストックが同じようにjoin
+  - r3にr2とgoodsをjoin
+  - r4でr3をproject
+  - このやり方は最後にprojetをやっているので効率が悪い。もっと早くprojectを行うようにクエリを直すとどうなるか？
+- 4.3.5 以下の条件を満たすbranch, size, colour, sell_priceの一覧を表示せよ：まだ売れてないdress全て
+
+他にもなにか面白い例を考えてPRください（csvも）。
+自分が考えたのは機械学習のアルゴリズムの一覧とPRMLで扱ってるアルゴリズムをjoinしてPRMLの教師なし学習のアルゴリズムの一覧を出す、
+というのがあるんですが、csv作る途中で挫折した…
 
 ## renameの実装
 
@@ -1535,6 +1557,7 @@ tandp p68のQuery 4.3.4よりあとから例を持ってくる。
 
 - リレーションは最初のカッコでわかるので別途は指定しない
 - rename対象はidentifierか`[`とかでくくったもの（colname)
+- 上記の文で、專門のカラムの名前が科目になったリレーションが他のクエリと同様にランダムに生成される名前に保存される（シラバス.csvは変更されない）
 
 ## 細々としたものの対応
 
@@ -1543,6 +1566,10 @@ tandp p68のQuery 4.3.4よりあとから例を持ってくる。
 - `@last`
 
 この辺はやらなくてもいいけれどここまでやったらか一応。
+
+`@last`は直前に生成されたrelationの名前が入ります。
+普通はランダムに生成されたリレーションの名前をいちいち目視して打つのを避けるためのものですが、
+assignmentの時にも左辺の変数名が入るとします。
 
 ## コマンドにしてみる
 
