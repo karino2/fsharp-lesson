@@ -1568,10 +1568,45 @@ restrictのcondの指定でrelationの名前をつけてもつけなくても良
 この辺はやらなくてもいいけれどここまでやったらか一応。
 
 `@last`は直前に生成されたrelationの名前が入ります。
+
+```
+> project (シラバス) 専門, 学年
+Relation zzybac returned.
+
+> print @last
+専門   学年
+----  ----
+数学    1
+物理    1
+数学    2
+```
+
 普通はランダムに生成されたリレーションの名前をいちいち目視して打つのを避けるためのものですが、
 assignmentの時にも左辺の変数名が入るとします。
 
 ## コマンドにしてみる
 
-一応シングルバイナリー（ただしランタイムは含めない奴）にしてみる。
+せっかくここまで完成したので、単体のコマンドにしてみましょう。
+ランタイムまで含めたそれ単体で他のマシンに持っていっても使える形式と、
+dotnetランタイムは入っている事を前提にした形式の２つがありますが、
+今回は後者で良いでしょう。
 
+手元のシェルスクリプトには、以下の用に書いてありますが、
+
+```
+dotnet publish -c release -r osx-x64 --self-contained false /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+cp bin/release/net6.0/osx-x64/publish/mdvcat ~/bin
+```
+
+たぶんSelfContainedも`/p:`の形式で良い気がする。
+
+Mac以外のRuntime Identifierなどが必要な人は以下の項式ドキュメントを見て下さい。
+
+[Create a single file for application deployment - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file/overview?tabs=cli)
+
+データベースのルートをどう指定するか？などはたとえば以下の二通りくらいは考えられそうです。
+
+- データベースのルートで実行する事にし、現在のディレクトリ（CWDとかpwdと呼ばれるもの）を使う
+- Arguで適当に引数でパスを指定出来るようにする
+
+どのくらい頑張るのかはおまかせします。
