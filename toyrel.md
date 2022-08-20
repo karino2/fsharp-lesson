@@ -1591,7 +1591,11 @@ assignmentの時にも左辺の変数名が入るとします。
 dotnetランタイムは入っている事を前提にした形式の２つがありますが、
 今回は後者で良いでしょう。
 
-手元のシェルスクリプトには、以下の用に書いてありますが、
+以下の公式ドキュメントに必要な事は書いてありますが、
+
+[Create a single file for application deployment - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file/overview?tabs=cli)
+
+読み解くのは結構たいへんなので、自分の手元にあったシェルスクリプトを載せておきます。
 
 ```
 $ dotnet publish -c release -r osx-x64 --self-contained false /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
@@ -1600,16 +1604,14 @@ $ cp bin/release/net6.0/osx-x64/publish/mdvcat ~/bin
 
 たぶんSelfContainedも`/p:`の形式で良い気がする。
 
-Mac以外のRuntime Identifierなどが必要な人は以下の公式ドキュメントを見て下さい。
-
-[Create a single file for application deployment - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file/overview?tabs=cli)
+Mac以外のRuntime Identifierなどが必要な人は公式ドキュメントを見て下さい。
 
 データベースのルートをどう指定するか？などはたとえば以下の二通りくらいは考えられそうです。
 
 - データベースのルートで実行する事にし、現在のディレクトリ（CWDとかpwdと呼ばれるもの）を使う
 - Arguで適当に引数でパスを指定出来るようにする
 
-どのくらい頑張るのかはおまかせします。
+どのくらい頑張るのかはおまかせします。どっちでもいいと思います。
 
 ## 第二回の終わりに
 
