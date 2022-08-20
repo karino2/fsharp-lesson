@@ -1696,6 +1696,10 @@ ToyRelはRelational Algebraの処理系である、と言い続けて来まし�
 
 そういった事を本気で学びたい場合は、以下の書籍、Database Management Systems、いわゆる牛本が定番だと思います（その割には改訂版出てないんですね…）
 
+データベースは使う機会が多いという点でちゃんと学ぶご利益があるとともに、
+現代のソフトウェアにおいてかなり洗練された実装を持つ分野の一つでもあるため、
+ソフトウェアを作る勉强としても良い題材です。
+
 <iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=007123151X&linkId=5628b4778dfab0858f67af28e581efd1"></iframe>
 
 自分は昔サーバーサイドで結構真面目にSQL叩く仕事をしていたのでこの本は何度も読み直して、SQL Serverの返すExecution Planなどを眺めてはコストを見積もったりしていました。
