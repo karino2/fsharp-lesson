@@ -17,6 +17,8 @@ layout: page
 上のリンクから買ってくれるとちょっとアフィリエイトが入って嬉しいくらい。
 牛の本とか持ってるなら買わなくてもいいと思います（自分は昔読んだが捨ててしまって手元に無い…）
 
+ただ、練習問題などで同じ問題をやってみる時は、参照はつけます。そういう場合にはtandpと略称で呼ぶ事にします。
+
 ## ToyRelとrelational modelとrelational algebra
 
 RDBの基礎は、relational modelとrelational algebraです。
