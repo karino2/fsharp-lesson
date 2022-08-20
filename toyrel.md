@@ -1594,13 +1594,13 @@ dotnetランタイムは入っている事を前提にした形式の２つが�
 手元のシェルスクリプトには、以下の用に書いてありますが、
 
 ```
-dotnet publish -c release -r osx-x64 --self-contained false /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
-cp bin/release/net6.0/osx-x64/publish/mdvcat ~/bin
+$ dotnet publish -c release -r osx-x64 --self-contained false /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+$ cp bin/release/net6.0/osx-x64/publish/mdvcat ~/bin
 ```
 
 たぶんSelfContainedも`/p:`の形式で良い気がする。
 
-Mac以外のRuntime Identifierなどが必要な人は以下の項式ドキュメントを見て下さい。
+Mac以外のRuntime Identifierなどが必要な人は以下の公式ドキュメントを見て下さい。
 
 [Create a single file for application deployment - Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/core/deploying/single-file/overview?tabs=cli)
 
