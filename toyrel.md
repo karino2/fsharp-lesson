@@ -1528,7 +1528,7 @@ restrictのcondの指定でrelationの名前をつけてもつけなくても良
 - Natural joinの所の例にあるEmployeeとDeptのjoin結果となるようなtheta-joinを書いてみよう
 - CarとBoatの例を動かせ（最初の人はcsvのPRもください…）
 
-[tandp](tandp.md)の「ファッション雑貨店の在庫管理データベース」に対して、p67以降の例を動かしてみましょう（以下に書いたものです）
+[tandp](tandp.md)の「ファッション雑貨店の在庫管理データベース」に対して、tandpのp67以降の例を動かしてみましょう（以下に書いたものです）
 
 - 4.3.1 商品を提供している全producerを調べよ
 - 4.3.2 支社に配送している全producerを調べよ
