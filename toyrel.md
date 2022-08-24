@@ -255,7 +255,7 @@ identifierというのは普通の言語では変数や関数名に使われる�
 例えば以下のident1とかident2とかident3の場所に来るのがidentifierです。
 
 ```
-ident1 = project (ident2) idnet3, ident4
+ident1 = project (ident2) ident3, ident4
 ```
 
 左辺の変数名、projectの引数のリレーションの名前、projectの引数のカラムの名前などで使われます。
@@ -1567,7 +1567,7 @@ restrictのcondの指定でrelationの名前をつけてもつけなくても良
 - intersect
 - `@last`
 
-この辺はやらなくてもいいけれどここまでやったらか一応。
+この辺はやらなくてもいいけれどここまでやったから一応。
 
 `@last`は直前に生成されたrelationの名前が入ります。
 
