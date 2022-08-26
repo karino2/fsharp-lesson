@@ -1225,7 +1225,7 @@ projectだけだといまいち面白い事が出来ないので、次にdiffere
 Relational algebraでのdifferenceはいわゆるset differenceです。
 
 `(project (Employee) DeptName) difference (project (Dept) DeptName)` みたいに書くと、
-Employeeリレーションの中にあるDeptNameで、Deptリーレションには無いものの一覧が出ます。
+Employeeリレーションの中にあるDeptNameで、Deptリレーションには無いものの一覧が出ます。
 
 set differenceについては詳細は以下。
 
