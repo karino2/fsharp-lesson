@@ -1407,7 +1407,7 @@ Union Comparableじゃない場合、projectでカラム名が間違ってる場
 [tandp.md](tandp.md)の図書館データベースの例だと、以下のようにすると、
 
 ```
-> restrict auction (sell_price>purchse_price)
+> restrict auction (sell_price>purchase_price)
 ```
 
 sell_priceがpurchase_priceより大きなものだけが残る、という感じの機能です。
