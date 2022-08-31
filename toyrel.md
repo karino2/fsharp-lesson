@@ -1551,7 +1551,7 @@ restrictのcondの指定でrelationの名前をつけてもつけなくても良
 自分が考えたのは機械学習のアルゴリズムの一覧とPRMLで扱ってるアルゴリズムをjoinしてPRMLの教師なし学習のアルゴリズムの一覧を出す、
 というのがあるんですが、csv作る途中で挫折した…
 
-## renameの実装
+### 課題18: renameの実装
 
 一応実装しておく。
 
@@ -1571,6 +1571,12 @@ restrictのcondの指定でrelationの名前をつけてもつけなくても良
 
 この辺はやらなくてもいいけれどここまでやったから一応。
 
+### 課題19: unionとintersectの実装
+unionは、２つのリレーション、rel1とrel2に対して、`(rel1) union (rel2)` の形で、rel1のrowとrel2のrowのset unionになっているリレーションを出力する、という機能です。differenceの時と同様にUnion compatibleかどうかを判定してください。
+
+intersectは、differenceで差し引いた部分、つまり、２つのリレーション、rel1とrel2に対して、rel1とrel2両方に現れるrowだけ持つリレーションをつくる機能です。
+
+### 課題20: `@last`の実装
 `@last`は直前に生成されたrelationの名前が入ります。
 
 ```
