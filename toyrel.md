@@ -1608,7 +1608,11 @@ $ cp bin/release/net6.0/osx-x64/publish/mdvcat ~/bin
 
 たぶんSelfContainedも`/p:`の形式で良い気がする。
 
-Mac以外のRuntime Identifierなどが必要な人は公式ドキュメントを見て下さい。
+Mac以外のRuntime Identifierなどが必要な人は公式ドキュメントを見て下さい。例えば、Windowsの場合以下のように変更する必要があるはずです。
+```
+$ dotnet publish -c release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+```
+
 
 データベースのルートをどう指定するか？などはたとえば以下の二通りくらいは考えられそうです。
 
