@@ -1241,7 +1241,7 @@ DifferenceExpression = Expression "difference" Expression
 
 で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃なので同じシンタックスを採用）
 
-### Union comparable
+### Union compatible
 
 さて、unionやdifferenceはrowが一致しているかいないかを判定出来る必要があります。
 そのためには、
@@ -1250,11 +1250,11 @@ DifferenceExpression = Expression "difference" Expression
 - 各カラムの型が同じ
 
 という制約を満たしている必要がある。
-この制約をUnion comparableと呼びます。
+この制約をUnion compatibleと呼びます。
 
-differenceの仕様としては、Union Comparableじゃない時はエラーにしたい。
+differenceの仕様としては、Union compatibleじゃない時はエラーにしたい。
 
-カラムの順番も同じでないとUnion Comparableではありません。
+カラムの順番も同じでないとUnion compatibleではありません。
 
 型については次の「Deedleにおけるカラムの型」を参照ください。
 
@@ -1362,7 +1362,7 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 
 （補足：解説を書いた時には実装出来ないと気づいていなかったけど、教育的に良いので残す事にした）
 
-とりあえずUnion comparableでない時はfailwithで落とす感じで実装してみます。
+とりあえずUnion compatibleでない時はfailwithで落とす感じで実装してみます。
 
 まず以下が動くように実装します。
 
@@ -1385,7 +1385,7 @@ setを使って実装してみると、rowはcomparableじゃない的なこと�
 ### 課題14: エラー処理を実装する
 
 エラーメッセージを保持するべく、Union型で。中身は文字列だけでいいでしょう。
-Union Comparableじゃない場合、projectでカラム名が間違ってる場合など。
+Union compatibleじゃない場合、projectでカラム名が間違ってる場合など。
 
 少しここの型の設計は真面目に考えましょう。
 
@@ -1395,8 +1395,8 @@ Union Comparableじゃない場合、projectでカラム名が間違ってる場
 
 - [tandp.md](tandp.md)の図書館データベースで、図書館にまったく本が存在しないsubjectの一覧を取り出す
 - wikipediaデータベースでEmployeeの居ない部署を取り出す
-- wikipediaデータベースで`(project (Employee) DeptName) difference (project (Dept) Manager)`を実行して、Union Comparableじゃない（カラムが違う）エラーが出ることを確認する
-- wikipediaデータベースで`(project (Employee) EmpId) difference (project (EmployeeTypeMismatch) EmpId)`を実行して、Union Comparableじゃない（型が違う）エラーが出ることを確認する
+- wikipediaデータベースで`(project (Employee) DeptName) difference (project (Dept) Manager)`を実行して、Union compatibleじゃない（カラムが違う）エラーが出ることを確認する
+- wikipediaデータベースで`(project (Employee) EmpId) difference (project (EmployeeTypeMismatch) EmpId)`を実行して、Union compatibleじゃない（型が違う）エラーが出ることを確認する
 
 他にもなにかやってみてください。（良さげなのを思いついたら、ここに追加するPRくれると嬉しい）
 
@@ -1456,7 +1456,7 @@ thetaは `=, <>, <` などです。
 そしてrestrictの条件はtheta-comparableでなくてはいけなくて、
 theta-comparableじゃない場合はエラーとして処理したい。
 
-union comparableの時と同様、それを表すエラーを作って返してください。
+union compatibleの時と同様、それを表すエラーを作って返してください。
 
 ### 課題15: restrictを実装しよう
 
