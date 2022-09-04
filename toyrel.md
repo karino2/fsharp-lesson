@@ -1231,7 +1231,7 @@ DifferenceExpression = Expression "difference" Expression
 
 で良いでしょう。（別に中置にしなくても良いのだけどLEAPがそうなっているしパーサーの練習に手頃なので同じシンタックスを採用）
 
-### Union comparable
+### Union compatible
 
 さて、unionやdifferenceはrowが一致しているかいないかを判定出来る必要があります。
 そのためには、
@@ -1240,11 +1240,11 @@ DifferenceExpression = Expression "difference" Expression
 - 各カラムの型が同じ
 
 という制約を満たしている必要がある。
-この制約をUnion comparableと呼びます。
+この制約をUnion compatibleと呼びます。
 
-differenceの仕様としては、Union Comparableじゃない時はエラーにしたい。
+differenceの仕様としては、Union compatibleじゃない時はエラーにしたい。
 
-カラムの順番も同じでないとUnion Comparableではありません。
+カラムの順番も同じでないとUnion compatibleではありません。
 
 型については次の「Deedleにおけるカラムの型」を参照ください。
 
@@ -1352,7 +1352,7 @@ fsharp-lessonとしては、解説はmutableな辞書も使っていきますが
 
 （補足：解説を書いた時には実装出来ないと気づいていなかったけど、教育的に良いので残す事にした）
 
-とりあえずUnion comparableでない時はfailwithで落とす感じで実装してみます。
+とりあえずUnion compatibleでない時はfailwithで落とす感じで実装してみます。
 
 まず以下が動くように実装します。
 
@@ -1375,7 +1375,7 @@ setを使って実装してみると、rowはcomparableじゃない的なこと�
 ### 課題14: エラー処理を実装する
 
 エラーメッセージを保持するべく、Union型で。中身は文字列だけでいいでしょう。
-Union Comparableじゃない場合、projectでカラム名が間違ってる場合など。
+Union compatibleじゃない場合、projectでカラム名が間違ってる場合など。
 
 少しここの型の設計は真面目に考えましょう。
 
@@ -1385,8 +1385,8 @@ Union Comparableじゃない場合、projectでカラム名が間違ってる場
 
 - [tandp.md](tandp.md)の図書館データベースで、図書館にまったく本が存在しないsubjectの一覧を取り出す
 - wikipediaデータベースでEmployeeの居ない部署を取り出す
-- wikipediaデータベースで`(project (Employee) DeptName) difference (project (Dept) Manager)`を実行して、Union Comparableじゃない（カラムが違う）エラーが出ることを確認する
-- wikipediaデータベースで`(project (Employee) EmpId) difference (project (EmployeeTypeMismatch) EmpId)`を実行して、Union Comparableじゃない（型が違う）エラーが出ることを確認する
+- wikipediaデータベースで`(project (Employee) DeptName) difference (project (Dept) Manager)`を実行して、Union compatibleじゃない（カラムが違う）エラーが出ることを確認する
+- wikipediaデータベースで`(project (Employee) EmpId) difference (project (EmployeeTypeMismatch) EmpId)`を実行して、Union compatibleじゃない（型が違う）エラーが出ることを確認する
 
 他にもなにかやってみてください。（良さげなのを思いついたら、ここに追加するPRくれると嬉しい）
 
@@ -1397,7 +1397,7 @@ Union Comparableじゃない場合、projectでカラム名が間違ってる場
 [tandp.md](tandp.md)の図書館データベースの例だと、以下のようにすると、
 
 ```
-> restrict auction (sell_price>purchse_price)
+> restrict auction (sell_price>purchase_price)
 ```
 
 sell_priceがpurchase_priceより大きなものだけが残る、という感じの機能です。
@@ -1446,7 +1446,7 @@ thetaは `=, <>, <` などです。
 そしてrestrictの条件はtheta-comparableでなくてはいけなくて、
 theta-comparableじゃない場合はエラーとして処理したい。
 
-union comparableの時と同様、それを表すエラーを作って返してください。
+union compatibleの時と同様、それを表すエラーを作って返してください。
 
 ### 課題15: restrictを実装しよう
 
@@ -1541,7 +1541,7 @@ restrictのcondの指定でrelationの名前をつけてもつけなくても良
 自分が考えたのは機械学習のアルゴリズムの一覧とPRMLで扱ってるアルゴリズムをjoinしてPRMLの教師なし学習のアルゴリズムの一覧を出す、
 というのがあるんですが、csv作る途中で挫折した…
 
-## renameの実装
+### 課題18: renameの実装
 
 一応実装しておく。
 
@@ -1561,6 +1561,12 @@ restrictのcondの指定でrelationの名前をつけてもつけなくても良
 
 この辺はやらなくてもいいけれどここまでやったから一応。
 
+### 課題19: unionとintersectの実装
+unionは、２つのリレーション、rel1とrel2に対して、`(rel1) union (rel2)` の形で、rel1のrowとrel2のrowのset unionになっているリレーションを出力する、という機能です。differenceの時と同様にUnion compatibleかどうかを判定してください。
+
+intersectは、differenceで差し引いた部分、つまり、２つのリレーション、rel1とrel2に対して、rel1とrel2両方に現れるrowだけ持つリレーションをつくる機能です。
+
+### 課題20: `@last`の実装
 `@last`は直前に生成されたrelationの名前が入ります。
 
 ```
@@ -1598,7 +1604,11 @@ $ cp bin/release/net6.0/osx-x64/publish/mdvcat ~/bin
 
 たぶんSelfContainedも`/p:`の形式で良い気がする。
 
-Mac以外のRuntime Identifierなどが必要な人は公式ドキュメントを見て下さい。
+Mac以外のRuntime Identifierなどが必要な人は公式ドキュメントを見て下さい。例えば、Windowsの場合以下のように変更する必要があるはずです。
+```
+$ dotnet publish -c release -r win-x64 --self-contained false -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+```
+
 
 データベースのルートをどう指定するか？などはたとえば以下の二通りくらいは考えられそうです。
 
