@@ -1138,29 +1138,29 @@ fsxで着想を得ていろいろと確認し、それらをfsへ整理してい
 
 単に `Console.ReadLine()` などを使っても良いのですが、これではバックスペースや矢印キーなどで編集出来ないので複雑なrelational algebraを書く時にはやや辛い。
 
-もうちょっとまともなeditting experienceが欲しいので、radlineを使う事にします。
+もうちょっとまともなeditting experienceが欲しいので、このレッスンのために自分が作った、ReCJKLineを使う事にします。
 
-### radline入門
+### ReCJKLine入門
 
 Unix系のコンソールだとこういう時にはreadlineという定番のライブラリがあるのですが、
 dotnetだと何が使われるのか良く知りません。
+いくつかNuGetにあるのを評価した所、どれも日本語の扱いが壊れていて、クエリに日本語を使いたいToyRelとしては都合が悪い。
 
-以前radlineというライブラリをredditで見かけて少し触った所期待通り動いたので、
-今回はこれを使う事にします。
+という事でReCJKLineというライブラリを作ってみました。これを使ってみたいと思います。
 
-- [spectreconsole/radline: A .NET library to read and display keyboard input.](https://github.com/spectreconsole/radline)
-- [NuGet Gallery - RadLine 0.6.0](https://www.nuget.org/packages/RadLine)
+- [karino2/ReCJKLine: Readline like dotnet library which support CJK (fullwidth).](https://github.com/karino2/ReCJKLine)
+- [NuGet Gallery - ReCJKLine.karino2 1.0.2](https://www.nuget.org/packages/ReCJKLine.karino2/)
+
 
 いつものようにプロジェクトにdotnetコマンドで追加して、以下のようなコードをProgram.fsに書いて動かしてみてください。
 
 ```
-open RadLine
+open ReCJKLine
 
-let lineEditor = LineEditor()
-lineEditor.Prompt <- LineEditorPrompt(">", ".")
+let lineEditor = ReCJKLine()
 
 let rec repl () =
-  let text = lineEditor.ReadLine(System.Threading.CancellationToken.None).Result
+  let text = lineEditor.ReadLine(">")
   printfn "read: %s" text
   repl ()
 
@@ -1168,16 +1168,6 @@ repl ()
 ```
 
 基本的にはこの程度の機能にこれまでのコードをインテグレートすれば十分と思います。
-
-なおデフォルトではコントロールと矢印の上と下でヒストリーっぽいのですが、Macだと他にかぶって動かないですね。
-以下のようにしたら、Ctrl-Pでヒストリーバックが見れるようになりました。
-
-```
-open System
-lineEditor.KeyBindings.Add<PreviousHistoryCommand>(ConsoleKey.P, ConsoleModifiers.Control)
-```
-
-Ctrl-NとPくらいはサポートしても良いかもしれません。（しなくてもOK）
 
 ### 課題11: REPLとインテグレートせよ
 
