@@ -118,7 +118,46 @@ idはUInt64。
 
 ## 02. 全部のファイルを開いて検索、を実装する
 
-最初はインデックス無しで検索して、時間などを測る。
+最初はインデックス無しで検索するコードを書いてみます。
+これを基本として他の方法と比較していきます。
+
+### 最初に作るものの概要
+
+単語とディレクトリを指定すると、そのディレクトリ以下のファイルを開いて単語を探し、単語があったら、「パス名:その行」という表示をするプログラムを作ります。
+正規表現の無いgrepのようなものですね。
+
+例えば以下のような出力です。
+
+```
+./test_data/ZipSourceCodeReading/Write.kt:        DataOutputStream(BufferedOutputStream(FileOutputStream(postIndexFile))).use {
+```
+
+また、拡張子でテキストっぽく無いものはスキップするようにします。具体的には `.png` とか `.jpg` とかです。
+
+
+### プロジェクトの作成と基本的なコードを書く
+
+まずプロジェクトとしては第二回のToyRelの時と同様、ToyIndという名前でsourcesの下に作ります。
+ブランチとしてはtoyindでいいでしょう。
+
+対象とするディレクトリの指定はとりあえずグローバル変数かなにかに書いておくのが良いと思います。
+
+ディレクトリ一覧はEnumerateDirectories。ファイル一覧はEnumerateFiles。
+
+```
+let di = DirectoryInfo("./")
+di.EnumerateDirectories()
+di.EnumerateFiles()
+```
+
+ファイルを開いてい行を読むのはFile.ReadLinesを使うのが便利です。
+
+```
+open System.IO
+
+File.ReadLines("toyrel.md")
+```
+
 
 ## 03. ファイルインデックスをオンメモリで実装してみる
 
