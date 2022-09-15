@@ -1602,7 +1602,7 @@ dotnetランタイムは入っている事を前提にした形式の２つが�
 
 ```
 $ dotnet publish -c release -r osx-x64 --self-contained false /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
-$ cp bin/release/net6.0/osx-x64/publish/mdvcat ~/bin
+$ cp bin/release/net6.0/osx-x64/publish/ToyRel ~/bin
 ```
 
 たぶんSelfContainedも`/p:`の形式で良い気がする。
