@@ -142,7 +142,24 @@ idはUInt64。
 
 対象とするディレクトリの指定はとりあえずグローバル変数かなにかに書いておくのが良いと思います。
 
-ディレクトリ一覧はEnumerateDirectories。ファイル一覧はEnumerateFiles。
+まずは指定ディレクトリの下のファイルのすべてに対して、一行ずつ読んでマッチするか調べるのがいいと思います。
+
+ファイルやディレクトリを操作するには、DirectoryInfoやStreamReaderを使っても良いのですが、
+スクリプト的にF#を使っている時はFileやDirectoryを使う方がいいでしょう。
+
+この辺は [Common I/O Tasks - Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/standard/io/common-i-o-tasks)が良く書かれています。
+
+今回だったら、
+
+- [How to: Enumerate directories and files](https://learn.microsoft.com/en-us/dotnet/standard/io/how-to-enumerate-directories-and-files)
+- [File.ReadLines Method (System.IO)](https://learn.microsoft.com/en-us/dotnet/api/system.io.file.readlines?view=net-6.0#system-io-file-readlines%28system-string%29)
+
+あたりが良いでしょう。
+
+{% capture stream_pipe %}
+**ストリームとパイプライン**  
+
+この辺との比較を書く。
 
 ```
 let di = DirectoryInfo("./")
@@ -150,13 +167,8 @@ di.EnumerateDirectories()
 di.EnumerateFiles()
 ```
 
-ファイルを開いてい行を読むのはFile.ReadLinesを使うのが便利です。
-
-```
-open System.IO
-
-File.ReadLines("toyrel.md")
-```
+{% endcapture %}
+{% include myquote.html body=stream_pipe %}
 
 
 ## 03. ファイルインデックスをオンメモリで実装してみる
