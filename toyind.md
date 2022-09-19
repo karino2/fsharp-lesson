@@ -141,6 +141,7 @@ idはUInt64。
 ブランチとしてはtoyindでいいでしょう。
 
 対象とするディレクトリの指定はとりあえずグローバル変数かなにかに書いておくのが良いと思います。
+Scratch.fsxからもProgram.fsからも出来る感じにしておいてください。
 
 まずは指定ディレクトリの下のファイルのすべてに対して、一行ずつ読んでマッチするか調べるのがいいと思います。
 
@@ -203,22 +204,136 @@ FileやDirectory系のAPIはFileInfoやDirectoryInfoに比べてだいぶ最近�
 githubからコードを取得し、特定の場所に置きます。
 
 とりあえずToyIndのディレクトリの下にtest_targetというディレクトリを掘り、そこに置く事にします。
-これは.gitignoreに加えてコミットしないようにしておいてください。
+つまり `souces/ToyInd/test_target/fparsec` というディレクトリの下にfparsecのコードを置く感じですね。
 
+test_target以下は.gitignoreに加えてコミットしないようにしておいてください。
 また、検索の対象としては.gitなどの不要なディレクトリは削除しておいてください。
 
+### 基本的な計測を行う
+
+検索対象を置いたら、
 まずファイル数や行数をなんとなく調べておきます。
 
 ```
 $ find . type -f | wc -l
      175
+
 $ find . type -f | xargs wc -l
 ...
    74443 total
+
+$ du -h
+...
+11M
 ```
 
-という事で、175ファイル、74K行くらいのようです。
+という事で、175ファイル、74K行、11MBくらいのようです。
+timeコマンドで時間を図っていましょう。
+pipe3という単語をagやgrepで調べてみます。
 
+Mac版だとgrepに `-R` オプションが使えますが、これは環境によっては使えないかもしれないので他の方法で調べてみてください。
+
+```
+$ time ag pipe3
+...
+ag pipe3  0.02s user 0.02s system 99% cpu 0.040 total
+
+$ time grep -R pipe3
+...
+grep -R pipe3  0.16s user 0.01s system 99% cpu 0.173 total
+```
+
+agだと20msec, grepだと160msecくらいでしょうか。
+
+メモリ使用量も測るバージョンのtimeが `/usr/bin/time` の方にあるのが普通です（何もつけないtimeはshの組み込みコマンドだったりする）。
+自分の手元のMacだと`-l`のオプションを使う事でメモリ使用量が測れるようです。
+
+```
+$ /usr/bin/time -l ag pipe3
+...
+        0.03 real         0.01 user         0.02 sys
+             3727360  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                2984  page reclaims
+                  26  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                  10  voluntary context switches
+                 160  involuntary context switches
+            76502781  instructions retired
+            57790386  cycles elapsed
+             3231744  peak memory footprint
+
+$ /usr/bin/time -l grep -R pipe3
+...
+        0.20 real         0.15 user         0.01 sys
+             1396736  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+                 471  page reclaims
+                   0  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 251  voluntary context switches
+                  12  involuntary context switches
+          1560448993  instructions retired
+           657863973  cycles elapsed
+              974848  peak memory footprint
+```
+
+とりあえずpeak memory footprintに相当するメモリ量と、realの時間を計測する事にしましょう。
+単位は好きにしてください。
+
+この/usr/bin/timeのアウトプットは使っているOSで結構変わる所と思います。
+Linux系列だとフォーマットを指定したり出来るはず。
+そういう機能が無い場合は適当なシェルスクリプトなどでrealの時間とメモリ量を抜き出すスクリプトを作ってください。
+
+出力としてはcsvでいいでしょう。
+以下のような感じでためていける感じにしたい。
+
+```
+label, time, memory
+fparsec_ag, 0.03, 3231744
+fparsec_grep, 0.20, 974848
+```
+
+同様に、上で書いたfsでの検索の時間なども調べて時間を教えて下さい。
+調べる時はReleaseモード、つまり `dotnet run -c Release` で調べるのを忘れないように。
+
+dotnetのメモリが上記のコマンドでいい感じに測れるか分からないので、ここまでやってみた人は結果を教えて下さい。
+もし目的の数値が測れていないようならBenchmarkDotNet使うように変更します。
+
+### 規模の違うデータセットをいくつか用意する
+
+簡単に持ってこれて取り回しが大変なほどはでかく無い程度の大きなデータセットを追加する。
+
+- fsharpのコンパイラ等 [dotnet/fsharp: The F# compiler, F# core library, F# language service, and F# tooling integration for Visual Studio](https://github.com/dotnet/fsharp)
+- [mongodb/mongo: The MongoDB Database](https://github.com/mongodb/mongo)
+
+| 名前 | ファイル数 | 行数 | duのバイナリサイズ |
+| ---- | ---- | ---- | ---- |
+| fparsec | 175 | 74443 |  11M |
+| fsharp | 10452 | 442042 | 127M |
+| mongo | 37155 | 534676 | 573M |
+
+他にllvm、Chromium、Linuxカーネルあたりとかどうだろう。誰か調べて表に追記したりリンク足したりしてください。
+2〜3GBくらいのが欲しい気はする。
+
+またこれらのデータセットに検索を試す手頃な単語も調べておいてくれると。
+だいたい数件程度のヒットがあるようなのが理想ですが、あまり多すぎなければOKです（consoleへの出力の時間が問題になるようなのは測りたい事が測れないので）。
+
+fparsecならattempt、fsharpならgenerics、mongoならpagingとかでどうでしょう？
 
 ## 03. ファイルインデックスをオンメモリで実装してみる
 
@@ -231,8 +346,8 @@ $ find . type -f | xargs wc -l
 
 ## いくつかの規模で検索してみる
 
-とりあえず全検索、インデクサ使った検索を比較していき、
-またサイズを増やしてインデックスのサイズやその探索時間がどうなっていくかを調べる。
+用意したデータセットに対して、全部開く検索と時間や使用メモリなどを比較する。
+ついでにインデックスのサイズも記録しておく。
 
 ## ファイル名とidのindexをもう少し真面目に作る
 
