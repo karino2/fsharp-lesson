@@ -321,11 +321,11 @@ dotnetのメモリが上記のコマンドでいい感じに測れるか分か�
 - fsharpのコンパイラ等 [dotnet/fsharp: The F# compiler, F# core library, F# language service, and F# tooling integration for Visual Studio](https://github.com/dotnet/fsharp)
 - [mongodb/mongo: The MongoDB Database](https://github.com/mongodb/mongo)
 
-| 名前 | ファイル数 | 行数 | duのバイナリサイズ |
-| ---- | ---- | ---- | ---- |
-| fparsec | 175 | 74443 |  11M |
-| fsharp | 10452 | 442042 | 127M |
-| mongo | 37155 | 534676 | 573M |
+| 名前 | ファイル数 | 行数 | duのバイナリサイズ | grepの時間 |
+| ---- | ---- | ---- | ---- | ---- |
+| fparsec | 175 | 74443 |  11M | 0.22 |
+| fsharp | 10452 | 442042 | 127M | 2.57 |
+| mongo | 37155 | 534676 | 573M | 12.07 |
 
 他にllvm、Chromium、Linuxカーネルあたりとかどうだろう。誰か調べて表に追記したりリンク足したりしてください。
 2〜3GBくらいのが欲しい気はする。
