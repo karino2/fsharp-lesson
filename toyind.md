@@ -482,11 +482,14 @@ createFileIndexでこのファイルを作り、loadFileIndexでこのファイ�
 **Unix的なディレクトリとテキストファイルの使い方**  
 
 今回紹介したようなディレクトリとテキストファイルを使うシステムというのはUnixではちょくちょく見られます。
-古くはterminfo([Studying Cases](http://www.catb.org/~esr/writings/taoup/html/ch06s01.html#id2910334)に詳しい)とか、
+古くはterminfo([Studying Cases](http://www.catb.org/~esr/writings/taoup/html/ch06s01.html#id2910334)に詳しい)などが有名で、
+`/usr/share/terminfo/`の下をlsすると雰囲気はわかります。
+
 最近ではgitがこのようなディレクトリをDB的に使う事で有名です（[Git - Git Objects](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)に詳しい）。
 gitはハッシュを求めてその最初二文字をディレクトリに、残りをファイル名に使います。
-後半ではこれと似たような手法でファイルインデックスの方もディレクトリにしたいと思います。
+`.git/objects/` 下や、そのディレクトリの一つを選んでさらにその中をlsしてみると雰囲気は分かると思います。
 
+後半ではこれと似たような手法でファイルインデックスの方もディレクトリにしたいと思います。
 
 
 
