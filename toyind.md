@@ -308,10 +308,55 @@ fparsec_grep, 0.20, 974848
 ```
 
 同様に、上で書いたfsでの検索の時間なども調べて時間を教えて下さい。
+Unix系の環境だったらfsのコードも同じように測ればいいでしょう。
 調べる時はReleaseモード、つまり `dotnet run -c Release` で調べるのを忘れないように。
 
-dotnetのメモリが上記のコマンドでいい感じに測れるか分からないので、ここまでやってみた人は結果を教えて下さい。
-もし目的の数値が測れていないようならBenchmarkDotNet使うように変更します。
+Windowsでは以下に示すBenchmarkDotNetで測るのがいいと思います。
+
+### BenchmarkDotNetで時間とメモリを計測する
+
+F# 上でメモリと時間を測るなら、BenchmarkDotNetを使うのが手頃に思います。
+これは本来はベンチマーク計測用プログラムなので用途が違いますが、
+簡易な計測にも手頃なのでこれを使う事にしましょう。
+
+いつものように以下のようにパッケージを追加し、
+
+```
+$ dotnet add package benchmarkdotnet
+```
+
+以下のような感じで一回だけのテスト結果が表示されます。
+
+```
+open BenchmarkDotNet.Attributes
+open BenchmarkDotNet.Running
+open BenchmarkDotNet.Jobs
+open BenchmarkDotNet.Engines
+
+[<SimpleJob (RunStrategy.ColdStart, targetCount=1)>]
+[<MemoryDiagnoser>]
+type ProductBench() =
+  [<Benchmark>]
+  member _.Product() =
+     // ここにテスト対象のコードを書く
+     runAll ()
+
+
+[<EntryPoint>]
+let main _ = 
+  BenchmarkRunner.Run<ProductBench>() |> ignore
+  0
+```
+
+これでコマンドラインから以下のように実行する。
+
+```
+$ dotnet run -c Release
+```
+
+これで表示されるMeanとAllocatedで良いでしょう。
+たぶんちゃんと調べればこれらの値を取得する方法もあるはずなので、
+誰か調べてPRください。
 
 ### 規模の違うデータセットをいくつか用意する
 
