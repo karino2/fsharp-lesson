@@ -309,7 +309,14 @@ fparsec_grep, 0.20, 974848
 
 同様に、上で書いたfsでの検索の時間なども調べて時間を教えて下さい。
 Unix系の環境だったらfsのコードも同じように測ればいいでしょう。
-調べる時はReleaseモード、つまり `dotnet run -c Release` で調べるのを忘れないように。
+
+調べる時はReleaseモードで、しかもビルドは別に行う方がいいでしょう。
+つまり、例えば以下のような感じです。
+
+```
+$ dotnet build -c Release
+$ /usr/bin/time -l  bin/Release/net6.0/ToyInd
+```
 
 Windowsでは以下に示すBenchmarkDotNetで測るのがいいと思います。
 
