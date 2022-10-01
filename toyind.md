@@ -214,10 +214,10 @@ test_target以下は.gitignoreに加えてコミットしないようにして�
 まずファイル数や行数をなんとなく調べておきます。
 
 ```
-$ find . type -f | wc -l
+$ find . -type f | wc -l
      175
 
-$ find . type -f | xargs wc -l
+$ find . -type f | xargs wc -l
 ...
    74443 total
 
