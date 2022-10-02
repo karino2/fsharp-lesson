@@ -214,10 +214,10 @@ test_target以下は.gitignoreに加えてコミットしないようにして�
 まずファイル数や行数をなんとなく調べておきます。
 
 ```
-$ find . type -f | wc -l
+$ find . -type f | wc -l
      175
 
-$ find . type -f | xargs wc -l
+$ find . -type f | xargs wc -l
 ...
    74443 total
 
@@ -371,12 +371,14 @@ $ dotnet run -c Release
 
 - fsharpのコンパイラ等 [dotnet/fsharp: The F# compiler, F# core library, F# language service, and F# tooling integration for Visual Studio](https://github.com/dotnet/fsharp)
 - [mongodb/mongo: The MongoDB Database](https://github.com/mongodb/mongo)
+- [Elsevier open access articles](https://elsevier.digitalcommonsdata.com/datasets/zm33cdndxs/3)
 
 | 名前 | ファイル数 | 行数 | duのバイナリサイズ | grepの時間 |
 | ---- | ---- | ---- | ---- | ---- |
 | fparsec | 175 | 74443 |  11M | 0.22 |
 | fsharp | 10452 | 442042 | 127M | 2.57 |
 | mongo | 37155 | 534676 | 573M | 12.07 |
+| elsevier | 40098 | 7266898 | 7.1G | ? |
 
 他にllvm、Chromium、Linuxカーネルあたりとかどうだろう。誰か調べて表に追記したりリンク足したりしてください。
 2〜3GBくらいのが欲しい気はする。grepで数分掛かるくらいの。
@@ -384,6 +386,8 @@ $ dotnet run -c Release
 なお、ソースコードじゃなくても手頃な英文テキストがあるならそれでもいいです。
 ダウンロードが簡単で検索が興味が湧くものがあればいい。
 日本語Wikipediaくらいのサイズの自然言語のなにかがあればいいかなぁ。
+
+（Elsevierという科学論文の出版社が公開している論文のデータセットを追加しました。検索した単語は"higgs"です。）
 
 またこれらのデータセットに検索を試す手頃な単語も調べておいてくれると。
 だいたい数件程度のヒットがあるようなのが理想ですが、あまり多すぎなければOKです（consoleへの出力の時間が問題になるようなのは測りたい事が測れないので）。
