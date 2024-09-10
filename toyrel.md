@@ -8,7 +8,7 @@ layout: page
 
 なおLEAPを題材にRelational Algebraやデータベースの基礎を教える本として、以下があります。
 
-<iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=B00OD5CB50&linkId=031b79722ee8b82c89df4ef320cc8118"></iframe>
+[amazon: Theory and Practice of Relational Databases](https://amzn.to/4efujw1)
 
 ちょっと高くて古い本ですが、ちゃんと基本的なrelational modelやrelational algebra関連の理論がまとまっていながら不要に難しいと思う所はちゃんとカットしていたりと悪くない本なので興味があったらどうぞ。
 自分は第二回の内容を書く為に買いました。
@@ -136,7 +136,7 @@ ERDに関しては理論だけでは無くて訓練も重要で、そうした�
 
 この記事を拡充して書籍化された以下の本を若かりし頃、頑張って練習しました。Kindle化されないですかね〜。
 
-<iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=4798110663&linkId=d16b70a4d08fd1e3da37295ee773b78f"></iframe>
+[amazon: 楽々ERDレッスン](https://amzn.to/4d8qaJG)
 
 なお、このToyRelではあえてRelational Modelそのままに近いものを実装していきます。
 EAR的な要素は一切出さないように気をつけています。
@@ -1710,7 +1710,7 @@ ToyRelはRelational Algebraの処理系である、と言い続けて来まし�
 現代のソフトウェアにおいてかなり洗練された実装を持つ分野の一つでもあるため、
 ソフトウェアを作る勉强としても良い題材です。
 
-<iframe sandbox="allow-popups allow-scripts allow-modals allow-forms allow-same-origin" style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=karino203-22&language=ja_JP&o=9&p=8&l=as4&m=amazon&f=ifr&ref=as_ss_li_til&asins=007123151X&linkId=5628b4778dfab0858f67af28e581efd1"></iframe>
+[amazon: Database Management Systems](https://amzn.to/4eeGqtm)
 
 自分は昔サーバーサイドで結構真面目にSQL叩く仕事をしていたのでこの本は何度も読み直して、SQL Serverの返すExecution Planなどを眺めてはコストを見積もったりしていました。
 
